@@ -470,62 +470,6 @@ def build(ensemble: dict[str, Any], backtest: dict[str, Any] | None,
     Dimitris' <b>checks that the stated calculation is real</b>. Three systems that do not make the
     same mistake is the entire reason the vote works.</p></div>
 
-  <h3 style="margin:38px 0 0">The same three, in detail</h3>
-
-  <div class="cards">
-    <div class="card neva"><div class="who">Asof &middot; Neva</div>
-      <h3>Reads only what was publishable, and measures itself</h3>
-      <p class="how">Retrieval never takes a date argument. Instead one guard object is installed
-        for the run, and every search asks it whether a document may be used. Ask without a guard
-        configured and it raises. That makes replaying the past safe: set the guard to the day
-        before a result was announced, forecast it, and compare. 32 past quarters were replayed
-        that way.</p>
-      <p class="how">Forecasts come from a series read out of <em>earnings releases</em> rather
-        than quarterly reports. A release writes "reported sales of $41.8 billion" in a sentence;
-        a 10-Q buries the same figure in a table where picking the right row is guesswork. The
-        next period is then estimated as the same quarter a year ago moved by recent growth.</p>
-      <p class="how">A model is called for six of the twelve metrics only &mdash; the ones the
-        replay scores worst. Its answer must arrive with arithmetic and cited passages, and it
-        faces the same unit and range checks as any other number.</p>
-      </div>
-
-    <div class="card adrian"><div class="who">Adrian</div>
-      <h3>Anchors every figure, and refuses mismatched anchors</h3>
-      <p class="how">Evidence is gathered per metric and kept split by where it came from &mdash;
-        filings, history, market &mdash; so a figure is never averaged across sources that were
-        not measuring the same thing. Coverage gaps are recorded, and a follow-up brief is written
-        for metrics with thin evidence.</p>
-      <p class="how">A market channel pulls sell-side estimates: 30 analysts on Home Depot, 25 on
-        ADI, 17 on Deere. Those become anchors &mdash; but only after a period check. From the
-        code: Deere's full-year guidance implies about $16.67 of annual EPS, and applying it to a
-        <em>quarterly</em> forecast dragged a sensible $5.25 up to $10.21. Full-year guidance is
-        not a quarterly anchor, so anchors whose period does not match are rejected outright.</p>
-      <p class="how">Industry is treated as data rather than branching code: five profiles, one per
-        company in play plus a fallback. A classifier picks one and every downstream step reads
-        it, so a retailer and a chipmaker are reasoned about differently without a second pipeline.
-        Each metric then gets a critic pass before it is accepted.</p>
-      </div>
-
-    <div class="card dimitris"><div class="who">Dimitris</div>
-      <h3>Four specialists, and the arithmetic is re-checked</h3>
-      <p class="how">Rather than one reader for everything, four analysts each own a source type:
-        one for filings, one for financial statements, one for news, one for the company's own
-        track record. A central coordinator merges their reports. Each analyst returns a typed
-        object with citations, so a missing field is a validation error rather than a surprise
-        later.</p>
-      <p class="how">The strongest guard here: when the model says a figure came from, say,
-        revenue times margin, the coordinator <em>re-evaluates that expression itself</em> in a
-        restricted evaluator and checks the result matches the number claimed. If it does not, a
-        repair message goes back with the specific failure. The model does not get to assert
-        arithmetic it did not do.</p>
-      <p class="how">Two more details worth naming. Fiscal calendars are modelled properly, so a
-        quarter label means the same thing for a company whose year ends in June as for one ending
-        in January. And the news tool blocks the hackathon host's own domain, so the system cannot
-        accidentally read the answers off the site it is competing on.</p>
-      <p class="how">Every figure carries a low and a high. That is what made disagreement between
-        the three of us measurable rather than a matter of opinion.</p>
-      </div>
-  </div>
 </div></section>
 
 <section><div class="wrap">
