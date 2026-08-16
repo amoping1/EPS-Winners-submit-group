@@ -245,7 +245,7 @@ def master_diagram() -> str:
   <path class="ln" d="M500 624 L500 646"/>
 
   <rect class="ink" x="298" y="648" width="404" height="38" rx="2"/>
-  <text class="ti" x="500" y="672" text-anchor="middle">4 WORKBOOKS &#183; Summary!C7:C9 &#183; uploaded by hand</text>
+  <text class="ti" x="500" y="672" text-anchor="middle">4 WORKBOOKS &#183; Summary!C7:C9</text>
 </svg>
 """
 
