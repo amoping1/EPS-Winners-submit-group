@@ -1,0 +1,392 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>EPS Winners &mdash; team architecture</title>
+<style>
+*,*::before,*::after{box-sizing:border-box}
+:root{
+  --paper:#f4f3ef; --card:#fffefc; --sunk:#eceae4;
+  --ink:#15171c; --ink2:#4e535d; --ink3:#8b909b;
+  --rule:#dcd8cf;
+  --neva:#0f5c58; --adrian:#7a4bab; --dimitris:#a8620d;
+  --forecast:#93331f; --flag:#9a6c07;
+  --mono:ui-monospace,"SF Mono","Cascadia Mono","Segoe UI Mono",Menlo,Consolas,monospace;
+  --sans:Inter,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+}
+body{margin:0;background:var(--paper);color:var(--ink);font:16px/1.65 var(--sans);
+  -webkit-font-smoothing:antialiased}
+.wrap{width:min(1120px,calc(100% - 40px));margin:0 auto}
+.rail{position:sticky;top:0;z-index:30;background:var(--ink);color:var(--paper)}
+.rail .wrap{display:flex;justify-content:space-between;align-items:center;height:46px;
+  font:600 11.5px/1 var(--mono);letter-spacing:.13em;text-transform:uppercase}
+.rail .r{color:#a9aeb8;display:flex;gap:18px}
+.rail .cut{color:var(--paper);border-bottom:2px solid var(--forecast);padding-bottom:2px}
+
+.hero{padding:70px 0 30px}
+.kicker{font:700 12px/1 var(--mono);letter-spacing:.18em;text-transform:uppercase;
+  color:var(--forecast);margin:0 0 18px}
+h1{margin:0;font:700 clamp(40px,7vw,82px)/.98 var(--mono);letter-spacing:-.055em}
+h1 .thin{color:var(--ink3);font-weight:400}
+.lede{margin:24px 0 0;font-size:20px;line-height:1.5;color:var(--ink2);max-width:62ch}
+.lede b{color:var(--ink);font-weight:600}
+
+h2{margin:0;font:600 13px/1 var(--mono);letter-spacing:.14em;text-transform:uppercase}
+h3{margin:0 0 6px;font-size:17px;letter-spacing:-.01em}
+section{padding:44px 0;border-top:1px solid var(--rule)}
+.note{color:var(--ink2);font-size:14.5px;max-width:80ch;margin:10px 0 0}
+.lead-in{margin:14px 0 26px;font-size:18px;color:var(--ink);max-width:70ch}
+
+.diagram-frame{background:var(--card);border:1px solid var(--rule);padding:26px 22px;margin:26px 0}
+svg.arch{width:100%;height:auto;display:block}
+figcaption{color:var(--ink2);font-size:13.5px;margin-top:14px;max-width:82ch}
+
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px;margin-top:24px}
+.card{background:var(--card);border:1px solid var(--rule);padding:20px 22px;border-top:3px solid}
+.card.neva{border-top-color:var(--neva)} .card.adrian{border-top-color:var(--adrian)}
+.card.dimitris{border-top-color:var(--dimitris)}
+.card .who{font:700 10.5px/1 var(--mono);letter-spacing:.14em;text-transform:uppercase;margin-bottom:10px}
+.card.neva .who{color:var(--neva)} .card.adrian .who{color:var(--adrian)}
+.card.dimitris .who{color:var(--dimitris)}
+.card ul{margin:10px 0 0;padding-left:18px}
+.card li{margin:6px 0;font-size:14px;color:var(--ink2)}
+.card li b{color:var(--ink);font-weight:600}
+
+table{width:100%;border-collapse:collapse;margin-top:20px}
+thead th{text-align:left;padding:0 10px 9px;border-bottom:1px solid var(--rule);
+  font:600 10px/1 var(--mono);letter-spacing:.13em;text-transform:uppercase;color:var(--ink3)}
+tbody td{padding:11px 10px;border-bottom:1px solid var(--rule);font-size:13.5px;vertical-align:top}
+tbody tr:last-child td{border-bottom:0}
+.n{text-align:right;font-family:var(--mono);font-variant-numeric:tabular-nums;white-space:nowrap}
+th.n{text-align:right}
+.tk{font:700 12px/1 var(--mono)}
+.out{color:var(--ink3);text-decoration:line-through}
+.win{font-weight:700}
+.src-neva{color:var(--neva)} .src-adrian{color:var(--adrian)} .src-dimitris{color:var(--dimitris)}
+
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));
+  border:1px solid var(--rule);background:var(--card);margin-top:24px}
+.stat{padding:18px 20px;border-right:1px solid var(--rule)}
+.stat:last-child{border-right:0}
+.stat .k{font:600 10px/1 var(--mono);letter-spacing:.13em;text-transform:uppercase;color:var(--ink3)}
+.stat .v{font:600 29px/1.05 var(--mono);letter-spacing:-.03em;margin-top:9px}
+.stat .d{color:var(--ink2);font-size:12.5px;margin-top:4px}
+
+.callout{border-left:3px solid var(--forecast);background:var(--card);padding:16px 20px;margin:24px 0}
+.callout p{margin:0;font-size:15px}
+code{font-family:var(--mono);font-size:13px;background:var(--sunk);padding:2px 6px}
+pre{background:var(--ink);color:#e6edf6;padding:16px 18px;overflow:auto;
+  font-family:var(--mono);font-size:13px;line-height:1.6}
+pre code{background:none;color:inherit;padding:0}
+footer{border-top:1px solid var(--rule);padding:26px 0 48px;font:12px/1.7 var(--mono);color:var(--ink3)}
+@media print{.rail{position:static}section{break-inside:avoid}}
+</style>
+</head>
+<body>
+
+<div class="rail"><div class="wrap">
+  <span>Agents vs Wall Street &middot; EPS Winners</span>
+  <span class="r"><span>fd6b209</span><span class="cut">cutoff 2026-08-16</span></span>
+</div></div>
+
+<header class="hero"><div class="wrap">
+  <p class="kicker">Three systems, one entry</p>
+  <h1>Three agents.<br><span class="thin">One vote.</span></h1>
+  <p class="lede">We built three forecasting systems independently &mdash; same brief, same frozen
+    corpus, same twelve targets, <b>no shared code</b>. The submitted figures are what those three
+    systems agree on, with outliers voted out.</p>
+</div></header>
+
+<section><div class="wrap">
+  <h2>Architecture</h2>
+  <p class="lead-in">Four evidence channels, three independent systems, one consensus. Everything
+    sits behind a single point-in-time cutoff.</p>
+
+  <figure class="diagram-frame">
+    
+<svg class="arch" viewBox="0 0 1000 690" xmlns="http://www.w3.org/2000/svg" role="img"
+     aria-label="Four evidence channels feed three independent forecasting systems behind one point-in-time cutoff; their outputs meet in a two-against-one consensus, then validation, then four workbooks">
+  <defs>
+    <marker id="a2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+      <path d="M0 0 L10 5 L0 10 z" fill="#8b909b"/>
+    </marker>
+    <pattern id="hat" width="8" height="8" patternTransform="rotate(-45)" patternUnits="userSpaceOnUse">
+      <line x1="0" y1="0" x2="0" y2="8" stroke="rgba(147,51,31,.16)" stroke-width="3"/>
+    </pattern>
+    <style>
+      .bx{fill:#fffefc;stroke:#dcd8cf;stroke-width:1.5}
+      .ink{fill:#15171c;stroke:#15171c}
+      .gd{fill:rgba(147,51,31,.06);stroke:#93331f;stroke-width:1.5}
+      .nv{fill:rgba(15,92,88,.07);stroke:#0f5c58;stroke-width:2}
+      .ad{fill:rgba(122,75,171,.07);stroke:#7a4bab;stroke-width:2}
+      .dm{fill:rgba(168,98,13,.07);stroke:#a8620d;stroke-width:2}
+      .t{font:600 13px ui-monospace,Menlo,Consolas,monospace;fill:#15171c}
+      .ti{font:600 13px ui-monospace,Menlo,Consolas,monospace;fill:#f4f3ef}
+      .s{font:11px Inter,system-ui,sans-serif;fill:#4e535d}
+      .si{font:11px Inter,system-ui,sans-serif;fill:#a9aeb8}
+      .hd{font:700 10px ui-monospace,Menlo,Consolas,monospace;letter-spacing:.14em}
+      .ln{stroke:#8b909b;stroke-width:1.4;fill:none;marker-end:url(#a2)}
+      .lnq{stroke:#c6c1b6;stroke-width:1.2;fill:none;stroke-dasharray:4 3}
+    </style>
+  </defs>
+
+  <!-- cutoff band -->
+  <rect class="gd" x="14" y="14" width="972" height="44" rx="2"/>
+  <text class="hd" x="32" y="34" fill="#93331f">POINT-IN-TIME CUTOFF &#8212; as-of 2026-08-16</text>
+  <text class="s" x="32" y="49">every read in every box below is filtered on published_at &#8804; cutoff; an unguarded read raises rather than returning</text>
+
+  <!-- channels -->
+  <text class="hd" x="16" y="88" fill="#8b909b">EVIDENCE CHANNELS</text>
+  <rect class="bx" x="14" y="98" width="228" height="58" rx="2"/>
+  <text class="t" x="30" y="121">Frozen corpus</text>
+  <text class="s" x="30" y="139">1,139 filings, calls, slides</text>
+
+  <rect class="bx" x="256" y="98" width="228" height="58" rx="2"/>
+  <text class="t" x="272" y="121">Sell-side consensus</text>
+  <text class="s" x="272" y="139">30 / 25 / 17 analysts, captured today</text>
+
+  <rect class="bx" x="498" y="98" width="228" height="58" rx="2"/>
+  <text class="t" x="514" y="121">Reported history</text>
+  <text class="s" x="514" y="139">series read from earnings releases</text>
+
+  <rect class="bx" x="740" y="98" width="246" height="58" rx="2"/>
+  <text class="t" x="756" y="121">Public research</text>
+  <text class="s" x="756" y="139">cached with retrieval date</text>
+
+  <path class="ln" d="M128 156 L128 188"/>
+  <path class="ln" d="M370 156 L370 188"/>
+  <path class="ln" d="M612 156 L612 188"/>
+  <path class="ln" d="M863 156 L863 188"/>
+
+  <!-- three systems -->
+  <text class="hd" x="16" y="212" fill="#8b909b">THREE SYSTEMS, BUILT INDEPENDENTLY, NO SHARED CODE</text>
+
+  <rect class="nv" x="14" y="224" width="316" height="164" rx="2"/>
+  <text class="t" x="32" y="249" fill="#0f5c58">ASOF &#183; Neva</text>
+  <text class="s" x="32" y="270">One global cutoff guard</text>
+  <text class="s" x="32" y="288">Backtest with leakage audit</text>
+  <text class="s" x="32" y="306">Series from earnings releases</text>
+  <text class="s" x="32" y="324">Unit / range / margin checks</text>
+  <text class="s" x="32" y="342">Evidence chain per figure</text>
+  <text class="s" x="32" y="360">Agent aimed only where measured weak</text>
+  <text class="s" x="32" y="378" fill="#0f5c58">32 replays &#183; leakage clean</text>
+
+  <rect class="ad" x="342" y="224" width="316" height="164" rx="2"/>
+  <text class="t" x="360" y="249" fill="#7a4bab">Adrian</text>
+  <text class="s" x="360" y="270">Market consensus channel</text>
+  <text class="s" x="360" y="288">Company profiling by sector</text>
+  <text class="s" x="360" y="306">Anchor reconciliation</text>
+  <text class="s" x="360" y="324">Critic pass over each metric</text>
+  <text class="s" x="360" y="342">Evidence-gap tracking</text>
+  <text class="s" x="360" y="360">Thin-metric rescue</text>
+  <text class="s" x="360" y="378" fill="#7a4bab">external reference on 6 of 12</text>
+
+  <rect class="dm" x="670" y="224" width="316" height="164" rx="2"/>
+  <text class="t" x="688" y="249" fill="#a8620d">Dimitris</text>
+  <text class="s" x="688" y="270">Specialist analysts per source</text>
+  <text class="s" x="688" y="288">filings &#183; financials &#183; news</text>
+  <text class="s" x="688" y="306">Named forecast methods</text>
+  <text class="s" x="688" y="324">DRIVER_BRIDGE, YOY_GROWTH,</text>
+  <text class="s" x="688" y="342">GUIDANCE_MIDPOINT, MARGIN&#215;REV</text>
+  <text class="s" x="688" y="360">Low / high band on every figure</text>
+  <text class="s" x="688" y="378" fill="#a8620d">12 of 12 with intervals</text>
+
+  <path class="ln" d="M172 388 L172 424 L440 424 L440 450"/>
+  <path class="ln" d="M500 388 L500 450"/>
+  <path class="ln" d="M828 388 L828 424 L560 424 L560 450"/>
+
+  <!-- consensus -->
+  <rect class="ink" x="238" y="452" width="524" height="86" rx="2"/>
+  <text class="ti" x="500" y="479" text-anchor="middle">CONSENSUS &#8212; TWO AGAINST ONE</text>
+  <text class="si" x="500" y="500" text-anchor="middle">sort the three; if one gap exceeds twice the other, the far value is an outlier</text>
+  <text class="si" x="500" y="518" text-anchor="middle">and the two that agree are averaged &#8212; otherwise the median stands</text>
+
+  <path class="lnq" d="M370 156 L370 200 L214 200 L214 452"/>
+  <text class="s" x="222" y="446" fill="#93331f">consensus as a rail, not a target</text>
+
+  <path class="ln" d="M500 538 L500 570"/>
+
+  <rect class="bx" x="238" y="572" width="524" height="52" rx="2"/>
+  <text class="t" x="500" y="595" text-anchor="middle">VALIDATION</text>
+  <text class="s" x="500" y="613" text-anchor="middle">units, magnitude, sign, implied margin, completeness &#8212; before anything is written</text>
+
+  <path class="ln" d="M500 624 L500 646"/>
+
+  <rect class="ink" x="298" y="648" width="404" height="38" rx="2"/>
+  <text class="ti" x="500" y="672" text-anchor="middle">4 WORKBOOKS &#183; Summary!C7:C9 &#183; uploaded by hand</text>
+</svg>
+
+    <figcaption>The cutoff is not a filter applied per call site. It is one global guard that
+      retrieval must ask for, and which raises when none is configured &mdash; so an unguarded read
+      is impossible rather than discouraged. That single mechanism does three jobs: it makes the
+      backtest honest, it makes the competition run reproduce exactly after the event, and dropping
+      it turns the system into a live forecaster for the next earnings season.</figcaption>
+  </figure>
+
+  <div class="cards">
+    <div class="card neva"><div class="who">Asof &middot; Neva</div>
+      <h3>Point-in-time discipline</h3>
+      <ul>
+        <li><b>One global cutoff guard.</b> Retrieval fails loudly rather than leaking.</li>
+        <li><b>Backtest that drives design.</b> 32 replays, leakage clean; it found three
+          extraction defects inspection had missed.</li>
+        <li><b>Series from earnings releases</b>, not 10-Qs, where figures are stated in prose
+          with their units.</li>
+        <li><b>Validation before writing</b> &mdash; units, magnitude, sign, implied margin.</li>
+        <li><b>Model aimed only where measured weak</b>, so a measured method is never replaced
+          by an unmeasured one.</li>
+      </ul></div>
+
+    <div class="card adrian"><div class="who">Adrian</div>
+      <h3>External reference</h3>
+      <ul>
+        <li><b>Market consensus channel.</b> Sell-side estimates from 30, 25 and 17 analysts &mdash;
+          the denominator the accuracy prize scores us against.</li>
+        <li><b>Company profiling</b> by sector, so a retailer and a semiconductor maker are not
+          reasoned about identically.</li>
+        <li><b>Anchor reconciliation</b> across channels.</li>
+        <li><b>A critic pass</b> over each metric, and rescue for metrics with thin history.</li>
+      </ul></div>
+
+    <div class="card dimitris"><div class="who">Dimitris</div>
+      <h3>Specialisation and intervals</h3>
+      <ul>
+        <li><b>Analyst agents per source type</b> &mdash; filings, financials, news &mdash; rather
+          than one generalist reading everything.</li>
+        <li><b>Named forecast methods.</b> Every figure records how it was derived:
+          <code>DRIVER_BRIDGE</code>, <code>YOY_GROWTH</code>, <code>GUIDANCE_MIDPOINT</code>,
+          <code>EPS_FROM_NET_INCOME</code>.</li>
+        <li><b>A low/high band on all twelve</b>, which is what makes disagreement measurable.</li>
+      </ul></div>
+  </div>
+</div></section>
+
+<section><div class="wrap">
+  <h2>How the vote works</h2>
+  <p class="lead-in">Three estimates are enough to reject an outlier and not enough to fit
+    anything cleverer. So the rule is deliberately blunt.</p>
+  <figure class="diagram-frame">
+    
+<svg class="arch" viewBox="0 0 1000 240" xmlns="http://www.w3.org/2000/svg" role="img"
+     aria-label="Worked example: for ADI adjusted gross margin the three estimates were 69.2, 73.0 and 74.1; the lowest was more than twice as far from the middle as the highest, so it was discarded and the other two averaged to 73.55">
+  <defs><style>
+    .ax{stroke:#dcd8cf;stroke-width:1.5}
+    .pt{stroke-width:2}
+    .lbl{font:600 12px ui-monospace,Menlo,Consolas,monospace}
+    .sm{font:11px Inter,system-ui,sans-serif;fill:#4e535d}
+    .hd2{font:700 10px ui-monospace,Menlo,Consolas,monospace;letter-spacing:.14em;fill:#8b909b}
+    .res{font:700 15px ui-monospace,Menlo,Consolas,monospace;fill:#93331f}
+  </style></defs>
+
+  <text class="hd2" x="14" y="24">WORKED EXAMPLE &#8212; ADI ADJUSTED GROSS MARGIN, %</text>
+
+  <line class="ax" x1="80" y1="120" x2="920" y2="120"/>
+  <line class="ax" x1="80" y1="112" x2="80" y2="128"/>
+  <line class="ax" x1="920" y1="112" x2="920" y2="128"/>
+  <text class="sm" x="80" y="146" text-anchor="middle">69.0</text>
+  <text class="sm" x="920" y="146" text-anchor="middle">74.5</text>
+
+  <!-- 69.2 at x=110, 73.0 at x=690, 74.1 at x=858 -->
+  <circle cx="110" cy="120" r="9" fill="#fffefc" stroke="#0f5c58" class="pt"/>
+  <text class="lbl" x="110" y="98" text-anchor="middle" fill="#0f5c58">69.20</text>
+  <text class="sm" x="110" y="176" text-anchor="middle">Neva</text>
+  <text class="sm" x="110" y="192" text-anchor="middle" fill="#93331f">discarded</text>
+
+  <circle cx="690" cy="120" r="9" fill="#7a4bab" stroke="#7a4bab" class="pt"/>
+  <text class="lbl" x="690" y="98" text-anchor="middle" fill="#7a4bab">73.00</text>
+  <text class="sm" x="690" y="176" text-anchor="middle">Adrian</text>
+
+  <circle cx="858" cy="120" r="9" fill="#a8620d" stroke="#a8620d" class="pt"/>
+  <text class="lbl" x="858" y="98" text-anchor="middle" fill="#a8620d">74.10</text>
+  <text class="sm" x="858" y="176" text-anchor="middle">Dimitris</text>
+
+  <path d="M110 120 L690 120" stroke="#93331f" stroke-width="2" stroke-dasharray="5 4" fill="none"/>
+  <text class="sm" x="400" y="112" text-anchor="middle" fill="#93331f">gap 3.80</text>
+  <path d="M690 120 L858 120" stroke="#0f5c58" stroke-width="3" fill="none"/>
+  <text class="sm" x="774" y="112" text-anchor="middle" fill="#0f5c58">gap 1.10</text>
+
+  <circle cx="774" cy="120" r="6" fill="#93331f"/>
+  <text class="res" x="774" y="216" text-anchor="middle">submitted 73.55</text>
+
+  <text class="sm" x="14" y="216">3.80 &gt; 2 &#215; 1.10, so the lowest estimate stands apart and is dropped.</text>
+  <text class="sm" x="14" y="232">The filing states 73.0 &#8212; the vote removed a real error without being told which one it was.</text>
+</svg>
+
+    <figcaption>No system is trusted more than the others, and none knows which one is right.
+      The vote is on the numbers alone.</figcaption>
+  </figure>
+
+  <div class="stats">
+    <div class="stat"><div class="k">Targets</div><div class="v">12</div>
+      <div class="d">all covered by all three</div></div>
+    <div class="stat"><div class="k">Median spread</div>
+      <div class="v">7.0%</div>
+      <div class="d">between the three systems</div></div>
+    <div class="stat"><div class="k">Agreement</div>
+      <div class="v">3/6/3</div>
+      <div class="d">tight / moderate / wide</div></div>
+    <div class="stat"><div class="k">Outliers voted out</div>
+      <div class="v">8</div>
+      <div class="d">adrian 1, dimitris 3, neva 4</div></div>
+  </div>
+
+  <div class="callout"><p>Neva's system was outvoted most often, four times of twelve. Its ADI
+    adjusted gross margin read 69.2 against 73.0 and 74.1 &mdash; the filing states 73.0. The
+    ensemble removed a real error without being told which system was wrong, which is the whole
+    argument for running three.</p></div>
+</div></section>
+
+<section><div class="wrap">
+  <h2>The twelve submitted figures</h2>
+  <p class="note">Struck-through values were voted out. The consensus column is a rail, not a
+    target: the accuracy prize divides our error by Wall Street's, so matching it scores exactly
+    1.0 and guarantees a tie.</p>
+  <table>
+    <thead><tr><th>Co</th><th>Metric</th><th class="n">Neva</th><th class="n">Adrian</th>
+      <th class="n">Dimitris</th><th class="n">Submitted</th><th class="n">Street</th>
+      <th>Rule</th></tr></thead>
+    <tbody><tr><td><span class='tk'>HD</span></td><td>Net sales</td><td class="n src-neva">47,457.14</td><td class="n src-adrian">47,324.52</td><td class="n src-dimitris">47,250.00</td><td class='n win'>47,324.52</td><td class='n'>47,235.45<div style='color:var(--ink3);font-size:11px'>+0.2%</div></td><td style='color:var(--ink2);font-size:12.5px'>median of three; no estimate stood apart</td></tr><tr><td><span class='tk'>HD</span></td><td>Adjusted diluted EPS</td><td class="n out">4.38</td><td class="n src-adrian">4.62</td><td class="n src-dimitris">4.70</td><td class='n win'>4.66</td><td class='n'>4.73<div style='color:var(--ink3);font-size:11px'>-1.5%</div></td><td style='color:var(--ink2);font-size:12.5px'>two agreed, lowest discarded as an outlier</td></tr><tr><td><span class='tk'>HD</span></td><td>Comparable sales, total company</td><td class="n src-neva">0.60</td><td class="n src-adrian">1.80</td><td class="n src-dimitris">1.10</td><td class='n win'>1.10</td><td class='n'>&mdash;<div style='color:var(--ink3);font-size:11px'></div></td><td style='color:var(--ink2);font-size:12.5px'>median of three; no estimate stood apart</td></tr><tr><td><span class='tk'>ADI</span></td><td>Revenue</td><td class="n src-neva">3,917.18</td><td class="n src-adrian">3,925.01</td><td class="n out">3,950.00</td><td class='n win'>3,921.10</td><td class='n'>3,925.04<div style='color:var(--ink3);font-size:11px'>-0.1%</div></td><td style='color:var(--ink2);font-size:12.5px'>two agreed, highest discarded as an outlier</td></tr><tr><td><span class='tk'>ADI</span></td><td>Adjusted diluted EPS</td><td class="n out">3.42</td><td class="n src-adrian">3.33</td><td class="n src-dimitris">3.36</td><td class='n win'>3.35</td><td class='n'>3.33<div style='color:var(--ink3);font-size:11px'>+0.4%</div></td><td style='color:var(--ink2);font-size:12.5px'>two agreed, highest discarded as an outlier</td></tr><tr><td><span class='tk'>ADI</span></td><td>Adjusted gross margin</td><td class="n out">69.20</td><td class="n src-adrian">73.00</td><td class="n src-dimitris">74.10</td><td class='n win'>73.55</td><td class='n'>&mdash;<div style='color:var(--ink3);font-size:11px'></div></td><td style='color:var(--ink2);font-size:12.5px'>two agreed, lowest discarded as an outlier</td></tr><tr><td><span class='tk'>HAS</span></td><td>Net fees</td><td class="n out">890.40</td><td class="n src-adrian">950.00</td><td class="n src-dimitris">933.50</td><td class='n win'>941.75</td><td class='n'>&mdash;<div style='color:var(--ink3);font-size:11px'></div></td><td style='color:var(--ink2);font-size:12.5px'>two agreed, lowest discarded as an outlier</td></tr><tr><td><span class='tk'>HAS</span></td><td>Pre-exceptional basic EPS</td><td class="n src-neva">0.75</td><td class="n src-adrian">1.00</td><td class="n src-dimitris">1.32</td><td class='n win'>1.00</td><td class='n'>&mdash;<div style='color:var(--ink3);font-size:11px'></div></td><td style='color:var(--ink2);font-size:12.5px'>median of three; no estimate stood apart</td></tr><tr><td><span class='tk'>HAS</span></td><td>Pre-exceptional operating profit</td><td class="n src-neva">40.20</td><td class="n src-adrian">43.99</td><td class="n src-dimitris">46.00</td><td class='n win'>43.99</td><td class='n'>&mdash;<div style='color:var(--ink3);font-size:11px'></div></td><td style='color:var(--ink2);font-size:12.5px'>median of three; no estimate stood apart</td></tr><tr><td><span class='tk'>DE</span></td><td>Worldwide net sales and revenues</td><td class="n src-neva">10,919.77</td><td class="n src-adrian">10,903.68</td><td class="n out">12,700.00</td><td class='n win'>10,911.73</td><td class='n'>10,731.54<div style='color:var(--ink3);font-size:11px'>+1.7%</div></td><td style='color:var(--ink2);font-size:12.5px'>two agreed, highest discarded as an outlier</td></tr><tr><td><span class='tk'>DE</span></td><td>Diluted EPS (GAAP)</td><td class="n src-neva">4.69</td><td class="n out">4.42</td><td class="n src-dimitris">4.75</td><td class='n win'>4.72</td><td class='n'>4.67<div style='color:var(--ink3);font-size:11px'>+1.1%</div></td><td style='color:var(--ink2);font-size:12.5px'>two agreed, lowest discarded as an outlier</td></tr><tr><td><span class='tk'>DE</span></td><td>Production & Precision Ag operating profit</td><td class="n src-neva">356.69</td><td class="n src-adrian">400.00</td><td class="n out">525.00</td><td class='n win'>378.34</td><td class='n'>&mdash;<div style='color:var(--ink3);font-size:11px'></div></td><td style='color:var(--ink2);font-size:12.5px'>two agreed, highest discarded as an outlier</td></tr></tbody>
+  </table>
+</div></section>
+
+<section><div class="wrap">
+  <h2>Evidence the method was measured</h2>
+  <p class="lead-in">One of the three systems can replay the past honestly, which gives the entry
+    something rare: a number for how well the method actually works.</p>
+  <div class="stats">
+    <div class="stat"><div class="k">Events replayed</div>
+      <div class="v">32</div>
+      <div class="d">past reporting dates</div></div>
+    <div class="stat"><div class="k">Leakage guard</div>
+      <div class="v" style="color:var(--neva)">clean</div>
+      <div class="d">0 leaks detected</div></div>
+    <div class="stat"><div class="k">Median error</div>
+      <div class="v">17.0%</div>
+      <div class="d">deterministic path, per metric</div></div>
+    <div class="stat"><div class="k">Documents</div><div class="v">1,139</div>
+      <div class="d">69,229 indexed passages</div></div>
+  </div>
+  <div class="callout"><p>A caveat we would rather state than have found: a low backtest error
+    proves the method is <em>self-consistent</em>, not that the right quantity was extracted.
+    Forecast and actual are read by the same extractor, so a bias shared by both stays invisible.
+    That is precisely the failure the three-system vote catches, because the other two systems do
+    not share the bias.</p></div>
+</div></section>
+
+<section><div class="wrap">
+  <h2>Reproducing this</h2>
+  <pre><code>python run.py --as-of 2026-08-16          # this system's twelve figures
+python scripts/collect_team_forecasts.py  # read all three systems' outputs
+python scripts/build_ensemble.py --write  # vote, validate, write the workbooks
+npm run check:submission                  # the organisers' validator</code></pre>
+  <p class="note">No credentials are required to reproduce the submitted figures: the market
+    snapshot and every run artifact are committed, and the corpus ships with the repository.</p>
+</div></section>
+
+<footer><div class="wrap">
+  EPS Winners &middot; Agents vs Wall Street, London, 16 August 2026 &middot; commit fd6b209
+</div></footer>
+
+</body>
+</html>
