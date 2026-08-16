@@ -66,13 +66,13 @@ footer{margin-top:52px;padding-top:22px;border-top:1px solid var(--line);
     what makes our backtest honest, what makes this run reproducible after the event, and what lets
     the agent be reused for the next earnings season.</p>
 
-  <div class="chips"><span class="chip">As of <b>2026-08-16</b></span><span class="chip">Commit <b>6b8748625c</b></span><span class="chip">Forecasts <b>12/12</b></span><span class="chip">Documents <b>1,139</b></span><span class="chip ok">Leakage guard <b>clean</b> over 32 replays</span></div>
+  <div class="chips"><span class="chip">As of <b>2026-08-16</b></span><span class="chip">Commit <b>6c38d97042</b></span><span class="chip">Forecasts <b>12/12</b></span><span class="chip">Documents <b>1,139</b></span><span class="chip ok">Leakage guard <b>clean</b> over 32 replays</span></div>
 
   <div class="card">
     <p>Build style: <strong>coding harness</strong></p>
     <p>Languages: <strong>Python 3.13, no third-party runtime dependencies beyond openpyxl</strong></p>
     <p>Final command: <code>python run.py --as-of 2026-08-16</code></p>
-    <p>Final commit: <code>6b8748625c0beff91fb4cd9036c1afaebc869cb9</code></p>
+    <p>Final commit: <code>6c38d970422eef9ec456e89e9a2e1b65a4be93f8</code></p>
   </div>
 
   <h2>The idea</h2>
@@ -223,7 +223,7 @@ python run.py                      # live mode, for future earnings events</code
 
   <h2>The twelve submitted forecasts</h2>
   <table><thead><tr><th>Co</th><th>Metric</th><th class="num">Forecast</th><th>Units</th>
-    <th>Confidence</th></tr></thead><tbody><tr><td><b>ADI</b></td><td>Revenue</td><td class='num'>3,949</td><td>USDm</td><td>medium</td></tr><tr><td><b>ADI</b></td><td>Adjusted diluted EPS</td><td class='num'>3.42</td><td>USD / share</td><td>medium</td></tr><tr><td><b>ADI</b></td><td>Adjusted gross margin</td><td class='num'>27.00</td><td>%</td><td>medium</td></tr><tr><td><b>DE</b></td><td>Worldwide net sales and revenues</td><td class='num'>10,920</td><td>USDm</td><td>medium</td></tr><tr><td><b>DE</b></td><td>Diluted EPS (GAAP)</td><td class='num'>4.69</td><td>USD / share</td><td>medium</td></tr><tr><td><b>DE</b></td><td>Production & Precision Ag operating profit</td><td class='num'>1,513</td><td>USDm</td><td>medium</td></tr><tr><td><b>HAS</b></td><td>Net fees</td><td class='num'>85.00</td><td>GBPm</td><td>medium</td></tr><tr><td><b>HAS</b></td><td>Pre-exceptional basic EPS</td><td class='num'>0.02</td><td>GBp</td><td>low</td></tr><tr><td><b>HAS</b></td><td>Pre-exceptional operating profit</td><td class='num'>85.00</td><td>GBPm</td><td>medium</td></tr><tr><td><b>HD</b></td><td>Net sales</td><td class='num'>47,457</td><td>USDm</td><td>medium</td></tr><tr><td><b>HD</b></td><td>Adjusted diluted EPS</td><td class='num'>4.38</td><td>USD / share</td><td>medium</td></tr><tr><td><b>HD</b></td><td>Comparable sales, total company</td><td class='num'>1.00</td><td>%</td><td>medium</td></tr></tbody></table>
+    <th>Confidence</th></tr></thead><tbody><tr><td><b>ADI</b></td><td>Revenue</td><td class='num'>3,917</td><td>USDm</td><td>medium</td></tr><tr><td><b>ADI</b></td><td>Adjusted diluted EPS</td><td class='num'>3.42</td><td>USD / share</td><td>medium</td></tr><tr><td><b>ADI</b></td><td>Adjusted gross margin</td><td class='num'>27.00</td><td>%</td><td>medium</td></tr><tr><td><b>DE</b></td><td>Worldwide net sales and revenues</td><td class='num'>10,920</td><td>USDm</td><td>medium</td></tr><tr><td><b>DE</b></td><td>Diluted EPS (GAAP)</td><td class='num'>4.69</td><td>USD / share</td><td>medium</td></tr><tr><td><b>DE</b></td><td>Production & Precision Ag operating profit</td><td class='num'>1,513</td><td>USDm</td><td>medium</td></tr><tr><td><b>HAS</b></td><td>Net fees</td><td class='num'>85.00</td><td>GBPm</td><td>medium</td></tr><tr><td><b>HAS</b></td><td>Pre-exceptional basic EPS</td><td class='num'>0.02</td><td>GBp</td><td>low</td></tr><tr><td><b>HAS</b></td><td>Pre-exceptional operating profit</td><td class='num'>85.00</td><td>GBPm</td><td>medium</td></tr><tr><td><b>HD</b></td><td>Net sales</td><td class='num'>47,457</td><td>USDm</td><td>medium</td></tr><tr><td><b>HD</b></td><td>Adjusted diluted EPS</td><td class='num'>4.38</td><td>USD / share</td><td>medium</td></tr><tr><td><b>HD</b></td><td>Comparable sales, total company</td><td class='num'>1.00</td><td>%</td><td>medium</td></tr></tbody></table>
 
   <h2>Checks and tests</h2>
   <p>60 timestamped events were written during this run to the clear-run log
@@ -247,7 +247,7 @@ python run.py                      # live mode, for future earnings events</code
     Leakage guard: <strong>clean</strong>. Median absolute percentage error
     against what the companies actually reported:</p>
   <table><thead><tr><th>Co</th><th>Metric</th><th class="num">Events</th>
-    <th class="num">Median error</th></tr></thead><tbody><tr><td><b>ADI</b></td><td>Adjusted diluted EPS</td><td class='num'>8</td><td class='num mid'>20.3%</td></tr><tr><td><b>ADI</b></td><td>Adjusted gross margin</td><td class='num'>8</td><td class='num bad'>158.4%</td></tr><tr><td><b>ADI</b></td><td>Revenue</td><td class='num'>8</td><td class='num good'>5.8%</td></tr><tr><td><b>DE</b></td><td>Diluted EPS (GAAP)</td><td class='num'>8</td><td class='num good'>13.6%</td></tr><tr><td><b>DE</b></td><td>Production & Precision Ag operating profit</td><td class='num'>8</td><td class='num bad'>97.7%</td></tr><tr><td><b>DE</b></td><td>Worldwide net sales and revenues</td><td class='num'>8</td><td class='num good'>10.6%</td></tr><tr><td><b>HAS</b></td><td>Net fees</td><td class='num'>8</td><td class='num bad'>178.5%</td></tr><tr><td><b>HAS</b></td><td>Pre-exceptional basic EPS</td><td class='num'>8</td><td class='num bad'>99.6%</td></tr><tr><td><b>HAS</b></td><td>Pre-exceptional operating profit</td><td class='num'>8</td><td class='num bad'>98.6%</td></tr><tr><td><b>HD</b></td><td>Adjusted diluted EPS</td><td class='num'>8</td><td class='num good'>10.4%</td></tr><tr><td><b>HD</b></td><td>Comparable sales, total company</td><td class='num'>8</td><td class='num bad'>184.2%</td></tr><tr><td><b>HD</b></td><td>Net sales</td><td class='num'>8</td><td class='num good'>5.1%</td></tr></tbody></table>
+    <th class="num">Median error</th></tr></thead><tbody><tr><td><b>ADI</b></td><td>Adjusted diluted EPS</td><td class='num'>8</td><td class='num mid'>20.3%</td></tr><tr><td><b>ADI</b></td><td>Adjusted gross margin</td><td class='num'>8</td><td class='num bad'>158.4%</td></tr><tr><td><b>ADI</b></td><td>Revenue</td><td class='num'>8</td><td class='num good'>3.9%</td></tr><tr><td><b>DE</b></td><td>Diluted EPS (GAAP)</td><td class='num'>8</td><td class='num good'>13.6%</td></tr><tr><td><b>DE</b></td><td>Production & Precision Ag operating profit</td><td class='num'>8</td><td class='num bad'>97.7%</td></tr><tr><td><b>DE</b></td><td>Worldwide net sales and revenues</td><td class='num'>8</td><td class='num good'>10.6%</td></tr><tr><td><b>HAS</b></td><td>Net fees</td><td class='num'>8</td><td class='num bad'>178.5%</td></tr><tr><td><b>HAS</b></td><td>Pre-exceptional basic EPS</td><td class='num'>8</td><td class='num bad'>99.6%</td></tr><tr><td><b>HAS</b></td><td>Pre-exceptional operating profit</td><td class='num'>8</td><td class='num bad'>98.6%</td></tr><tr><td><b>HD</b></td><td>Adjusted diluted EPS</td><td class='num'>8</td><td class='num good'>10.4%</td></tr><tr><td><b>HD</b></td><td>Comparable sales, total company</td><td class='num'>8</td><td class='num bad'>184.2%</td></tr><tr><td><b>HD</b></td><td>Net sales</td><td class='num'>8</td><td class='num good'>4.3%</td></tr></tbody></table>
   <p>Overall median across scored metrics:
     <strong class="mid">
     59.0%</strong>.</p>
@@ -356,13 +356,13 @@ python scripts/build_architecture.py  # regenerates this page</code></pre>
     a rerun needs no network access and produces the same figures.</p>
 
   <div class="card">
-    <p>Final commit: <code>6b8748625c0beff91fb4cd9036c1afaebc869cb9</code></p>
+    <p>Final commit: <code>6c38d970422eef9ec456e89e9a2e1b65a4be93f8</code></p>
     <p>Final command: <code>python run.py --as-of 2026-08-16</code></p>
     <p>Expected output: four completed workbooks in <code>submission/</code>.</p>
   </div>
 
-  <footer>Generated from run <code>run-2026-08-16-20260816T123645Z</code> at
-    2026-08-16T12:37:25.258Z.</footer>
+  <footer>Generated from run <code>run-2026-08-16-20260816T124833Z</code> at
+    2026-08-16T12:49:15.148Z.</footer>
 </main>
 </body>
 </html>

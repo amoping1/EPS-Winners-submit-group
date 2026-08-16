@@ -1,4 +1,4 @@
-"""Deterministic baseline estimates.
+﻿"""Deterministic baseline estimates.
 
 This is the floor of the system, not its ceiling. It needs no API key and no
 model call: it searches the corpus for each metric, extracts plausible values
@@ -31,6 +31,7 @@ from datetime import timedelta
 from .config import Company, Metric
 from .corpus import CorpusIndex
 from .extract import ValueCandidate, candidates_from_hits, metric_query
+from .guidance import apply_bias, find_guidance
 from .series import QUARTER_DAYS, YEAR_TOLERANCE_DAYS, build_series
 
 # How many top-scoring candidates feed the median. Small enough to stay close to
@@ -173,6 +174,74 @@ def _seasonal_naive_estimate(
     )
 
 
+# Two independent methods disagreeing by more than this have not merely differed
+# in judgement; one of them has read the wrong number.
+GUIDANCE_AGREEMENT_BAND = 0.40
+
+# Weight given to the company's own statement when the two methods do agree.
+GUIDANCE_WEIGHT = 0.65
+
+
+def _blend_with_guidance(
+    index: CorpusIndex,
+    company: Company,
+    metric: Metric,
+    statistical: BaselineEstimate,
+) -> BaselineEstimate:
+    """Blend published guidance into the statistical forecast, when they agree.
+
+    When a company has already told the market what it expects, that is usually
+    the better forecast: ADI guided Q3 FY2026 revenue to $3.9bn against our
+    statistical 3.62bn.
+
+    But guidance extraction is only right about a quarter of the time -- it
+    picks up half-year figures, adjacent metrics and stray numbers from guidance
+    paragraphs. Rather than trust it, we use the two methods to check each other.
+    Agreement within 40% means both read the same quantity, and the company's own
+    statement is weighted higher. Disagreement beyond that means one of them
+    misread, and we keep the statistical path because it is the one the backtest
+    has actually measured.
+
+    On this run the rule keeps ADI revenue, where guidance is correct, and
+    rejects three cases where extraction had picked the wrong figure.
+    """
+    try:
+        anchor = find_guidance(index, company, metric)
+    except Exception:  # noqa: BLE001 - guidance is an enhancement, never a blocker
+        return statistical
+    if anchor is None:
+        statistical.notes.append("no published guidance found for this metric")
+        return statistical
+
+    series = build_series(index, company, metric)
+    anchor = apply_bias(anchor, series.guidance_bias())
+
+    scale = max(abs(statistical.value), 1e-9)
+    divergence = abs(anchor.value - statistical.value) / scale
+
+    if divergence > GUIDANCE_AGREEMENT_BAND:
+        statistical.notes.append(
+            f"guidance candidate {anchor.value:,.4g} rejected: it differs from the "
+            f"statistical forecast by {divergence:.0%}, beyond the "
+            f"{GUIDANCE_AGREEMENT_BAND:.0%} agreement band, so one of the two misread"
+        )
+        return statistical
+
+    blended = GUIDANCE_WEIGHT * anchor.value + (1 - GUIDANCE_WEIGHT) * statistical.value
+    statistical.notes.append(
+        f"blended with published guidance {anchor.value:,.4g} "
+        f"({anchor.published_at}); methods agreed within {divergence:.0%}"
+    )
+    statistical.notes.extend(anchor.notes)
+    statistical.method = (
+        f"{GUIDANCE_WEIGHT:.0%} published guidance, "
+        f"{1 - GUIDANCE_WEIGHT:.0%} {statistical.method}"
+    )
+    statistical.value = float(blended)
+    statistical.confidence = "medium"
+    return statistical
+
+
 def _fallback_value(metric: Metric) -> tuple[float, str]:
     """Last resort when the corpus yields nothing usable for a metric.
 
@@ -202,7 +271,7 @@ def estimate_metric(
     """
     seasonal = _seasonal_naive_estimate(index, company, metric)
     if seasonal is not None:
-        return seasonal
+        return _blend_with_guidance(index, company, metric, seasonal)
 
     query = metric_query(company, metric)
 
@@ -260,3 +329,4 @@ def estimate_company(index: CorpusIndex, company: Company) -> dict[str, Baseline
     return {
         metric.label: estimate_metric(index, company, metric) for metric in company.metrics
     }
+
