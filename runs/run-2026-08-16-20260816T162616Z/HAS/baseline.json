@@ -1,0 +1,362 @@
+{
+  "company": {
+    "name": "Hays plc",
+    "ticker": "LSE:HAS",
+    "slug": "HAS",
+    "period": "FY2026",
+    "output_file": "HAS-FY2026.xlsx",
+    "metrics": [
+      {
+        "label": "Net fees",
+        "units": "GBPm",
+        "kind": "money"
+      },
+      {
+        "label": "Pre-exceptional basic EPS",
+        "units": "GBp",
+        "kind": "per_share"
+      },
+      {
+        "label": "Pre-exceptional operating profit",
+        "units": "GBPm",
+        "kind": "money"
+      }
+    ]
+  },
+  "as_of": "2026-08-16",
+  "estimates": [
+    {
+      "company": "HAS",
+      "metric": "Net fees",
+      "units": "GBPm",
+      "value": 890.4,
+      "confidence": "medium",
+      "method": "reasoning agent over cutoff-filtered filing passages",
+      "notes": [
+        "series has 27 reported observations from earnings releases",
+        "latest reported 85 on 2026-07-10",
+        "units: millions of GBP, so 41800 means 41.8 billion",
+        "guidance candidate 45 rejected: it differs from the statistical forecast by 47%, beyond the 40% agreement band, so one of the two misread",
+        "replaced by the reasoning agent: Use reported H1 FY26 operating profit and conversion rate to infer H1 FY26 net fees: £20.1m / 4.4% = £456.8m. Derive prior-year H1 seasonality from the same metrics: H1 FY26 operating profit was down 21% reported, so H1 FY25 operating profit = £20.1m / (1 - 0.21) = £25.4m; H1 FY25 conversion rate = 4.4% + 0.7% = 5.1%; H1 FY25 net fees = £25.4m / 5.1% = £498.9m. FY25 full-year net fees were £972.4m",
+        "agent cited passages [1], [9]"
+      ],
+      "evidence": [
+        {
+          "value": 40.0,
+          "units": "GBPm",
+          "raw": "£40 million",
+          "context": "million annual profit\n\nHigh: +4% annual net fees (+£40 million) | &gt;£10 million annual profit\n\n<!-- PAGE 76 -->\n\nTask Force on Climate-related Financial Disclosures continued\n\n| Risk (Timeframe)         | Current Policies (3+°C)         | Divergent Net Zero (1.5°C)",
+          "score": 2.257,
+          "notes": [
+            "period-match",
+            "explicit-scale",
+            "gap=11",
+            "currency=£",
+            "scale=million"
+          ],
+          "source": {
+            "doc_id": "2025-08-21__has-ln-20250821-h2-8k-2__671218",
+            "path": "challenge/offline-data/hays/filings/2025-08-21__has-ln-20250821-h2-8k-2__671218.md",
+            "company": "HAS",
+            "published_at": "2025-08-21",
+            "document_type": "FILING",
+            "period": "FY 2025",
+            "title": "Annual Report and Accounts",
+            "source_url": null
+          }
+        },
+        {
+          "value": 85.0,
+          "units": "GBPm",
+          "raw": "£85 million",
+          "context": "ional operating profit on c.£85 million net fees in FY 26.\n\nOver the last year,  we have resha ped our  country portfolio as  we focus on building scale in high performing and high potential markets where we have an ability to establish and grow leading positions. Goi",
+          "score": 1.6,
+          "notes": [
+            "explicit-scale",
+            "precedes-label",
+            "gap=12",
+            "currency=£",
+            "scale=million"
+          ],
+          "source": {
+            "doc_id": "2026-07-10__has-ln-20260710-q4-8k__1572805",
+            "path": "challenge/offline-data/hays/filings/2026-07-10__has-ln-20260710-q4-8k__1572805.md",
+            "company": "HAS",
+            "published_at": "2026-07-10",
+            "document_type": "FILING",
+            "period": "Q4 2026",
+            "title": "Quarterly Trading Update",
+            "source_url": null
+          }
+        }
+      ]
+    },
+    {
+      "company": "HAS",
+      "metric": "Pre-exceptional basic EPS",
+      "units": "GBp",
+      "value": 0.75,
+      "confidence": "medium",
+      "method": "reasoning agent over cutoff-filtered filing passages",
+      "notes": [
+        "series has 21 reported observations from earnings releases",
+        "latest reported 0.15 on 2026-02-27",
+        "units: pence per share, so 6.2 means 6.2p",
+        "no published guidance found for this metric",
+        "replaced by the reasoning agent: H1 FY26 pre-exceptional basic earnings were £7.4m versus £12.9m in H1 FY25, a ratio of 7.4 / 12.9 = 0.5736. Applying that same run-rate decline to FY2025 full-year pre-exceptional basic earnings of £20.9m gives forecast FY2026 pre-exceptional basic earnings of £20.9m * 0.5736 = £11.99m. Using the latest weighted average shares of 1,595.7m, EPS = £11.99m / 1,595.7m * 100 = 0.751p, rounded to 0.75p.",
+        "agent cited passages [1], [2], [7]"
+      ],
+      "evidence": [
+        {
+          "value": 0.15,
+          "units": "GBp",
+          "raw": "0.15 pence",
+          "context": "hs ended 31 December 2025 of 0.15 pence per share is not included as a liability in the balance sheet as at 31 December 2025.",
+          "score": 0.916,
+          "notes": [
+            "precedes-label",
+            "gap=11"
+          ],
+          "source": {
+            "doc_id": "2026-02-27__has-ln-20260227-h1-8k__642921",
+            "path": "challenge/offline-data/hays/filings/2026-02-27__has-ln-20260227-h1-8k__642921.md",
+            "company": "HAS",
+            "published_at": "2026-02-27",
+            "document_type": "FILING",
+            "period": "H1 2026",
+            "title": "Half-Year Report",
+            "source_url": null
+          }
+        }
+      ]
+    },
+    {
+      "company": "HAS",
+      "metric": "Pre-exceptional operating profit",
+      "units": "GBPm",
+      "value": 40.2,
+      "confidence": "medium",
+      "method": "reasoning agent over cutoff-filtered filing passages",
+      "notes": [
+        "series has 34 reported observations from earnings releases",
+        "latest reported 85 on 2026-07-10",
+        "units: millions of GBP, so 41800 means 41.8 billion",
+        "guidance candidate 20 rejected: it differs from the statistical forecast by 76%, beyond the 40% agreement band, so one of the two misread",
+        "replaced by the reasoning agent: H1 FY2026 pre-exceptional operating profit was £20.1m. The comparable H1 FY2025 figure was £25.5m, and FY2025 full-year pre-exceptional operating profit was £45.6m, so FY2025 H2 pre-exceptional operating profit = £45.6m - £25.5m = £20.1m. Using that latest comparable H2 amount as the derivable H2 FY2026 estimate: FY2026 = H1 FY2026 £20.1m + H2 estimate £20.1m = £40.2m.",
+        "agent cited passages [3], [12], [2]"
+      ],
+      "evidence": [
+        {
+          "value": 5.6,
+          "units": "GBPm",
+          "raw": "£5.6 million",
+          "context": "decreasing net fees by £5.6 million and operating profit by £0.6 million.\n\nTemporary &amp; Contracting net fees (69% of ANZ) decreased by 8%, with volumes down 13%, but remained broadly stable through the second half. Permanent net fees decreased by 22%, with volumes down 28%",
+          "score": 1.542,
+          "notes": [
+            "explicit-scale",
+            "precedes-label",
+            "gap=17",
+            "currency=£",
+            "scale=million"
+          ],
+          "source": {
+            "doc_id": "2025-08-21__has-ln-20250821-h2-8k-2__671218",
+            "path": "challenge/offline-data/hays/filings/2025-08-21__has-ln-20250821-h2-8k-2__671218.md",
+            "company": "HAS",
+            "published_at": "2025-08-21",
+            "document_type": "FILING",
+            "period": "FY 2025",
+            "title": "Annual Report and Accounts",
+            "source_url": null
+          }
+        },
+        {
+          "value": 85.0,
+          "units": "GBPm",
+          "raw": "£85 million",
+          "context": "a broadly break even pre -exceptional operating profit on c.£85 million net fees in FY 26.\n\nOver the last year,  we have resha ped our  country portfolio as  we focus on building scale in high performing and high potential markets where we have an ability to establish and g",
+          "score": 1.487,
+          "notes": [
+            "explicit-scale",
+            "gap=22",
+            "currency=£",
+            "scale=million"
+          ],
+          "source": {
+            "doc_id": "2026-07-10__has-ln-20260710-q4-8k__1572805",
+            "path": "challenge/offline-data/hays/filings/2026-07-10__has-ln-20260710-q4-8k__1572805.md",
+            "company": "HAS",
+            "published_at": "2026-07-10",
+            "document_type": "FILING",
+            "period": "Q4 2026",
+            "title": "Quarterly Trading Update",
+            "source_url": null
+          }
+        }
+      ]
+    }
+  ],
+  "written_cells": [
+    {
+      "metric": "Net fees",
+      "units": "GBPm",
+      "cell": "C7",
+      "value": 890.4
+    },
+    {
+      "metric": "Pre-exceptional basic EPS",
+      "units": "GBp",
+      "cell": "C8",
+      "value": 0.75
+    },
+    {
+      "metric": "Pre-exceptional operating profit",
+      "units": "GBPm",
+      "cell": "C9",
+      "value": 40.2
+    }
+  ],
+  "validation": {
+    "total": 13,
+    "passed": 11,
+    "warnings": 2,
+    "failures": 0,
+    "status": "warn",
+    "checks": [
+      {
+        "company": "HAS",
+        "metric": "Net fees",
+        "check": "completeness",
+        "status": "pass",
+        "detail": "forecast present"
+      },
+      {
+        "company": "HAS",
+        "metric": "Pre-exceptional basic EPS",
+        "check": "completeness",
+        "status": "pass",
+        "detail": "forecast present"
+      },
+      {
+        "company": "HAS",
+        "metric": "Pre-exceptional operating profit",
+        "check": "completeness",
+        "status": "pass",
+        "detail": "forecast present"
+      },
+      {
+        "company": "HAS",
+        "metric": "Net fees",
+        "check": "units",
+        "status": "pass",
+        "detail": "890.4 is plausible for GBPm"
+      },
+      {
+        "company": "HAS",
+        "metric": "Net fees",
+        "check": "sign",
+        "status": "pass",
+        "detail": "sign is sensible"
+      },
+      {
+        "company": "HAS",
+        "metric": "Net fees",
+        "check": "history",
+        "status": "warn",
+        "detail": "890.4 against most recent reported 85 on 2026-07-10 (+948%) -- unusually far"
+      },
+      {
+        "company": "HAS",
+        "metric": "Pre-exceptional basic EPS",
+        "check": "units",
+        "status": "pass",
+        "detail": "0.75 is plausible for GBp"
+      },
+      {
+        "company": "HAS",
+        "metric": "Pre-exceptional basic EPS",
+        "check": "sign",
+        "status": "pass",
+        "detail": "sign is sensible"
+      },
+      {
+        "company": "HAS",
+        "metric": "Pre-exceptional basic EPS",
+        "check": "history",
+        "status": "warn",
+        "detail": "0.75 against most recent reported 0.15 on 2026-02-27 (+400%) -- unusually far"
+      },
+      {
+        "company": "HAS",
+        "metric": "Pre-exceptional operating profit",
+        "check": "units",
+        "status": "pass",
+        "detail": "40.2 is plausible for GBPm"
+      },
+      {
+        "company": "HAS",
+        "metric": "Pre-exceptional operating profit",
+        "check": "sign",
+        "status": "pass",
+        "detail": "sign is sensible"
+      },
+      {
+        "company": "HAS",
+        "metric": "Pre-exceptional operating profit",
+        "check": "history",
+        "status": "pass",
+        "detail": "40.2 against most recent reported 85 on 2026-07-10 (+53%)"
+      },
+      {
+        "company": "HAS",
+        "metric": "internal consistency",
+        "check": "margin",
+        "status": "pass",
+        "detail": "Pre-exceptional operating profit / Net fees implies a 4.5% margin (40.2 / 890.4)"
+      }
+    ]
+  },
+  "agent": [
+    {
+      "metric": "Net fees",
+      "units": "GBPm",
+      "value": 890.4,
+      "confidence": "medium",
+      "derivation": "Use reported H1 FY26 operating profit and conversion rate to infer H1 FY26 net fees: £20.1m / 4.4% = £456.8m. Derive prior-year H1 seasonality from the same metrics: H1 FY26 operating profit was down 21% reported, so H1 FY25 operating profit = £20.1m / (1 - 0.21) = £25.4m; H1 FY25 conversion rate = 4.4% + 0.7% = 5.1%; H1 FY25 net fees = £25.4m / 5.1% = £498.9m. FY25 full-year net fees were £972.4m, so H2 FY25 net fees = £972.4m - £498.9m = £473.5m, and H2/H1 seasonality = £473.5m / £498.9m = 0.9491. Apply that seasonality to H1 FY26: H2 FY26 forecast = £456.8m * 0.9491 = £433.6m. FY2026 net fees forecast = £456.8m + £433.6m = £890.4m.",
+      "citations": [
+        "[1]",
+        "[9]"
+      ],
+      "accepted": true,
+      "rejection": ""
+    },
+    {
+      "metric": "Pre-exceptional basic EPS",
+      "units": "GBp",
+      "value": 0.75,
+      "confidence": "low",
+      "derivation": "H1 FY26 pre-exceptional basic earnings were £7.4m versus £12.9m in H1 FY25, a ratio of 7.4 / 12.9 = 0.5736. Applying that same run-rate decline to FY2025 full-year pre-exceptional basic earnings of £20.9m gives forecast FY2026 pre-exceptional basic earnings of £20.9m * 0.5736 = £11.99m. Using the latest weighted average shares of 1,595.7m, EPS = £11.99m / 1,595.7m * 100 = 0.751p, rounded to 0.75p.",
+      "citations": [
+        "[1]",
+        "[2]",
+        "[7]"
+      ],
+      "accepted": true,
+      "rejection": ""
+    },
+    {
+      "metric": "Pre-exceptional operating profit",
+      "units": "GBPm",
+      "value": 40.2,
+      "confidence": "low",
+      "derivation": "H1 FY2026 pre-exceptional operating profit was £20.1m. The comparable H1 FY2025 figure was £25.5m, and FY2025 full-year pre-exceptional operating profit was £45.6m, so FY2025 H2 pre-exceptional operating profit = £45.6m - £25.5m = £20.1m. Using that latest comparable H2 amount as the derivable H2 FY2026 estimate: FY2026 = H1 FY2026 £20.1m + H2 estimate £20.1m = £40.2m.",
+      "citations": [
+        "[3]",
+        "[12]",
+        "[2]"
+      ],
+      "accepted": true,
+      "rejection": ""
+    }
+  ]
+}
