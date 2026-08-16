@@ -38,6 +38,10 @@ _NUMBER_TOKEN = re.compile(
     re.IGNORECASE | re.VERBOSE,
 )
 
+# A figure this close to its label is part of the same phrase, whichever side it
+# sits on: "$6.55 per share" reads as one statement.
+ADJACENT_CHARS = 18
+
 _SCALE_TO_MILLIONS = {
     "billion": 1000.0,
     "bn": 1000.0,
@@ -335,6 +339,7 @@ def candidates_from_hits(
                 period_weight = _period_fit(window, annual)
                 if period_weight is None:
                     continue
+                from_window: list[ValueCandidate] = []
                 if metric.kind == "per_share":
                     lowered_window = window.lower()
                     if not any(marker in lowered_window for marker in _PER_SHARE_MARKERS):
@@ -349,6 +354,12 @@ def candidates_from_hits(
                     else:
                         value = None if parsed.is_percent else parsed.value
                     if value is None or not _plausible(metric, value):
+                        continue
+
+                    # Basis points express a *change*, never a level. Reading
+                    # "630 bps" as a margin gave ADI an adjusted gross margin of
+                    # 6.3% against an actual near 73%.
+                    if metric.kind == "percent" and parsed.scale == "bps":
                         continue
 
                     # A money figure in a filing is either written with its unit
@@ -378,6 +389,17 @@ def candidates_from_hits(
                     position = window.find(parsed.raw)
                     if distance >= 0 and position >= 0:
                         gap = abs(position - distance)
+                        # A number sitting well before its label usually belongs
+                        # to the previous column: ADI's "44 %" change column sits
+                        # just before "Adjusted gross margin percentage 73.0 %"
+                        # and was winning on proximity alone.
+                        #
+                        # Adjacency is the exception, because prose puts the
+                        # figure first: "$6.55 per share". Penalising that broke
+                        # Deere's EPS, so only a distant preceding number is
+                        # treated as belonging to something else.
+                        if position < distance:
+                            notes.append("precedes-label")
                         score *= 1.0 / (1.0 + gap / 120.0)
                         notes.append(f"gap={gap}")
                     if parsed.currency:
@@ -386,7 +408,7 @@ def candidates_from_hits(
                     if parsed.scale:
                         notes.append(f"scale={parsed.scale}")
 
-                    found.append(
+                    from_window.append(
                         ValueCandidate(
                             value=value,
                             units=metric.units,
@@ -397,6 +419,27 @@ def candidates_from_hits(
                             notes=notes,
                         )
                     )
+
+                # A label's own figure follows it. Anything before the label
+                # belongs to the previous column -- ADI's "44 %" change column
+                # sits immediately before "Adjusted gross margin percentage
+                # 73.0 %" and wins on proximity alone.
+                #
+                # But prose puts the figure first ("$6.55 per share"), and there
+                # the preceding number is the answer. Distance cannot separate
+                # the two cases; both gaps are tiny. Presence can: if this window
+                # has a figure after the label, the ones before it are discarded,
+                # and if it does not, they are all we have.
+                # Per-share metrics are exempt. They are quoted in prose as
+                # "$6.55 per share" -- the figure always precedes its label --
+                # whereas margins and other percentages are read out of tables
+                # where the label comes first. Applying the rule to both put
+                # Deere's EPS at 2.67 against a reported 6.55.
+                if metric.kind == "per_share":
+                    found.extend(from_window)
+                else:
+                    following = [c for c in from_window if "precedes-label" not in c.notes]
+                    found.extend(following or from_window)
 
     found.sort(key=lambda candidate: candidate.score, reverse=True)
 
