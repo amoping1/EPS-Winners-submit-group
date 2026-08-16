@@ -1,0 +1,324 @@
+{
+  "company": {
+    "name": "Home Depot",
+    "ticker": "HD",
+    "slug": "HD",
+    "period": "FY2026Q2",
+    "output_file": "HD-FY2026Q2.xlsx",
+    "metrics": [
+      {
+        "label": "Net sales",
+        "units": "USDm",
+        "kind": "money"
+      },
+      {
+        "label": "Adjusted diluted EPS",
+        "units": "USD / share",
+        "kind": "per_share"
+      },
+      {
+        "label": "Comparable sales, total company",
+        "units": "%",
+        "kind": "percent"
+      }
+    ]
+  },
+  "as_of": "2026-08-16",
+  "estimates": [
+    {
+      "company": "HD",
+      "metric": "Net sales",
+      "units": "USDm",
+      "value": 47457.14285714286,
+      "confidence": "medium",
+      "method": "seasonal naive with drift: 2025-08-19 value 4.53e+04 grown by +4.8% year-on-year",
+      "notes": [
+        "series has 42 reported observations from earnings releases",
+        "latest reported 4.18e+04 on 2026-05-19",
+        "units: millions of USD, so 41800 means 41.8 billion",
+        "no published guidance found for this metric"
+      ],
+      "evidence": [
+        {
+          "value": 45300.0,
+          "units": "USDm",
+          "raw": "$45.3 billion",
+          "context": "me improvement retailer, today reported sales of $45.3 billion for the second quarter of fiscal 2025, an increase of $2.1 billion, or 4.9% from the second quarter of fiscal 2024. Comparable sales for the second quarter of fiscal 2025 increased 1.0%, and comparable",
+          "score": 2.292,
+          "notes": [
+            "period-match",
+            "explicit-scale",
+            "gap=9",
+            "currency=$",
+            "scale=billion"
+          ],
+          "source": {
+            "doc_id": "2025-08-19__hd-us-20250819-q2-8k__143666",
+            "path": "challenge/offline-data/home-depot/filings/2025-08-19__hd-us-20250819-q2-8k__143666.md",
+            "company": "HD",
+            "published_at": "2025-08-19",
+            "document_type": "FILING",
+            "period": "Q2 2025",
+            "title": "Second Quarter Fiscal Results and Full Year Guidance",
+            "source_url": "https://www.sec.gov/Archives/edgar/data/354950/000035495025000195/hd_exhibit991x08032025.htm"
+          }
+        },
+        {
+          "value": 41800.0,
+          "units": "USDm",
+          "raw": "$41.8 billion",
+          "context": "me improvement retailer, today\nreported sales of $41.8 billion for the first quarter of fiscal 2026, an increase of $1.9 billion, or 4.8% from\nthe first quarter of fiscal 2025. Comparable sales for the first quarter of fiscal 2026 increased 0.6%, and\ncomparable sal",
+          "score": 2.292,
+          "notes": [
+            "period-match",
+            "explicit-scale",
+            "gap=9",
+            "currency=$",
+            "scale=billion"
+          ],
+          "source": {
+            "doc_id": "2026-05-19__hd-us-20260519-q1-8k__1038584",
+            "path": "challenge/offline-data/home-depot/filings/2026-05-19__hd-us-20260519-q1-8k__1038584.md",
+            "company": "HD",
+            "published_at": "2026-05-19",
+            "document_type": "FILING",
+            "period": "Q1 2026",
+            "title": "First Quarter Fiscal Results and Fiscal Guidance",
+            "source_url": null
+          }
+        }
+      ]
+    },
+    {
+      "company": "HD",
+      "metric": "Adjusted diluted EPS",
+      "units": "USD / share",
+      "value": 4.380869565217391,
+      "confidence": "medium",
+      "method": "seasonal naive with drift: 2025-08-19 value 4.58 grown by -4.3% year-on-year",
+      "notes": [
+        "series has 42 reported observations from earnings releases",
+        "latest reported 3.3 on 2026-05-19",
+        "units: currency per share, so 3.25 means $3.25",
+        "guidance candidate 202 rejected: it differs from the statistical forecast by 4511%, beyond the 40% agreement band, so one of the two misread"
+      ],
+      "evidence": [
+        {
+          "value": 4.58,
+          "units": "USD / share",
+          "raw": "$4.58",
+          "context": "fiscal 2025 were $4.6 billion, or $4.58 per diluted share, compared with net earnings of $4.6 billion, or $4.60 per diluted share, in the same period of fiscal 2024.\n\nAdjusted diluted earnings per share for the second quarter of fiscal 2025 were $4.68, compared with adjusted d",
+          "score": 1.467,
+          "notes": [
+            "period-match",
+            "gap=6",
+            "currency=$"
+          ],
+          "source": {
+            "doc_id": "2025-08-19__hd-us-20250819-q2-8k__143666",
+            "path": "challenge/offline-data/home-depot/filings/2025-08-19__hd-us-20250819-q2-8k__143666.md",
+            "company": "HD",
+            "published_at": "2025-08-19",
+            "document_type": "FILING",
+            "period": "Q2 2025",
+            "title": "Second Quarter Fiscal Results and Full Year Guidance",
+            "source_url": "https://www.sec.gov/Archives/edgar/data/354950/000035495025000195/hd_exhibit991x08032025.htm"
+          }
+        },
+        {
+          "value": 3.3,
+          "units": "USD / share",
+          "raw": "$3.30",
+          "context": "fiscal 2026 were $3.3 billion, or $3.30 per diluted share, compared\nwith net earnings of $3.4 billion, or $3.45 per diluted share, in the same period of fiscal 2025.\nAdjusted diluted earnings per share for the first quarter of fiscal 2026 were $3.43, compared with\nadjusted dil",
+          "score": 1.467,
+          "notes": [
+            "period-match",
+            "gap=6",
+            "currency=$"
+          ],
+          "source": {
+            "doc_id": "2026-05-19__hd-us-20260519-q1-8k__1038584",
+            "path": "challenge/offline-data/home-depot/filings/2026-05-19__hd-us-20260519-q1-8k__1038584.md",
+            "company": "HD",
+            "published_at": "2026-05-19",
+            "document_type": "FILING",
+            "period": "Q1 2026",
+            "title": "First Quarter Fiscal Results and Fiscal Guidance",
+            "source_url": null
+          }
+        }
+      ]
+    },
+    {
+      "company": "HD",
+      "metric": "Comparable sales, total company",
+      "units": "%",
+      "value": 1.0,
+      "confidence": "medium",
+      "method": "seasonal naive: same period a year earlier (2025-08-19)",
+      "notes": [
+        "series has 42 reported observations from earnings releases",
+        "latest reported 0.6 on 2026-05-19",
+        "units: percentage points, so 4.5 means 4.5%",
+        "no published guidance found for this metric"
+      ],
+      "evidence": [
+        {
+          "value": 1.0,
+          "units": "%",
+          "raw": "1.0%",
+          "context": "rter of fiscal 2025 increased 1.0%, and comparable sales in the U.S. increased 1.4%. For the second quarter of fiscal 2025, foreign exchange rates negatively impacted total company comparable sales by approximately 40 basis points.\n\nNet earnings for the second quarter of fisc",
+          "score": 1.292,
+          "notes": [
+            "period-match",
+            "gap=10"
+          ],
+          "source": {
+            "doc_id": "2025-08-19__hd-us-20250819-q2-8k__143666",
+            "path": "challenge/offline-data/home-depot/filings/2025-08-19__hd-us-20250819-q2-8k__143666.md",
+            "company": "HD",
+            "published_at": "2025-08-19",
+            "document_type": "FILING",
+            "period": "Q2 2025",
+            "title": "Second Quarter Fiscal Results and Full Year Guidance",
+            "source_url": "https://www.sec.gov/Archives/edgar/data/354950/000035495025000195/hd_exhibit991x08032025.htm"
+          }
+        },
+        {
+          "value": 0.6,
+          "units": "%",
+          "raw": "0.6%",
+          "context": "rter of fiscal 2026 increased 0.6%, and\ncomparable sales in the U.S. increased 0.4%. For the first quarter of fiscal 2026, foreign exchange rates\npositively impacted total company comparable sales by approximately 55 basis points.\nNet earnings for the first quarter of fiscal",
+          "score": 1.292,
+          "notes": [
+            "period-match",
+            "gap=10"
+          ],
+          "source": {
+            "doc_id": "2026-05-19__hd-us-20260519-q1-8k__1038584",
+            "path": "challenge/offline-data/home-depot/filings/2026-05-19__hd-us-20260519-q1-8k__1038584.md",
+            "company": "HD",
+            "published_at": "2026-05-19",
+            "document_type": "FILING",
+            "period": "Q1 2026",
+            "title": "First Quarter Fiscal Results and Fiscal Guidance",
+            "source_url": null
+          }
+        }
+      ]
+    }
+  ],
+  "written_cells": [
+    {
+      "metric": "Net sales",
+      "units": "USDm",
+      "cell": "C7",
+      "value": 47457.14285714286
+    },
+    {
+      "metric": "Adjusted diluted EPS",
+      "units": "USD / share",
+      "cell": "C8",
+      "value": 4.380869565217391
+    },
+    {
+      "metric": "Comparable sales, total company",
+      "units": "%",
+      "cell": "C9",
+      "value": 1.0
+    }
+  ],
+  "validation": {
+    "total": 12,
+    "passed": 11,
+    "warnings": 1,
+    "failures": 0,
+    "status": "warn",
+    "checks": [
+      {
+        "company": "HD",
+        "metric": "Net sales",
+        "check": "completeness",
+        "status": "pass",
+        "detail": "forecast present"
+      },
+      {
+        "company": "HD",
+        "metric": "Adjusted diluted EPS",
+        "check": "completeness",
+        "status": "pass",
+        "detail": "forecast present"
+      },
+      {
+        "company": "HD",
+        "metric": "Comparable sales, total company",
+        "check": "completeness",
+        "status": "pass",
+        "detail": "forecast present"
+      },
+      {
+        "company": "HD",
+        "metric": "Net sales",
+        "check": "units",
+        "status": "pass",
+        "detail": "4.746e+04 is plausible for USDm"
+      },
+      {
+        "company": "HD",
+        "metric": "Net sales",
+        "check": "sign",
+        "status": "pass",
+        "detail": "sign is sensible"
+      },
+      {
+        "company": "HD",
+        "metric": "Net sales",
+        "check": "history",
+        "status": "pass",
+        "detail": "4.746e+04 against most recent reported 4.18e+04 on 2026-05-19 (+14%)"
+      },
+      {
+        "company": "HD",
+        "metric": "Adjusted diluted EPS",
+        "check": "units",
+        "status": "pass",
+        "detail": "4.381 is plausible for USD / share"
+      },
+      {
+        "company": "HD",
+        "metric": "Adjusted diluted EPS",
+        "check": "sign",
+        "status": "pass",
+        "detail": "sign is sensible"
+      },
+      {
+        "company": "HD",
+        "metric": "Adjusted diluted EPS",
+        "check": "history",
+        "status": "pass",
+        "detail": "4.381 against most recent reported 3.3 on 2026-05-19 (+33%)"
+      },
+      {
+        "company": "HD",
+        "metric": "Comparable sales, total company",
+        "check": "units",
+        "status": "pass",
+        "detail": "1 is plausible for %"
+      },
+      {
+        "company": "HD",
+        "metric": "Comparable sales, total company",
+        "check": "sign",
+        "status": "pass",
+        "detail": "sign is sensible"
+      },
+      {
+        "company": "HD",
+        "metric": "Comparable sales, total company",
+        "check": "history",
+        "status": "warn",
+        "detail": "1 against most recent reported 0.6 on 2026-05-19 (+67%) -- unusually far"
+      }
+    ]
+  }
+}

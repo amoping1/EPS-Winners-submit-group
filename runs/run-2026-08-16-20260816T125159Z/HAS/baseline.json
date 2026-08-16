@@ -1,0 +1,310 @@
+{
+  "company": {
+    "name": "Hays plc",
+    "ticker": "LSE:HAS",
+    "slug": "HAS",
+    "period": "FY2026",
+    "output_file": "HAS-FY2026.xlsx",
+    "metrics": [
+      {
+        "label": "Net fees",
+        "units": "GBPm",
+        "kind": "money"
+      },
+      {
+        "label": "Pre-exceptional basic EPS",
+        "units": "GBp",
+        "kind": "per_share"
+      },
+      {
+        "label": "Pre-exceptional operating profit",
+        "units": "GBPm",
+        "kind": "money"
+      }
+    ]
+  },
+  "as_of": "2026-08-16",
+  "estimates": [
+    {
+      "company": "HAS",
+      "metric": "Net fees",
+      "units": "GBPm",
+      "value": 85.0,
+      "confidence": "medium",
+      "method": "seasonal naive with drift: 2025-08-21 value 40 grown by +112.5% year-on-year",
+      "notes": [
+        "series has 27 reported observations from earnings releases",
+        "latest reported 85 on 2026-07-10",
+        "units: millions of GBP, so 41800 means 41.8 billion",
+        "guidance candidate 45 rejected: it differs from the statistical forecast by 47%, beyond the 40% agreement band, so one of the two misread"
+      ],
+      "evidence": [
+        {
+          "value": 40.0,
+          "units": "GBPm",
+          "raw": "£40 million",
+          "context": "million annual profit\n\nHigh: +4% annual net fees (+£40 million) | &gt;£10 million annual profit\n\n<!-- PAGE 76 -->\n\nTask Force on Climate-related Financial Disclosures continued\n\n| Risk (Timeframe)         | Current Policies (3+°C)         | Divergent Net Zero (1.5°C)",
+          "score": 2.257,
+          "notes": [
+            "period-match",
+            "explicit-scale",
+            "gap=11",
+            "currency=£",
+            "scale=million"
+          ],
+          "source": {
+            "doc_id": "2025-08-21__has-ln-20250821-h2-8k-2__671218",
+            "path": "challenge/offline-data/hays/filings/2025-08-21__has-ln-20250821-h2-8k-2__671218.md",
+            "company": "HAS",
+            "published_at": "2025-08-21",
+            "document_type": "FILING",
+            "period": "FY 2025",
+            "title": "Annual Report and Accounts",
+            "source_url": null
+          }
+        },
+        {
+          "value": 85.0,
+          "units": "GBPm",
+          "raw": "£85 million",
+          "context": "ional operating profit on c.£85 million net fees in FY 26.\n\nOver the last year,  we have resha ped our  country portfolio as  we focus on building scale in high performing and high potential markets where we have an ability to establish and grow leading positions. Goi",
+          "score": 1.6,
+          "notes": [
+            "explicit-scale",
+            "gap=12",
+            "currency=£",
+            "scale=million"
+          ],
+          "source": {
+            "doc_id": "2026-07-10__has-ln-20260710-q4-8k__1572805",
+            "path": "challenge/offline-data/hays/filings/2026-07-10__has-ln-20260710-q4-8k__1572805.md",
+            "company": "HAS",
+            "published_at": "2026-07-10",
+            "document_type": "FILING",
+            "period": "Q4 2026",
+            "title": "Quarterly Trading Update",
+            "source_url": null
+          }
+        }
+      ]
+    },
+    {
+      "company": "HAS",
+      "metric": "Pre-exceptional basic EPS",
+      "units": "GBp",
+      "value": 0.023684210526315797,
+      "confidence": "low",
+      "method": "persistence with drift: latest value grown by -84.2%",
+      "notes": [
+        "series has 21 reported observations from earnings releases",
+        "latest reported 0.15 on 2026-02-27",
+        "units: pence per share, so 6.2 means 6.2p",
+        "no published guidance found for this metric"
+      ],
+      "evidence": [
+        {
+          "value": 0.15,
+          "units": "GBp",
+          "raw": "0.15 pence",
+          "context": "hs ended 31 December 2025 of 0.15 pence per share is not included as a liability in the balance sheet as at 31 December 2025.",
+          "score": 0.916,
+          "notes": [
+            "gap=11"
+          ],
+          "source": {
+            "doc_id": "2026-02-27__has-ln-20260227-h1-8k__642921",
+            "path": "challenge/offline-data/hays/filings/2026-02-27__has-ln-20260227-h1-8k__642921.md",
+            "company": "HAS",
+            "published_at": "2026-02-27",
+            "document_type": "FILING",
+            "period": "H1 2026",
+            "title": "Half-Year Report",
+            "source_url": null
+          }
+        }
+      ]
+    },
+    {
+      "company": "HAS",
+      "metric": "Pre-exceptional operating profit",
+      "units": "GBPm",
+      "value": 85.0,
+      "confidence": "medium",
+      "method": "seasonal naive with drift: 2025-08-21 value 308.9 grown by -72.5% year-on-year",
+      "notes": [
+        "series has 34 reported observations from earnings releases",
+        "latest reported 85 on 2026-07-10",
+        "units: millions of GBP, so 41800 means 41.8 billion",
+        "guidance candidate 20 rejected: it differs from the statistical forecast by 76%, beyond the 40% agreement band, so one of the two misread"
+      ],
+      "evidence": [
+        {
+          "value": 308.9,
+          "units": "GBPm",
+          "raw": "£308.9 million",
+          "context": "fees decrease by 10% to £308.9 million. Operating profit (3)  decreased by 22% to £52.1 million at a conversion rate of 16.9% (FY24: 19.3%). Currency impacts were negative in the year, decreasing net fees by £7.5 million and operating profit by £1.4 million.\n\nClient cost cont",
+          "score": 1.553,
+          "notes": [
+            "explicit-scale",
+            "gap=16",
+            "currency=£",
+            "scale=million"
+          ],
+          "source": {
+            "doc_id": "2025-08-21__has-ln-20250821-h2-8k-2__671218",
+            "path": "challenge/offline-data/hays/filings/2025-08-21__has-ln-20250821-h2-8k-2__671218.md",
+            "company": "HAS",
+            "published_at": "2025-08-21",
+            "document_type": "FILING",
+            "period": "FY 2025",
+            "title": "Annual Report and Accounts",
+            "source_url": null
+          }
+        },
+        {
+          "value": 85.0,
+          "units": "GBPm",
+          "raw": "£85 million",
+          "context": "a broadly break even pre -exceptional operating profit on c.£85 million net fees in FY 26.\n\nOver the last year,  we have resha ped our  country portfolio as  we focus on building scale in high performing and high potential markets where we have an ability to establish and g",
+          "score": 1.487,
+          "notes": [
+            "explicit-scale",
+            "gap=22",
+            "currency=£",
+            "scale=million"
+          ],
+          "source": {
+            "doc_id": "2026-07-10__has-ln-20260710-q4-8k__1572805",
+            "path": "challenge/offline-data/hays/filings/2026-07-10__has-ln-20260710-q4-8k__1572805.md",
+            "company": "HAS",
+            "published_at": "2026-07-10",
+            "document_type": "FILING",
+            "period": "Q4 2026",
+            "title": "Quarterly Trading Update",
+            "source_url": null
+          }
+        }
+      ]
+    }
+  ],
+  "written_cells": [
+    {
+      "metric": "Net fees",
+      "units": "GBPm",
+      "cell": "C7",
+      "value": 85.0
+    },
+    {
+      "metric": "Pre-exceptional basic EPS",
+      "units": "GBp",
+      "cell": "C8",
+      "value": 0.023684210526315797
+    },
+    {
+      "metric": "Pre-exceptional operating profit",
+      "units": "GBPm",
+      "cell": "C9",
+      "value": 85.0
+    }
+  ],
+  "validation": {
+    "total": 13,
+    "passed": 11,
+    "warnings": 2,
+    "failures": 0,
+    "status": "warn",
+    "checks": [
+      {
+        "company": "HAS",
+        "metric": "Net fees",
+        "check": "completeness",
+        "status": "pass",
+        "detail": "forecast present"
+      },
+      {
+        "company": "HAS",
+        "metric": "Pre-exceptional basic EPS",
+        "check": "completeness",
+        "status": "pass",
+        "detail": "forecast present"
+      },
+      {
+        "company": "HAS",
+        "metric": "Pre-exceptional operating profit",
+        "check": "completeness",
+        "status": "pass",
+        "detail": "forecast present"
+      },
+      {
+        "company": "HAS",
+        "metric": "Net fees",
+        "check": "units",
+        "status": "pass",
+        "detail": "85 is plausible for GBPm"
+      },
+      {
+        "company": "HAS",
+        "metric": "Net fees",
+        "check": "sign",
+        "status": "pass",
+        "detail": "sign is sensible"
+      },
+      {
+        "company": "HAS",
+        "metric": "Net fees",
+        "check": "history",
+        "status": "pass",
+        "detail": "85 against most recent reported 85 on 2026-07-10 (+0%)"
+      },
+      {
+        "company": "HAS",
+        "metric": "Pre-exceptional basic EPS",
+        "check": "units",
+        "status": "pass",
+        "detail": "0.02368 is plausible for GBp"
+      },
+      {
+        "company": "HAS",
+        "metric": "Pre-exceptional basic EPS",
+        "check": "sign",
+        "status": "pass",
+        "detail": "sign is sensible"
+      },
+      {
+        "company": "HAS",
+        "metric": "Pre-exceptional basic EPS",
+        "check": "history",
+        "status": "warn",
+        "detail": "0.02368 against most recent reported 0.15 on 2026-02-27 (+84%) -- unusually far"
+      },
+      {
+        "company": "HAS",
+        "metric": "Pre-exceptional operating profit",
+        "check": "units",
+        "status": "pass",
+        "detail": "85 is plausible for GBPm"
+      },
+      {
+        "company": "HAS",
+        "metric": "Pre-exceptional operating profit",
+        "check": "sign",
+        "status": "pass",
+        "detail": "sign is sensible"
+      },
+      {
+        "company": "HAS",
+        "metric": "Pre-exceptional operating profit",
+        "check": "history",
+        "status": "pass",
+        "detail": "85 against most recent reported 85 on 2026-07-10 (+0%)"
+      },
+      {
+        "company": "HAS",
+        "metric": "internal consistency",
+        "check": "margin",
+        "status": "warn",
+        "detail": "Pre-exceptional operating profit / Net fees implies a 100.0% margin (85 / 85) -- implausible"
+      }
+    ]
+  }
+}
