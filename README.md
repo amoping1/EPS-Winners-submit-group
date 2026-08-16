@@ -1,85 +1,83 @@
-# Agents vs Wall Street
+﻿# EPS-Winners
 
-Agents vs Wall Street is a one-day hackathon presented by Primer, OpenStocks, AI Tinkerers and OpenAI. Around 50 people will build 20–25 forecasting agents, working alone or in teams of up to four.
+Team repository for **Agents vs Wall Street** — the forecasting-agent hackathon held in
+London on Sunday 16 August 2026, hosted by OpenStocks with Primer, AI Tinkerers and OpenAI.
 
-The challenge covers four companies: Home Depot, Analog Devices, Hays plc and Deere & Company. Your agent forecasts three reported figures for each.
+## The challenge
 
-The repository includes a frozen historical corpus of 1,139 filings, call-transcript sections and slide documents for the four known companies. Start at [challenge/offline-data/INDEX.md](challenge/offline-data/INDEX.md) or search the Markdown files directly.
+Build an agent that researches four public companies and forecasts twelve reported
+figures — three per company — then submits them as OpenStocks workbooks before the 18:00
+deadline.
 
-Your agent should be able to do the research, make the financial judgements and produce completed OpenStocks workbooks with as little manual help as possible.
+| Company | Ticker | Period | Metrics |
+|---|---|---|---|
+| Home Depot | HD | FY2026 Q2 | Net sales · Adjusted diluted EPS · Comparable sales |
+| Analog Devices | ADI | FY2026 Q3 | Revenue · Adjusted diluted EPS · Adjusted gross margin |
+| Hays plc | LSE:HAS | FY2026 | Net fees · Pre-exceptional basic EPS · Pre-exceptional operating profit |
+| Deere & Company | DE | FY2026 Q3 | Worldwide net sales & revenues · Diluted EPS (GAAP) · Production & Precision Ag operating profit |
 
-## What the day is for
+Two prizes are judged separately: **Architecture & Design**, decided on the day against a
+published 100-point rubric, and **Forecast Accuracy**, settled after the companies report.
+Accuracy is scored as the team's absolute error divided by Wall Street's absolute error on
+the same metric, capped at 5.0 and averaged across all twelve.
 
-1. **Build something real.** Create a repeatable agent that researches companies, makes financial judgements and produces completed forecast workbooks.
-2. **Show what is possible.** Help us learn what works and show how powerful this technology can be when it is assembled properly.
+## Rules that shaped the work
 
-OpenStocks offers ongoing $100 prizes for individual earnings events after the hackathon, so build an agent you can use again.
+- Everything competition-specific had to be built after the 11:15 start. Off-the-shelf
+  models and public libraries are allowed and must be declared in `entry.json`.
+- The supplied frozen corpus of filings, transcripts and slides may be used, along with
+  public information found during the event.
+- Uploads to OpenStocks are manual — the agent must never submit programmatically.
+- No secrets in the repository, the architecture page, or the run logs.
+- Repository history and the final commit are mandatory parts of the entry.
 
-## The challenge at a glance
+## Repositories
 
-- Doors open at 10:00 on Sunday 16 August 2026 at Ground Floor, 33 Johns Mews, London WC1N 2QL. The competition briefing begins at 10:30 and building starts at 11:15.
-- Teams can have one to four people.
-- Each individual or team enters one agent.
-- Each team receives $50 of Codex credit, kindly provided by OpenAI.
-- Competition-specific work must be built during the event; evidence of a pre-made entry means disqualification from all prizes.
-- Your agent must forecast three figures for each of four companies.
-- The final run starts at 17:15 and must finish before the 18:00 deadline.
-- OpenStocks opens for challenge uploads at 17:30.
-- Your final command must produce all four `.xlsx` workbooks.
-- Upload each workbook manually to the matching company Forecast Model on [openstocks.com](https://openstocks.com).
-- If you upload more than once, the last valid workbook uploaded for each company before 18:00 is your final forecast.
+| Repository | Contents |
+|---|---|
+| `EPS-Winners-submit` (branch `Adrian`) | Full agent: tools, agents, rails, backtest harness, generated architecture page |
+| `EPS-Winners-submit-group` | This repository — team landing point |
 
-## What you need to submit
+## Status
 
-1. A completed private `entry.json` with the agent name, every team member and email address, technical setup and final-run details. Upload it through openstocks.com/hackathon; no account is needed for this private team-entry form.
-2. Your code repository and the commit used for the final run.
-3. The completed self-contained `architecture/index.html`, uploaded through the same private form. You do not need to host it anywhere.
-4. A timestamped log from a clear run of the system.
-5. Four completed company workbooks in `submission/`.
+Initial commit. See the individual member branches and repositories above for the working
+code and the architecture write-up.
 
-Complete [ENTRY.md](ENTRY.md), then read [SUBMISSION.md](SUBMISSION.md) before the final run. The full event rules are in [RULES.md](RULES.md), the day is set out in [SCHEDULE.md](SCHEDULE.md), and the judging process is explained in [JUDGING.md](JUDGING.md).
+---
 
-By submitting the private team entry, your team accepts the hackathon and prize rules in [RULES.md](RULES.md).
+## This branch: Asof
 
-## Expected final output
+A forecasting system built around a single point-in-time cutoff.
 
-Your final command can use any language or framework, and it can run the four companies one after another or at the same time. It must finish by creating these exact files:
+`ash
+npm install && python -m pip install openpyxl
+python run.py --as-of 2026-08-16     # writes submission/*.xlsx
+npm run check:submission             # the organisers validator
+`
 
-```text
-submission/
-├── ADI-FY2026Q3.xlsx
-├── DE-FY2026Q3.xlsx
-├── HAS-FY2026.xlsx
-└── HD-FY2026Q2.xlsx
-```
+--as-of is one global guard that every retrieval must ask for, and which raises
+when no cutoff is configured. The same mechanism does three jobs: it makes the
+backtest honest, it makes the competition run reproduce exactly after the event,
+and dropping it turns the system into a live forecaster for future earnings events.
 
-Start from the supplied files in `challenge/templates/`. Do not rename the `Summary` sheet, metric labels, units or fiscal-period column.
+| Command | What it does |
+|---|---|
+| python run.py --as-of 2025-11-18 | Replays a quarter whose result we know, to score the method |
+| python run.py --as-of 2026-08-16 | The competition run |
+| python run.py | Live mode |
 
-Run `npm install` and `npm run setup:entry` once. Complete the private `entry.json` and `architecture/index.html`, then use `npm run check:submission` before uploading. It checks the entry record, architecture file and four workbooks. It does not judge whether the forecasts are good.
+The backtest runs before forecasting and decides where model budget is spent:
+metrics it scores under 15% never reach a model at all. Six of twelve qualified,
+each failing deterministically for a structural reason rather than a tuning one.
 
-## Optional document-search helper
+- dashboard/index.html - presentation dashboard, opens with a double click
+- rchitecture/index.html - the judged write-up, self-contained, no scripts
+- logs/ - timestamped clear-run logs
+- 
+uns/ - per-run artifacts, including the backtest report
 
-[`starter/search.py`](starter/search.py) is a small, dependency-free example of searching the supplied Markdown corpus and producing a cited research note. It does not make forecasts or edit a workbook.
-
-```bash
-python3 starter/search.py --company HD
-less research/HD.md
-```
-
-Use `HD`, `ADI`, `HAS` or `DE` for the four challenge companies. The output contains search leads rather than verified financial history, so check each figure in its cited document. Read [starter/README.md](starter/README.md) for narrower searches and testing instructions.
-
-## Repository map
-
-```text
-challenge/                 Companies, metrics, workbooks and historical documents
-architecture/index.html    Template for the required architecture explanation
-entry.template.json        Template for private team and agent details
-submission/                Put the four completed workbooks here
-logs/                      Save the final clear-run log here
-scripts/                   Local entry and workbook checks
-starter/                   Optional historical-document search helper
-```
-
-## Licence
-
-The original code and documentation in this repository are available under the [MIT License](LICENSE). The historical company documents under `challenge/offline-data/` are excluded; see [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
+`ash
+python -m unittest discover -s tests -t .   # 132 tests
+python scripts/build_dashboard.py
+python scripts/build_architecture.py
+`
