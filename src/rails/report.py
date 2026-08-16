@@ -99,10 +99,57 @@ color:var(--accent)}
 .ch-c{font-family:var(--mono);font-size:22px;font-variant-numeric:tabular-nums}
 .ch p{font-size:12.5px}
 .src{font-family:var(--mono);font-size:11px;color:var(--faint);word-break:break-all}
+.tablewrap{overflow-x:auto;border:1px solid var(--rule);background:var(--surface)}
+table{border-collapse:collapse;width:100%;min-width:680px}
+th{font-family:var(--mono);font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;
+color:var(--faint);text-align:left;font-weight:400;padding:10px 14px;
+border-bottom:1px solid var(--rule2);white-space:nowrap}
+td{padding:9px 14px;border-bottom:1px solid var(--rule);font-size:14px;vertical-align:baseline}
+tr:last-child td{border-bottom:none}
+td.num{font-family:var(--mono);text-align:right;font-variant-numeric:tabular-nums;
+white-space:nowrap;font-size:15px}
+td.unit{font-family:var(--mono);font-size:11.5px;color:var(--faint)}
+td.tick{font-family:var(--mono);font-size:12.5px;font-weight:650}
 footer{border-top:1px solid var(--rule);padding-top:14px;font-family:var(--mono);
 font-size:11px;color:var(--faint);display:flex;flex-wrap:wrap;gap:6px 22px}
 @media (max-width:640px){.metric{grid-template-columns:1fr}}
 """
+
+
+def confidence_for(res: dict) -> tuple[str, str]:
+    """Overall confidence for a metric, plus why.
+
+    Derived, not asked for: agreement between the three independent methods, whether a
+    published anchor bounded it, and whether the critic objected.
+    """
+    verdict = res.get("verdict") or {}
+    agree = res.get("agreement")
+    reasons = []
+
+    if verdict.get("plausible") is False:
+        return "low", "critic objected"
+    if res.get("guidance_bound") or (res.get("anchor") or {}).get("kind") in ("guidance", "consensus"):
+        reasons.append("published anchor")
+        level = "high"
+    elif isinstance(agree, (int, float)) and agree >= 0.9:
+        reasons.append("methods agree")
+        level = "high"
+    elif isinstance(agree, (int, float)) and agree >= 0.7:
+        reasons.append("moderate method spread")
+        level = "medium"
+    else:
+        reasons.append("methods diverge")
+        level = "low"
+
+    if res.get("outliers"):
+        reasons.append("outlier cut")
+        level = "medium" if level == "high" else level
+    if res.get("clamped"):
+        reasons.append("clamped")
+        level = "medium" if level == "high" else level
+    if not res.get("method_values"):
+        return "low", "no method proposals"
+    return level, ", ".join(reasons)
 
 
 def _e(value) -> str:
@@ -260,6 +307,20 @@ def build(run_path: str | Path = "logs/full-run.json",
 
     body = "".join(_company(r) for r in runs)
 
+    conf_pill = {"high": "pass", "medium": "warn", "low": "fail"}
+    summary_rows = ""
+    for run in runs:
+        for label, res in run["results"].items():
+            level, why = confidence_for(res)
+            summary_rows += (
+                f'<tr><td class="tick">{_e(run["ticker"].replace("LSE:", ""))}</td>'
+                f'<td>{_e(label)}</td>'
+                f'<td class="num">{_fmt(res.get("value"), res.get("units", ""))}</td>'
+                f'<td class="unit">{_e(res.get("units"))}</td>'
+                f'<td><span class="pill {conf_pill[level]}">{level}</span></td>'
+                f'<td class="unit">{_e(why)}</td></tr>'
+            )
+
     return _write(out_path, f"""<title>Quarterly Forecast Desk</title>
 <style>{CSS}</style>
 <div class="wrap">
@@ -278,6 +339,18 @@ def build(run_path: str | Path = "logs/full-run.json",
   <section>
     <h2>Evidence channels</h2>
     <div class="chan">{channels}</div>
+  </section>
+
+  <section>
+    <h2>The twelve submitted forecasts</h2>
+    <p>Exactly what is written to the four workbooks. Confidence is derived from method
+       agreement, whether a published anchor bounded the value, and whether the critic
+       objected.</p>
+    <div class="tablewrap"><table>
+      <thead><tr><th>Co</th><th>Metric</th><th style="text-align:right">Forecast</th>
+        <th>Units</th><th>Confidence</th><th>Basis</th></tr></thead>
+      <tbody>{summary_rows}</tbody>
+    </table></div>
   </section>
 
   <section>

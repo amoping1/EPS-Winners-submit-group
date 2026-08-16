@@ -83,6 +83,17 @@ color:var(--accent)}
 .ch-c{font-family:var(--mono);font-size:22px;font-variant-numeric:tabular-nums}
 .ch p{font-size:12.5px}
 .src{font-family:var(--mono);font-size:11px;color:var(--faint);word-break:break-all}
+.tablewrap{overflow-x:auto;border:1px solid var(--rule);background:var(--surface)}
+table{border-collapse:collapse;width:100%;min-width:680px}
+th{font-family:var(--mono);font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;
+color:var(--faint);text-align:left;font-weight:400;padding:10px 14px;
+border-bottom:1px solid var(--rule2);white-space:nowrap}
+td{padding:9px 14px;border-bottom:1px solid var(--rule);font-size:14px;vertical-align:baseline}
+tr:last-child td{border-bottom:none}
+td.num{font-family:var(--mono);text-align:right;font-variant-numeric:tabular-nums;
+white-space:nowrap;font-size:15px}
+td.unit{font-family:var(--mono);font-size:11.5px;color:var(--faint)}
+td.tick{font-family:var(--mono);font-size:12.5px;font-weight:650}
 footer{border-top:1px solid var(--rule);padding-top:14px;font-family:var(--mono);
 font-size:11px;color:var(--faint);display:flex;flex-wrap:wrap;gap:6px 22px}
 @media (max-width:640px){.metric{grid-template-columns:1fr}}
@@ -112,6 +123,18 @@ font-size:11px;color:var(--faint);display:flex;flex-wrap:wrap;gap:6px 22px}
         <p>Seasonality and trend computed from the finance channel, not read anywhere.</p></div>
       <div class="ch absent"><div class="ch-n">News &mdash; unavailable</div><div class="ch-c">0</div>
         <p>Not in the frozen corpus. Reported missing rather than invented.</p></div></div>
+  </section>
+
+  <section>
+    <h2>The twelve submitted forecasts</h2>
+    <p>Exactly what is written to the four workbooks. Confidence is derived from method
+       agreement, whether a published anchor bounded the value, and whether the critic
+       objected.</p>
+    <div class="tablewrap"><table>
+      <thead><tr><th>Co</th><th>Metric</th><th style="text-align:right">Forecast</th>
+        <th>Units</th><th>Confidence</th><th>Basis</th></tr></thead>
+      <tbody><tr><td class="tick">ADI</td><td>Revenue</td><td class="num">3,651.65</td><td class="unit">USDm</td><td><span class="pill pass">high</span></td><td class="unit">methods agree</td></tr><tr><td class="tick">ADI</td><td>Adjusted diluted EPS</td><td class="num">3.12</td><td class="unit">USD / share</td><td><span class="pill pass">high</span></td><td class="unit">methods agree</td></tr><tr><td class="tick">ADI</td><td>Adjusted gross margin</td><td class="num">73.06</td><td class="unit">%</td><td><span class="pill pass">high</span></td><td class="unit">methods agree</td></tr><tr><td class="tick">DE</td><td>Worldwide net sales and revenues</td><td class="num">12,201.00</td><td class="unit">USDm</td><td><span class="pill fail">low</span></td><td class="unit">critic objected</td></tr><tr><td class="tick">DE</td><td>Diluted EPS (GAAP)</td><td class="num">6.46</td><td class="unit">USD / share</td><td><span class="pill fail">low</span></td><td class="unit">critic objected</td></tr><tr><td class="tick">DE</td><td>Production &amp; Precision Ag operating profit</td><td class="num">399.30</td><td class="unit">USDm</td><td><span class="pill fail">low</span></td><td class="unit">critic objected</td></tr><tr><td class="tick">HD</td><td>Net sales</td><td class="num">47,430.48</td><td class="unit">USDm</td><td><span class="pill pass">high</span></td><td class="unit">methods agree</td></tr><tr><td class="tick">HD</td><td>Adjusted diluted EPS</td><td class="num">4.80</td><td class="unit">USD / share</td><td><span class="pill pass">high</span></td><td class="unit">methods agree</td></tr><tr><td class="tick">HD</td><td>Comparable sales, total company</td><td class="num">1.69</td><td class="unit">%</td><td><span class="pill fail">low</span></td><td class="unit">methods diverge</td></tr><tr><td class="tick">HAS</td><td>Net fees</td><td class="num">864.56</td><td class="unit">GBPm</td><td><span class="pill fail">low</span></td><td class="unit">critic objected</td></tr><tr><td class="tick">HAS</td><td>Pre-exceptional basic EPS</td><td class="num">0.45</td><td class="unit">GBp</td><td><span class="pill fail">low</span></td><td class="unit">critic objected</td></tr><tr><td class="tick">HAS</td><td>Pre-exceptional operating profit</td><td class="num">41.87</td><td class="unit">GBPm</td><td><span class="pill fail">low</span></td><td class="unit">critic objected</td></tr></tbody>
+    </table></div>
   </section>
 
   <section>
