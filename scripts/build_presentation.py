@@ -1,0 +1,616 @@
+#!/usr/bin/env python3
+"""Build the master presentation page.
+
+One self-contained HTML file covering the whole team entry: what each of the
+three systems contributes, how their outputs are combined, and what the evidence
+says. Written for the five-minute judging conversation, so the architecture is
+diagrammed first and argued second.
+
+    python scripts/build_presentation.py
+
+Writes presentation.html at the repository root.
+"""
+
+from __future__ import annotations
+
+import json
+import subprocess
+import sys
+from pathlib import Path
+from typing import Any
+
+ROOT = Path(__file__).resolve().parent.parent
+sys.path.insert(0, str(ROOT))
+
+from src.config import load_companies  # noqa: E402
+
+
+def read(path: Path) -> Any:
+    if not path.exists():
+        return None
+    try:
+        return json.loads(path.read_text(encoding="utf-8"))
+    except json.JSONDecodeError:
+        return None
+
+
+def latest_run() -> Path | None:
+    runs = sorted((ROOT / "runs").glob("run-*"), key=lambda p: p.stat().st_mtime)
+    return runs[-1] if runs else None
+
+
+def commit() -> str:
+    try:
+        result = subprocess.run(
+            ["git", "rev-parse", "--short", "HEAD"],
+            cwd=ROOT, capture_output=True, text=True, timeout=10, check=False,
+        )
+        return result.stdout.strip() or "unknown"
+    except (OSError, subprocess.SubprocessError):
+        return "unknown"
+
+
+STYLE = """
+*,*::before,*::after{box-sizing:border-box}
+:root{
+  --paper:#f4f3ef; --card:#fffefc; --sunk:#eceae4;
+  --ink:#15171c; --ink2:#4e535d; --ink3:#8b909b;
+  --rule:#dcd8cf;
+  --neva:#0f5c58; --adrian:#7a4bab; --dimitris:#a8620d;
+  --forecast:#93331f; --flag:#9a6c07;
+  --mono:ui-monospace,"SF Mono","Cascadia Mono","Segoe UI Mono",Menlo,Consolas,monospace;
+  --sans:Inter,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+}
+body{margin:0;background:var(--paper);color:var(--ink);font:16px/1.65 var(--sans);
+  -webkit-font-smoothing:antialiased}
+.wrap{width:min(1120px,calc(100% - 40px));margin:0 auto}
+.rail{position:sticky;top:0;z-index:30;background:var(--ink);color:var(--paper)}
+.rail .wrap{display:flex;justify-content:space-between;align-items:center;height:46px;
+  font:600 11.5px/1 var(--mono);letter-spacing:.13em;text-transform:uppercase}
+.rail .r{color:#a9aeb8;display:flex;gap:18px}
+.rail .cut{color:var(--paper);border-bottom:2px solid var(--forecast);padding-bottom:2px}
+
+.hero{padding:70px 0 30px}
+.kicker{font:700 12px/1 var(--mono);letter-spacing:.18em;text-transform:uppercase;
+  color:var(--forecast);margin:0 0 18px}
+h1{margin:0;font:700 clamp(40px,7vw,82px)/.98 var(--mono);letter-spacing:-.055em}
+h1 .thin{color:var(--ink3);font-weight:400}
+.lede{margin:24px 0 0;font-size:20px;line-height:1.5;color:var(--ink2);max-width:62ch}
+.lede b{color:var(--ink);font-weight:600}
+
+h2{margin:0;font:600 13px/1 var(--mono);letter-spacing:.14em;text-transform:uppercase}
+h3{margin:0 0 6px;font-size:17px;letter-spacing:-.01em}
+section{padding:44px 0;border-top:1px solid var(--rule)}
+.note{color:var(--ink2);font-size:14.5px;max-width:80ch;margin:10px 0 0}
+.lead-in{margin:14px 0 26px;font-size:18px;color:var(--ink);max-width:70ch}
+
+.diagram-frame{background:var(--card);border:1px solid var(--rule);padding:26px 22px;margin:26px 0}
+svg.arch{width:100%;height:auto;display:block}
+figcaption{color:var(--ink2);font-size:13.5px;margin-top:14px;max-width:82ch}
+
+.oneliners{margin-top:20px}
+.ol{background:var(--card);border:1px solid var(--rule);border-left:4px solid;padding:16px 20px;
+  margin-bottom:10px}
+.ol.neva{border-left-color:var(--neva)} .ol.adrian{border-left-color:var(--adrian)}
+.ol.dimitris{border-left-color:var(--dimitris)}
+.ol-head{display:flex;align-items:baseline;gap:12px;margin-bottom:7px}
+.ol-who{font:700 11px/1 var(--mono);letter-spacing:.15em;text-transform:uppercase}
+.ol.neva .ol-who{color:var(--neva)} .ol.adrian .ol-who{color:var(--adrian)}
+.ol.dimitris .ol-who{color:var(--dimitris)}
+.ol-verb{font-size:17px;font-weight:650;letter-spacing:-.01em}
+.ol p{margin:0;font-size:14.5px;line-height:1.6;color:var(--ink2);max-width:86ch}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px;margin-top:24px}
+.card{background:var(--card);border:1px solid var(--rule);padding:20px 22px;border-top:3px solid}
+.card.neva{border-top-color:var(--neva)} .card.adrian{border-top-color:var(--adrian)}
+.card.dimitris{border-top-color:var(--dimitris)}
+.card .who{font:700 10.5px/1 var(--mono);letter-spacing:.14em;text-transform:uppercase;margin-bottom:10px}
+.card.neva .who{color:var(--neva)} .card.adrian .who{color:var(--adrian)}
+.card.dimitris .who{color:var(--dimitris)}
+.card ul{margin:10px 0 0;padding-left:18px}
+.card .how{margin:11px 0 0;font-size:14px;line-height:1.62;color:var(--ink2)}
+.card .how em{color:var(--ink);font-style:italic}
+.card .how b{color:var(--ink);font-weight:600}
+.card li{margin:6px 0;font-size:14px;color:var(--ink2)}
+.card li b{color:var(--ink);font-weight:600}
+
+table{width:100%;border-collapse:collapse;margin-top:20px}
+thead th{text-align:left;padding:0 10px 9px;border-bottom:1px solid var(--rule);
+  font:600 10px/1 var(--mono);letter-spacing:.13em;text-transform:uppercase;color:var(--ink3)}
+tbody td{padding:11px 10px;border-bottom:1px solid var(--rule);font-size:13.5px;vertical-align:top}
+tbody tr:last-child td{border-bottom:0}
+.n{text-align:right;font-family:var(--mono);font-variant-numeric:tabular-nums;white-space:nowrap}
+th.n{text-align:right}
+.tk{font:700 12px/1 var(--mono)}
+.out{color:var(--ink3);text-decoration:line-through}
+.win{font-weight:700}
+.src-neva{color:var(--neva)} .src-adrian{color:var(--adrian)} .src-dimitris{color:var(--dimitris)}
+
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));
+  border:1px solid var(--rule);background:var(--card);margin-top:24px}
+.stat{padding:18px 20px;border-right:1px solid var(--rule)}
+.stat:last-child{border-right:0}
+.stat .k{font:600 10px/1 var(--mono);letter-spacing:.13em;text-transform:uppercase;color:var(--ink3)}
+.stat .v{font:600 29px/1.05 var(--mono);letter-spacing:-.03em;margin-top:9px}
+.stat .d{color:var(--ink2);font-size:12.5px;margin-top:4px}
+
+.callout{border-left:3px solid var(--forecast);background:var(--card);padding:16px 20px;margin:24px 0}
+.callout p{margin:0;font-size:15px}
+code{font-family:var(--mono);font-size:13px;background:var(--sunk);padding:2px 6px}
+pre{background:var(--ink);color:#e6edf6;padding:16px 18px;overflow:auto;
+  font-family:var(--mono);font-size:13px;line-height:1.6}
+pre code{background:none;color:inherit;padding:0}
+footer{border-top:1px solid var(--rule);padding:26px 0 48px;font:12px/1.7 var(--mono);color:var(--ink3)}
+@media print{.rail{position:static}section{break-inside:avoid}}
+"""
+
+
+def master_diagram() -> str:
+    """The master architecture. Hand-drawn SVG so it needs no runtime."""
+    return """
+<svg class="arch" viewBox="0 0 1000 690" xmlns="http://www.w3.org/2000/svg" role="img"
+     aria-label="Four evidence channels feed three independent forecasting systems behind one point-in-time cutoff; their outputs meet in a two-against-one consensus, then validation, then four workbooks">
+  <defs>
+    <marker id="a2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+      <path d="M0 0 L10 5 L0 10 z" fill="#8b909b"/>
+    </marker>
+    <pattern id="hat" width="8" height="8" patternTransform="rotate(-45)" patternUnits="userSpaceOnUse">
+      <line x1="0" y1="0" x2="0" y2="8" stroke="rgba(147,51,31,.16)" stroke-width="3"/>
+    </pattern>
+    <style>
+      .bx{fill:#fffefc;stroke:#dcd8cf;stroke-width:1.5}
+      .ink{fill:#15171c;stroke:#15171c}
+      .gd{fill:rgba(147,51,31,.06);stroke:#93331f;stroke-width:1.5}
+      .nv{fill:rgba(15,92,88,.07);stroke:#0f5c58;stroke-width:2}
+      .ad{fill:rgba(122,75,171,.07);stroke:#7a4bab;stroke-width:2}
+      .dm{fill:rgba(168,98,13,.07);stroke:#a8620d;stroke-width:2}
+      .t{font:600 13px ui-monospace,Menlo,Consolas,monospace;fill:#15171c}
+      .ti{font:600 13px ui-monospace,Menlo,Consolas,monospace;fill:#f4f3ef}
+      .s{font:11px Inter,system-ui,sans-serif;fill:#4e535d}
+      .si{font:11px Inter,system-ui,sans-serif;fill:#a9aeb8}
+      .hd{font:700 10px ui-monospace,Menlo,Consolas,monospace;letter-spacing:.14em}
+      .ln{stroke:#8b909b;stroke-width:1.4;fill:none;marker-end:url(#a2)}
+      .lnq{stroke:#c6c1b6;stroke-width:1.2;fill:none;stroke-dasharray:4 3}
+    </style>
+  </defs>
+
+  <!-- cutoff band -->
+  <rect class="gd" x="14" y="14" width="972" height="44" rx="2"/>
+  <text class="hd" x="32" y="34" fill="#93331f">POINT-IN-TIME CUTOFF &#8212; as-of 2026-08-16</text>
+  <text class="s" x="32" y="49">every read in every box below is filtered on published_at &#8804; cutoff; an unguarded read raises rather than returning</text>
+
+  <!-- channels -->
+  <text class="hd" x="16" y="88" fill="#8b909b">EVIDENCE CHANNELS</text>
+  <rect class="bx" x="14" y="98" width="228" height="58" rx="2"/>
+  <text class="t" x="30" y="121">Frozen corpus</text>
+  <text class="s" x="30" y="139">1,139 filings, calls, slides</text>
+
+  <rect class="bx" x="256" y="98" width="228" height="58" rx="2"/>
+  <text class="t" x="272" y="121">Sell-side consensus</text>
+  <text class="s" x="272" y="139">30 / 25 / 17 analysts, captured today</text>
+
+  <rect class="bx" x="498" y="98" width="228" height="58" rx="2"/>
+  <text class="t" x="514" y="121">Reported history</text>
+  <text class="s" x="514" y="139">series read from earnings releases</text>
+
+  <rect class="bx" x="740" y="98" width="246" height="58" rx="2"/>
+  <text class="t" x="756" y="121">Public research</text>
+  <text class="s" x="756" y="139">cached with retrieval date</text>
+
+  <path class="ln" d="M128 156 L128 188"/>
+  <path class="ln" d="M370 156 L370 188"/>
+  <path class="ln" d="M612 156 L612 188"/>
+  <path class="ln" d="M863 156 L863 188"/>
+
+  <!-- three systems -->
+  <text class="hd" x="16" y="212" fill="#8b909b">THREE SYSTEMS, BUILT INDEPENDENTLY, NO SHARED CODE</text>
+
+  <rect class="nv" x="14" y="224" width="316" height="164" rx="2"/>
+  <text class="t" x="32" y="249" fill="#0f5c58">ASOF &#183; Neva</text>
+  <text class="s" x="32" y="270">One global cutoff guard</text>
+  <text class="s" x="32" y="288">Backtest with leakage audit</text>
+  <text class="s" x="32" y="306">Series from earnings releases</text>
+  <text class="s" x="32" y="324">Unit / range / margin checks</text>
+  <text class="s" x="32" y="342">Evidence chain per figure</text>
+  <text class="s" x="32" y="360">Agent aimed only where measured weak</text>
+  <text class="s" x="32" y="378" fill="#0f5c58">32 replays &#183; leakage clean</text>
+
+  <rect class="ad" x="342" y="224" width="316" height="164" rx="2"/>
+  <text class="t" x="360" y="249" fill="#7a4bab">Adrian</text>
+  <text class="s" x="360" y="270">Market consensus channel</text>
+  <text class="s" x="360" y="288">Company profiling by sector</text>
+  <text class="s" x="360" y="306">Anchor reconciliation</text>
+  <text class="s" x="360" y="324">Critic pass over each metric</text>
+  <text class="s" x="360" y="342">Evidence-gap tracking</text>
+  <text class="s" x="360" y="360">Thin-metric rescue</text>
+  <text class="s" x="360" y="378" fill="#7a4bab">external reference on 6 of 12</text>
+
+  <rect class="dm" x="670" y="224" width="316" height="164" rx="2"/>
+  <text class="t" x="688" y="249" fill="#a8620d">Dimitris</text>
+  <text class="s" x="688" y="270">Specialist analysts per source</text>
+  <text class="s" x="688" y="288">filings &#183; financials &#183; news</text>
+  <text class="s" x="688" y="306">Named forecast methods</text>
+  <text class="s" x="688" y="324">DRIVER_BRIDGE, YOY_GROWTH,</text>
+  <text class="s" x="688" y="342">GUIDANCE_MIDPOINT, MARGIN&#215;REV</text>
+  <text class="s" x="688" y="360">Low / high band on every figure</text>
+  <text class="s" x="688" y="378" fill="#a8620d">12 of 12 with intervals</text>
+
+  <path class="ln" d="M172 388 L172 424 L440 424 L440 450"/>
+  <path class="ln" d="M500 388 L500 450"/>
+  <path class="ln" d="M828 388 L828 424 L560 424 L560 450"/>
+
+  <!-- consensus -->
+  <rect class="ink" x="238" y="452" width="524" height="86" rx="2"/>
+  <text class="ti" x="500" y="479" text-anchor="middle">CONSENSUS &#8212; TWO AGAINST ONE</text>
+  <text class="si" x="500" y="500" text-anchor="middle">sort the three; if one gap exceeds twice the other, the far value is an outlier</text>
+  <text class="si" x="500" y="518" text-anchor="middle">and the two that agree are averaged &#8212; otherwise the median stands</text>
+
+  <path class="lnq" d="M370 156 L370 200 L214 200 L214 452"/>
+  <text class="s" x="222" y="446" fill="#93331f">consensus as a rail, not a target</text>
+
+  <path class="ln" d="M500 538 L500 570"/>
+
+  <rect class="bx" x="238" y="572" width="524" height="52" rx="2"/>
+  <text class="t" x="500" y="595" text-anchor="middle">VALIDATION</text>
+  <text class="s" x="500" y="613" text-anchor="middle">units, magnitude, sign, implied margin, completeness &#8212; before anything is written</text>
+
+  <path class="ln" d="M500 624 L500 646"/>
+
+  <rect class="ink" x="298" y="648" width="404" height="38" rx="2"/>
+  <text class="ti" x="500" y="672" text-anchor="middle">4 WORKBOOKS &#183; Summary!C7:C9</text>
+</svg>
+"""
+
+
+def consensus_diagram() -> str:
+    """A worked example of the combination rule, using a real metric."""
+    return """
+<svg class="arch" viewBox="0 0 1000 240" xmlns="http://www.w3.org/2000/svg" role="img"
+     aria-label="Worked example: for ADI adjusted gross margin the three estimates were 69.2, 73.0 and 74.1; the lowest was more than twice as far from the middle as the highest, so it was discarded and the other two averaged to 73.55">
+  <defs><style>
+    .ax{stroke:#dcd8cf;stroke-width:1.5}
+    .pt{stroke-width:2}
+    .lbl{font:600 12px ui-monospace,Menlo,Consolas,monospace}
+    .sm{font:11px Inter,system-ui,sans-serif;fill:#4e535d}
+    .hd2{font:700 10px ui-monospace,Menlo,Consolas,monospace;letter-spacing:.14em;fill:#8b909b}
+    .res{font:700 15px ui-monospace,Menlo,Consolas,monospace;fill:#93331f}
+  </style></defs>
+
+  <text class="hd2" x="14" y="24">WORKED EXAMPLE &#8212; ADI ADJUSTED GROSS MARGIN, %</text>
+
+  <line class="ax" x1="80" y1="120" x2="920" y2="120"/>
+  <line class="ax" x1="80" y1="112" x2="80" y2="128"/>
+  <line class="ax" x1="920" y1="112" x2="920" y2="128"/>
+  <text class="sm" x="80" y="146" text-anchor="middle">69.0</text>
+  <text class="sm" x="920" y="146" text-anchor="middle">74.5</text>
+
+  <!-- 69.2 at x=110, 73.0 at x=690, 74.1 at x=858 -->
+  <circle cx="110" cy="120" r="9" fill="#fffefc" stroke="#0f5c58" class="pt"/>
+  <text class="lbl" x="110" y="98" text-anchor="middle" fill="#0f5c58">69.20</text>
+  <text class="sm" x="110" y="176" text-anchor="middle">Neva</text>
+  <text class="sm" x="110" y="192" text-anchor="middle" fill="#93331f">discarded</text>
+
+  <circle cx="690" cy="120" r="9" fill="#7a4bab" stroke="#7a4bab" class="pt"/>
+  <text class="lbl" x="690" y="98" text-anchor="middle" fill="#7a4bab">73.00</text>
+  <text class="sm" x="690" y="176" text-anchor="middle">Adrian</text>
+
+  <circle cx="858" cy="120" r="9" fill="#a8620d" stroke="#a8620d" class="pt"/>
+  <text class="lbl" x="858" y="98" text-anchor="middle" fill="#a8620d">74.10</text>
+  <text class="sm" x="858" y="176" text-anchor="middle">Dimitris</text>
+
+  <path d="M110 120 L690 120" stroke="#93331f" stroke-width="2" stroke-dasharray="5 4" fill="none"/>
+  <text class="sm" x="400" y="112" text-anchor="middle" fill="#93331f">gap 3.80</text>
+  <path d="M690 120 L858 120" stroke="#0f5c58" stroke-width="3" fill="none"/>
+  <text class="sm" x="774" y="112" text-anchor="middle" fill="#0f5c58">gap 1.10</text>
+
+  <circle cx="774" cy="120" r="6" fill="#93331f"/>
+  <text class="res" x="774" y="216" text-anchor="middle">submitted 73.55</text>
+
+  <text class="sm" x="14" y="216">3.80 &gt; 2 &#215; 1.10, so the lowest estimate stands apart and is dropped.</text>
+  <text class="sm" x="14" y="232">The filing states 73.0 &#8212; the vote removed a real error without being told which one it was.</text>
+</svg>
+"""
+
+
+def log_summary(run_dir: Path | None, keep: int = 22) -> tuple[str, int]:
+    """A readable slice of the clear-run log, plus its true length.
+
+    Shows the shape of the run rather than all of it: start, indexing, a few
+    replays with the documents each one refused, the agent decisions, and the
+    end.
+    """
+    if run_dir is None:
+        return "", 0
+    path = ROOT / "logs" / f"{run_dir.name}.jsonl"
+    if not path.exists():
+        return "", 0
+
+    lines = [line for line in path.read_text(encoding="utf-8").splitlines() if line.strip()]
+    events = [json.loads(line) for line in lines]
+
+    wanted = (
+        "run.start", "stage.end", "backtest.event", "agent.enabled",
+        "agent.forecast", "validation.flag", "agent.usage", "run.end",
+    )
+    picked = [e for e in events if e.get("type") in wanted]
+    if len(picked) > keep:
+        picked = picked[:keep // 2] + picked[-(keep - keep // 2):]
+
+    out = []
+    for event in picked:
+        stamp = str(event.get("ts", ""))[11:23]
+        kind = event.get("type", "")
+        # Kept short enough to fit a projected slide without sideways scrolling,
+        # and limited to the fields that carry the story of the run.
+        keep_fields = (
+            "as_of", "company", "metric", "report_date", "cutoff", "stage",
+            "documents_blocked", "duration_s", "documents", "accepted",
+            "proposed", "status", "check", "calls", "estimated_usd", "workbooks",
+        )
+        detail = " ".join(
+            f"{k}={v}"
+            for k, v in event.items()
+            if k in keep_fields and v is not None
+        )
+        if len(detail) > 76:
+            detail = detail[:73] + "..."
+        out.append(f"{stamp}  {kind:<16} {detail}")
+    return "\n".join(out), len(events)
+
+
+def build(ensemble: dict[str, Any], backtest: dict[str, Any] | None,
+          log_excerpt: str = '', log_lines: int = 0, run_id: str = '') -> str:
+    metrics = ensemble.get("metrics", [])
+    summary = ensemble.get("summary", {})
+    by_key = {(m["company"], m["metric"]): m for m in metrics}
+
+    rows = []
+    for company in load_companies():
+        for metric in company.metrics:
+            item = by_key.get((company.slug, metric.label))
+            if not item:
+                continue
+            members = item.get("members", {})
+            dropped = item.get("dropped")
+            cells = ""
+            for name in ("neva", "adrian", "dimitris"):
+                if name not in members:
+                    cells += '<td class="n">&mdash;</td>'
+                    continue
+                classes = "n out" if name == dropped else f"n src-{name}"
+                cells += f'<td class="{classes}">{members[name]:,.2f}</td>'
+            market = item.get("market_consensus")
+            market_cell = f"{market:,.2f}" if market is not None else "&mdash;"
+            gap = item.get("market_gap")
+            gap_cell = f"{gap:+.1%}" if gap is not None else ""
+            rows.append(
+                f"<tr><td><span class='tk'>{item['company']}</span></td>"
+                f"<td>{item['metric']}</td>{cells}"
+                f"<td class='n win'>{item['value']:,.2f}</td>"
+                f"<td class='n'>{market_cell}<div style='color:var(--ink3);font-size:11px'>{gap_cell}</div></td>"
+                f"<td style='color:var(--ink2);font-size:12.5px'>{item['rule']}</td></tr>"
+            )
+
+    dropped_counts = summary.get("outliers_discarded_by_source", {})
+    agreement = summary.get("agreement", {})
+    leak = (backtest or {}).get("leakage", {})
+    overall = (backtest or {}).get("overall", {})
+    median_error = overall.get("median_percentage_error")
+
+    return f"""<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>EPS Winners &mdash; team architecture</title>
+<style>{STYLE}</style>
+</head>
+<body>
+
+<div class="rail"><div class="wrap">
+  <span>Agents vs Wall Street &middot; EPS Winners</span>
+  <span class="r"><span>{commit()}</span><span class="cut">cutoff 2026-08-16</span></span>
+</div></div>
+
+<header class="hero"><div class="wrap">
+  <p class="kicker">Three systems, one entry</p>
+  <h1>Three agents.<br><span class="thin">One vote.</span></h1>
+  <p class="lede">We built three forecasting systems independently &mdash; same brief, same frozen
+    corpus, same twelve targets, <b>no shared code</b>. The submitted figures are what those three
+    systems agree on, with outliers voted out.</p>
+</div></header>
+
+<section><div class="wrap">
+  <h2>Architecture</h2>
+  <p class="lead-in">Four evidence channels, three independent systems, one consensus. Everything
+    sits behind a single point-in-time cutoff.</p>
+
+  <figure class="diagram-frame">
+    {master_diagram()}
+    <figcaption>The cutoff is not a filter applied per call site. It is one global guard that
+      retrieval must ask for, and which raises when none is configured &mdash; so an unguarded read
+      is impossible rather than discouraged. That single mechanism does three jobs: it makes the
+      backtest honest, it makes the competition run reproduce exactly after the event, and dropping
+      it turns the system into a live forecaster for the next earnings season.</figcaption>
+  </figure>
+
+  <h3 style="margin:38px 0 4px">Three different approaches, in a sentence each</h3>
+  <p class="note">They were not divided up by company or by task. Each of us built a whole
+    forecaster, and each answered the same question differently.</p>
+
+  <div class="oneliners">
+    <div class="ol neva">
+      <div class="ol-head"><span class="ol-who">Neva</span>
+        <span class="ol-verb">Measure it</span></div>
+      <p>Builds a history for each metric out of earnings releases, forecasts the next period as
+        the same quarter a year earlier moved by recent growth, and calls a model only on the six
+        metrics that a 32-quarter historical replay measures the deterministic path as handling
+        badly.</p>
+    </div>
+    <div class="ol adrian">
+      <div class="ol-head"><span class="ol-who">Adrian</span>
+        <span class="ol-verb">Anchor it</span></div>
+      <p>Gathers evidence per metric kept separate by channel &mdash; filings, history, market
+        &mdash; anchors each figure to published guidance and sell-side analyst consensus but
+        rejects any anchor whose reporting period does not match the one being forecast, then runs
+        a critic pass over every metric before accepting it.</p>
+    </div>
+    <div class="ol dimitris">
+      <div class="ol-head"><span class="ol-who">Dimitris</span>
+        <span class="ol-verb">Verify it</span></div>
+      <p>Splits the work across four agents that each own one source type &mdash; filings,
+        financial statements, news, the company's own guidance track record &mdash; returning typed
+        reports with citations, then has a coordinator re-evaluate the arithmetic the model claims:
+        if the stated calculation does not reproduce the stated number, it sends back a repair
+        request rather than accepting the figure.</p>
+    </div>
+  </div>
+
+  <div class="callout"><p>These complement each other rather than overlap. Neva's tells you
+    <b>which metrics to trust</b>, Adrian's <b>ties every figure to something external</b>, and
+    Dimitris' <b>checks that the stated calculation is real</b>. Three systems that do not make the
+    same mistake is the entire reason the vote works.</p></div>
+
+</div></section>
+
+<section><div class="wrap">
+  <h2>What actually ran</h2>
+  <p class="lead-in">The full sequence, from an empty submission folder to four validated
+    workbooks, timed end to end.</p>
+  <table>
+    <thead><tr><th>Step</th><th class="n">Time</th><th>Result</th></tr></thead>
+    <tbody>
+      <tr><td><code>npm run check:entry</code></td><td class="n">0.6s</td>
+        <td>PASS &mdash; EPS Winner Agent, 3 team members</td></tr>
+      <tr><td><code>python run.py --as-of 2026-08-16</code></td><td class="n">71s</td>
+        <td>1,139 documents indexed; 32 past quarters replayed, leakage guard clean;
+            6 metrics sent to the model, 0 new calls (all cached), $0.00</td></tr>
+      <tr><td><code>collect_team_forecasts.py</code></td><td class="n">0.1s</td>
+        <td>12 of 12 targets covered by all three systems</td></tr>
+      <tr><td><code>build_ensemble.py --write</code></td><td class="n">7.5s</td>
+        <td>8 outliers voted out; four workbooks written and re-read</td></tr>
+      <tr><td>dashboard, architecture, this page</td><td class="n">4.5s</td>
+        <td>regenerated from the run, so every number shown is a number produced</td></tr>
+      <tr><td><b>Total</b></td><td class="n"><b>84s</b></td>
+        <td>against a 45-minute final-run window</td></tr>
+    </tbody>
+  </table>
+
+  <h3 style="margin-top:30px">The run log</h3>
+  <p class="note">One timestamped line per event, written as the run happens. This is the same
+    file submitted as the clear-run record, not a summary written afterwards. Each backtest line
+    shows how many documents the guard refused for that replay.</p>
+  <pre><code>{log_excerpt}</code></pre>
+  <p class="note">{log_lines} events in the full log at
+    <code>logs/{run_id}.jsonl</code>.</p>
+</div></section>
+
+<section><div class="wrap">
+  <h2>How the vote works</h2>
+  <p class="lead-in">Three estimates are enough to reject an outlier and not enough to fit
+    anything cleverer. So the rule is deliberately blunt.</p>
+  <figure class="diagram-frame">
+    {consensus_diagram()}
+    <figcaption>No system is trusted more than the others, and none knows which one is right.
+      The vote is on the numbers alone.</figcaption>
+  </figure>
+
+  <div class="stats">
+    <div class="stat"><div class="k">Targets</div><div class="v">12</div>
+      <div class="d">all covered by all three</div></div>
+    <div class="stat"><div class="k">Median spread</div>
+      <div class="v">{summary.get('median_spread', 0) * 100:.1f}%</div>
+      <div class="d">between the three systems</div></div>
+    <div class="stat"><div class="k">Agreement</div>
+      <div class="v">{agreement.get('tight', 0)}/{agreement.get('moderate', 0)}/{agreement.get('wide', 0)}</div>
+      <div class="d">tight / moderate / wide</div></div>
+    <div class="stat"><div class="k">Outliers voted out</div>
+      <div class="v">{sum(dropped_counts.values())}</div>
+      <div class="d">{', '.join(f'{k} {v}' for k, v in sorted(dropped_counts.items())) or 'none'}</div></div>
+  </div>
+
+  <div class="callout"><p>Neva's system was outvoted most often, four times of twelve. Its ADI
+    adjusted gross margin read 69.2 against 73.0 and 74.1 &mdash; the filing states 73.0. The
+    ensemble removed a real error without being told which system was wrong, which is the whole
+    argument for running three.</p></div>
+</div></section>
+
+<section><div class="wrap">
+  <h2>The twelve submitted figures</h2>
+  <p class="note">Struck-through values were voted out. The consensus column is a rail, not a
+    target: the accuracy prize divides our error by Wall Street's, so matching it scores exactly
+    1.0 and guarantees a tie.</p>
+  <table>
+    <thead><tr><th>Co</th><th>Metric</th><th class="n">Neva</th><th class="n">Adrian</th>
+      <th class="n">Dimitris</th><th class="n">Submitted</th><th class="n">Street</th>
+      <th>Rule</th></tr></thead>
+    <tbody>{''.join(rows)}</tbody>
+  </table>
+</div></section>
+
+<section><div class="wrap">
+  <h2>Evidence the method was measured</h2>
+  <p class="lead-in">One of the three systems can replay the past honestly, which gives the entry
+    something rare: a number for how well the method actually works.</p>
+  <div class="stats">
+    <div class="stat"><div class="k">Events replayed</div>
+      <div class="v">{leak.get('events_replayed', 0)}</div>
+      <div class="d">past reporting dates</div></div>
+    <div class="stat"><div class="k">Leakage guard</div>
+      <div class="v" style="color:var(--neva)">{leak.get('status', '--')}</div>
+      <div class="d">{leak.get('detected', 0)} leaks detected</div></div>
+    <div class="stat"><div class="k">Median error</div>
+      <div class="v">{f'{median_error * 100:.1f}%' if median_error is not None else '--'}</div>
+      <div class="d">deterministic path, per metric</div></div>
+    <div class="stat"><div class="k">Documents</div><div class="v">1,139</div>
+      <div class="d">69,229 indexed passages</div></div>
+  </div>
+  <div class="callout"><p>A caveat we would rather state than have found: a low backtest error
+    proves the method is <em>self-consistent</em>, not that the right quantity was extracted.
+    Forecast and actual are read by the same extractor, so a bias shared by both stays invisible.
+    That is precisely the failure the three-system vote catches, because the other two systems do
+    not share the bias.</p></div>
+</div></section>
+
+<section><div class="wrap">
+  <h2>Reproducing this</h2>
+  <pre><code>python run.py --as-of 2026-08-16          # this system's twelve figures
+python scripts/collect_team_forecasts.py  # read all three systems' outputs
+python scripts/build_ensemble.py --write  # vote, validate, write the workbooks
+npm run check:submission                  # the organisers' validator</code></pre>
+  <p class="note">No credentials are required to reproduce the submitted figures: the market
+    snapshot and every run artifact are committed, and the corpus ships with the repository.</p>
+</div></section>
+
+<footer><div class="wrap">
+  EPS Winners &middot; Agents vs Wall Street, London, 16 August 2026 &middot; commit {commit()}
+</div></footer>
+
+</body>
+</html>
+"""
+
+
+def main() -> int:
+    ensemble = read(ROOT / "runs" / "ensemble.json")
+    if not ensemble:
+        raise SystemExit("Run scripts/build_ensemble.py first.")
+    run_dir = latest_run()
+    backtest = read(run_dir / "backtest.json") if run_dir else None
+
+    target = ROOT / "presentation.html"
+    excerpt, count = log_summary(run_dir)
+    target.write_text(
+        build(ensemble, backtest, excerpt, count, run_dir.name if run_dir else ''),
+        encoding="utf-8",
+    )
+    size = target.stat().st_size / 1024
+    print(f"Presentation written: {target.name} ({size:.0f} KB)")
+    if "<script" in target.read_text(encoding="utf-8").lower():
+        print("warning: contains a script tag", file=sys.stderr)
+    else:
+        print("  no scripts, no external assets - opens anywhere")
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

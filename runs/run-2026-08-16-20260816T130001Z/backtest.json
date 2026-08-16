@@ -1,0 +1,2326 @@
+{
+  "metrics": [
+    {
+      "company": "ADI",
+      "metric": "Adjusted diluted EPS",
+      "units": "USD / share",
+      "events": 8,
+      "median_absolute_error": 0.41445,
+      "median_percentage_error": 0.202584,
+      "mean_percentage_error": 0.234349,
+      "best_percentage_error": 0.041251,
+      "worst_percentage_error": 0.478036,
+      "within_5pct": 0.125
+    },
+    {
+      "company": "ADI",
+      "metric": "Adjusted gross margin",
+      "units": "%",
+      "events": 8,
+      "median_absolute_error": 6.75,
+      "median_percentage_error": 0.114643,
+      "mean_percentage_error": 0.124606,
+      "best_percentage_error": 0.031204,
+      "worst_percentage_error": 0.229422,
+      "within_5pct": 0.125
+    },
+    {
+      "company": "ADI",
+      "metric": "Revenue",
+      "units": "USDm",
+      "events": 8,
+      "median_absolute_error": 108.403846,
+      "median_percentage_error": 0.038767,
+      "mean_percentage_error": 0.044994,
+      "best_percentage_error": 0.015705,
+      "worst_percentage_error": 0.116298,
+      "within_5pct": 0.625
+    },
+    {
+      "company": "DE",
+      "metric": "Diluted EPS (GAAP)",
+      "units": "USD / share",
+      "events": 8,
+      "median_absolute_error": 0.669467,
+      "median_percentage_error": 0.136446,
+      "mean_percentage_error": 0.241507,
+      "best_percentage_error": 0.030804,
+      "worst_percentage_error": 0.853696,
+      "within_5pct": 0.125
+    },
+    {
+      "company": "DE",
+      "metric": "Production & Precision Ag operating profit",
+      "units": "USDm",
+      "events": 8,
+      "median_absolute_error": 211.575857,
+      "median_percentage_error": 0.720399,
+      "mean_percentage_error": 5.093353,
+      "best_percentage_error": 0.054629,
+      "worst_percentage_error": 35.717986,
+      "within_5pct": 0.0
+    },
+    {
+      "company": "DE",
+      "metric": "Worldwide net sales and revenues",
+      "units": "USDm",
+      "events": 8,
+      "median_absolute_error": 1179.623146,
+      "median_percentage_error": 0.106041,
+      "mean_percentage_error": 0.116979,
+      "best_percentage_error": 0.029334,
+      "worst_percentage_error": 0.208885,
+      "within_5pct": 0.25
+    },
+    {
+      "company": "HAS",
+      "metric": "Net fees",
+      "units": "GBPm",
+      "events": 8,
+      "median_absolute_error": 70.211692,
+      "median_percentage_error": 1.784613,
+      "mean_percentage_error": 13.486744,
+      "best_percentage_error": 0.0,
+      "worst_percentage_error": 56.714286,
+      "within_5pct": 0.125
+    },
+    {
+      "company": "HAS",
+      "metric": "Pre-exceptional basic EPS",
+      "units": "GBp",
+      "events": 8,
+      "median_absolute_error": 111.028817,
+      "median_percentage_error": 0.996318,
+      "mean_percentage_error": 1116.337402,
+      "best_percentage_error": 0.090383,
+      "worst_percentage_error": 8743.857143,
+      "within_5pct": 0.0
+    },
+    {
+      "company": "HAS",
+      "metric": "Pre-exceptional operating profit",
+      "units": "GBPm",
+      "events": 8,
+      "median_absolute_error": 81.368421,
+      "median_percentage_error": 0.838059,
+      "mean_percentage_error": 49.55,
+      "best_percentage_error": 0.015364,
+      "worst_percentage_error": 389.490196,
+      "within_5pct": 0.125
+    },
+    {
+      "company": "HD",
+      "metric": "Adjusted diluted EPS",
+      "units": "USD / share",
+      "events": 8,
+      "median_absolute_error": 0.328136,
+      "median_percentage_error": 0.1037,
+      "mean_percentage_error": 0.100021,
+      "best_percentage_error": 0.009404,
+      "worst_percentage_error": 0.202174,
+      "within_5pct": 0.25
+    },
+    {
+      "company": "HD",
+      "metric": "Comparable sales, total company",
+      "units": "%",
+      "events": 8,
+      "median_absolute_error": 1.65,
+      "median_percentage_error": 1.996795,
+      "mean_percentage_error": 4.442651,
+      "best_percentage_error": 0.142857,
+      "worst_percentage_error": 15.0,
+      "within_5pct": 0.0
+    },
+    {
+      "company": "HD",
+      "metric": "Net sales",
+      "units": "USDm",
+      "events": 8,
+      "median_absolute_error": 1289.00641,
+      "median_percentage_error": 0.029239,
+      "mean_percentage_error": 0.509296,
+      "best_percentage_error": 8.7e-05,
+      "worst_percentage_error": 3.181287,
+      "within_5pct": 0.625
+    }
+  ],
+  "overall": {
+    "scored_metrics": 12,
+    "median_percentage_error": 0.169515,
+    "outcomes": 96
+  },
+  "events": [
+    {
+      "company": "HD",
+      "report_date": "2026-05-19",
+      "cutoff": "2026-05-18",
+      "document": {
+        "doc_id": "2026-05-19__hd-us-20260519-q1-8k-2__1038586",
+        "path": "challenge/offline-data/home-depot/filings/2026-05-19__hd-us-20260519-q1-8k-2__1038586.md",
+        "company": "HD",
+        "published_at": "2026-05-19",
+        "document_type": "FILING",
+        "period": "Q1 2026",
+        "title": "First Quarter Fiscal Results and Full Year Guidance Reaffirmation",
+        "source_url": "https://www.sec.gov/Archives/edgar/data/354950/000035495026000101/hd_exhibit991x05032026.htm"
+      },
+      "actuals": {
+        "Net sales": 41800.0,
+        "Adjusted diluted EPS": 3.3,
+        "Comparable sales, total company": 0.4
+      }
+    },
+    {
+      "company": "HD",
+      "report_date": "2026-02-24",
+      "cutoff": "2026-02-23",
+      "document": {
+        "doc_id": "2026-02-24__hd-us-20260224-q4-8k-2__904387",
+        "path": "challenge/offline-data/home-depot/filings/2026-02-24__hd-us-20260224-q4-8k-2__904387.md",
+        "company": "HD",
+        "published_at": "2026-02-24",
+        "document_type": "FILING",
+        "period": "FY 2025",
+        "title": "Annual Report Filing",
+        "source_url": null
+      },
+      "actuals": {
+        "Net sales": 164700.0,
+        "Adjusted diluted EPS": 2.58,
+        "Comparable sales, total company": 0.3
+      }
+    },
+    {
+      "company": "HD",
+      "report_date": "2025-11-18",
+      "cutoff": "2025-11-17",
+      "document": {
+        "doc_id": "2025-11-18__hd-us-20251118-q3-8k__359994",
+        "path": "challenge/offline-data/home-depot/filings/2025-11-18__hd-us-20251118-q3-8k__359994.md",
+        "company": "HD",
+        "published_at": "2025-11-18",
+        "document_type": "FILING",
+        "period": "Q3 2025",
+        "title": "Third Quarter Fiscal 2025 Results and Fiscal 2025 Guidance Update",
+        "source_url": null
+      },
+      "actuals": {
+        "Net sales": 41400.0,
+        "Adjusted diluted EPS": 3.62,
+        "Comparable sales, total company": 0.1
+      }
+    },
+    {
+      "company": "HD",
+      "report_date": "2025-08-20",
+      "cutoff": "2025-08-19",
+      "document": {
+        "doc_id": "2025-08-20__hd-us-20250820-q2-8k__143688",
+        "path": "challenge/offline-data/home-depot/filings/2025-08-20__hd-us-20250820-q2-8k__143688.md",
+        "company": "HD",
+        "published_at": "2025-08-20",
+        "document_type": "FILING",
+        "period": "Q2 2025",
+        "title": "Second Quarter Fiscal 2025 Results and Fiscal 2025 Guidance",
+        "source_url": null
+      },
+      "actuals": {
+        "Net sales": 45300.0,
+        "Adjusted diluted EPS": 4.58,
+        "Comparable sales, total company": 1.4
+      }
+    },
+    {
+      "company": "HD",
+      "report_date": "2025-08-19",
+      "cutoff": "2025-08-18",
+      "document": {
+        "doc_id": "2025-08-19__hd-us-20250819-q2-8k__143666",
+        "path": "challenge/offline-data/home-depot/filings/2025-08-19__hd-us-20250819-q2-8k__143666.md",
+        "company": "HD",
+        "published_at": "2025-08-19",
+        "document_type": "FILING",
+        "period": "Q2 2025",
+        "title": "Second Quarter Fiscal Results and Full Year Guidance",
+        "source_url": "https://www.sec.gov/Archives/edgar/data/354950/000035495025000195/hd_exhibit991x08032025.htm"
+      },
+      "actuals": {
+        "Net sales": 45300.0,
+        "Adjusted diluted EPS": 4.58,
+        "Comparable sales, total company": 1.4
+      }
+    },
+    {
+      "company": "HD",
+      "report_date": "2025-05-20",
+      "cutoff": "2025-05-19",
+      "document": {
+        "doc_id": "2025-05-20__hd-us-20250520-q1-8k__101847",
+        "path": "challenge/offline-data/home-depot/filings/2025-05-20__hd-us-20250520-q1-8k__101847.md",
+        "company": "HD",
+        "published_at": "2025-05-20",
+        "document_type": "FILING",
+        "period": "Q1 2025",
+        "title": "First Quarter Results and Fiscal Year Guidance Reaffirmation",
+        "source_url": null
+      },
+      "actuals": {
+        "Net sales": 39900.0,
+        "Adjusted diluted EPS": 3.45,
+        "Comparable sales, total company": 0.2
+      }
+    },
+    {
+      "company": "HD",
+      "report_date": "2025-02-25",
+      "cutoff": "2025-02-24",
+      "document": {
+        "doc_id": "2025-02-25__hd-us-20250225-q4-8k__101827",
+        "path": "challenge/offline-data/home-depot/filings/2025-02-25__hd-us-20250225-q4-8k__101827.md",
+        "company": "HD",
+        "published_at": "2025-02-25",
+        "document_type": "FILING",
+        "period": "FY 2024",
+        "title": "Fourth Quarter and Fiscal Year Results and Fiscal Year Guidance",
+        "source_url": null
+      },
+      "actuals": {
+        "Net sales": 159500.0,
+        "Adjusted diluted EPS": 3.02,
+        "Comparable sales, total company": 1.3
+      }
+    },
+    {
+      "company": "HD",
+      "report_date": "2024-11-12",
+      "cutoff": "2024-11-11",
+      "document": {
+        "doc_id": "2024-11-12__hd-us-20241112-q3-8k__101844",
+        "path": "challenge/offline-data/home-depot/filings/2024-11-12__hd-us-20241112-q3-8k__101844.md",
+        "company": "HD",
+        "published_at": "2024-11-12",
+        "document_type": "FILING",
+        "period": "Q3 2024",
+        "title": "Third Quarter Results and Fiscal Year Guidance Update",
+        "source_url": null
+      },
+      "actuals": {
+        "Net sales": 40200.0,
+        "Adjusted diluted EPS": 3.67,
+        "Comparable sales, total company": 1.2
+      }
+    },
+    {
+      "company": "ADI",
+      "report_date": "2026-05-20",
+      "cutoff": "2026-05-19",
+      "document": {
+        "doc_id": "2026-05-20__adi-us-20260520-q2-8k-2__1040614",
+        "path": "challenge/offline-data/analog-devices/filings/2026-05-20__adi-us-20260520-q2-8k-2__1040614.md",
+        "company": "ADI",
+        "published_at": "2026-05-20",
+        "document_type": "FILING",
+        "period": "Q2 2026",
+        "title": "Second Quarter Financial Results and Third Quarter Outlook",
+        "source_url": null
+      },
+      "actuals": {
+        "Revenue": 3620.0,
+        "Adjusted diluted EPS": 3.09,
+        "Adjusted gross margin": 67.3
+      }
+    },
+    {
+      "company": "ADI",
+      "report_date": "2026-02-18",
+      "cutoff": "2026-02-17",
+      "document": {
+        "doc_id": "2026-02-18__adi-us-20260218-q1-8k-2__602115",
+        "path": "challenge/offline-data/analog-devices/filings/2026-02-18__adi-us-20260218-q1-8k-2__602115.md",
+        "company": "ADI",
+        "published_at": "2026-02-18",
+        "document_type": "FILING",
+        "period": "Q1 2026",
+        "title": "Fiscal First Quarter Financial Results",
+        "source_url": null
+      },
+      "actuals": {
+        "Revenue": 3160.0,
+        "Adjusted diluted EPS": 2.46,
+        "Adjusted gross margin": 64.7
+      }
+    },
+    {
+      "company": "ADI",
+      "report_date": "2025-11-25",
+      "cutoff": "2025-11-24",
+      "document": {
+        "doc_id": "2025-11-25__adi-us-20251125-q4-8k__361005",
+        "path": "challenge/offline-data/analog-devices/filings/2025-11-25__adi-us-20251125-q4-8k__361005.md",
+        "company": "ADI",
+        "published_at": "2025-11-25",
+        "document_type": "FILING",
+        "period": "FY 2025",
+        "title": "Fourth Quarter and Fiscal Year Financial Results",
+        "source_url": null
+      },
+      "actuals": {
+        "Revenue": 3080.0,
+        "Adjusted diluted EPS": 2.26,
+        "Adjusted gross margin": 61.5
+      }
+    },
+    {
+      "company": "ADI",
+      "report_date": "2025-08-20",
+      "cutoff": "2025-08-19",
+      "document": {
+        "doc_id": "2025-08-20__adi-us-20250820-q3-8k__155976",
+        "path": "challenge/offline-data/analog-devices/filings/2025-08-20__adi-us-20250820-q3-8k__155976.md",
+        "company": "ADI",
+        "published_at": "2025-08-20",
+        "document_type": "FILING",
+        "period": "Q3 2025",
+        "title": "Third Quarter Financial Results and Fourth Quarter Outlook",
+        "source_url": null
+      },
+      "actuals": {
+        "Revenue": 2880.0,
+        "Adjusted diluted EPS": 4.0,
+        "Adjusted gross margin": 69.2
+      }
+    },
+    {
+      "company": "ADI",
+      "report_date": "2025-05-22",
+      "cutoff": "2025-05-21",
+      "document": {
+        "doc_id": "2025-05-22__adi-us-20250522-q2-8k__102679",
+        "path": "challenge/offline-data/analog-devices/filings/2025-05-22__adi-us-20250522-q2-8k__102679.md",
+        "company": "ADI",
+        "published_at": "2025-05-22",
+        "document_type": "FILING",
+        "period": "Q2 2025",
+        "title": "Fiscal Second Quarter Financial Results",
+        "source_url": null
+      },
+      "actuals": {
+        "Revenue": 2640.0,
+        "Adjusted diluted EPS": 1.85,
+        "Adjusted gross margin": 61.0
+      }
+    },
+    {
+      "company": "ADI",
+      "report_date": "2025-02-19",
+      "cutoff": "2025-02-18",
+      "document": {
+        "doc_id": "2025-02-19__adi-us-20250219-q1-8k__102670",
+        "path": "challenge/offline-data/analog-devices/filings/2025-02-19__adi-us-20250219-q1-8k__102670.md",
+        "company": "ADI",
+        "published_at": "2025-02-19",
+        "document_type": "FILING",
+        "period": "Q1 2025",
+        "title": "Fiscal First Quarter Financial Results and Second Quarter Outlook",
+        "source_url": null
+      },
+      "actuals": {
+        "Revenue": 2500.0,
+        "Adjusted diluted EPS": 1.63,
+        "Adjusted gross margin": 59.0
+      }
+    },
+    {
+      "company": "ADI",
+      "report_date": "2024-11-26",
+      "cutoff": "2024-11-25",
+      "document": {
+        "doc_id": "2024-11-26__adi-us-20241126-q4-8k__102666",
+        "path": "challenge/offline-data/analog-devices/filings/2024-11-26__adi-us-20241126-q4-8k__102666.md",
+        "company": "ADI",
+        "published_at": "2024-11-26",
+        "document_type": "FILING",
+        "period": "FY 2024",
+        "title": "Fourth Quarter and Fiscal Year Financial Results",
+        "source_url": null
+      },
+      "actuals": {
+        "Revenue": 2400.0,
+        "Adjusted diluted EPS": 1.67,
+        "Adjusted gross margin": 57.1
+      }
+    },
+    {
+      "company": "ADI",
+      "report_date": "2024-08-21",
+      "cutoff": "2024-08-20",
+      "document": {
+        "doc_id": "2024-08-21__adi-us-20240821-q3-8k__102648",
+        "path": "challenge/offline-data/analog-devices/filings/2024-08-21__adi-us-20240821-q3-8k__102648.md",
+        "company": "ADI",
+        "published_at": "2024-08-21",
+        "document_type": "FILING",
+        "period": "Q3 2024",
+        "title": "Fiscal Third Quarter Financial Results and Fourth Quarter Outlook",
+        "source_url": null
+      },
+      "actuals": {
+        "Revenue": 2310.0,
+        "Adjusted diluted EPS": 1.58,
+        "Adjusted gross margin": 56.7
+      }
+    },
+    {
+      "company": "HAS",
+      "report_date": "2025-08-21",
+      "cutoff": "2025-08-20",
+      "document": {
+        "doc_id": "2025-08-21__has-ln-20250821-h2-8k-2__671218",
+        "path": "challenge/offline-data/hays/filings/2025-08-21__has-ln-20250821-h2-8k-2__671218.md",
+        "company": "HAS",
+        "published_at": "2025-08-21",
+        "document_type": "FILING",
+        "period": "FY 2025",
+        "title": "Annual Report and Accounts",
+        "source_url": null
+      },
+      "actuals": {
+        "Net fees": 40.0,
+        "Pre-exceptional basic EPS": 32.6,
+        "Pre-exceptional operating profit": 3.0
+      }
+    },
+    {
+      "company": "HAS",
+      "report_date": "2024-08-22",
+      "cutoff": "2024-08-21",
+      "document": {
+        "doc_id": "2024-08-22__has-ln-20240822-h2-8k-2__671217",
+        "path": "challenge/offline-data/hays/filings/2024-08-22__has-ln-20240822-h2-8k-2__671217.md",
+        "company": "HAS",
+        "published_at": "2024-08-22",
+        "document_type": "FILING",
+        "period": "FY 2024",
+        "title": "Annual Report and Accounts",
+        "source_url": null
+      },
+      "actuals": {
+        "Net fees": 40.0,
+        "Pre-exceptional basic EPS": 202.0,
+        "Pre-exceptional operating profit": 105.0
+      }
+    },
+    {
+      "company": "HAS",
+      "report_date": "2023-08-24",
+      "cutoff": "2023-08-23",
+      "document": {
+        "doc_id": "2023-08-24__has-ln-20230824-h2-8k-2__671216",
+        "path": "challenge/offline-data/hays/filings/2023-08-24__has-ln-20230824-h2-8k-2__671216.md",
+        "company": "HAS",
+        "published_at": "2023-08-24",
+        "document_type": "FILING",
+        "period": "FY 2023",
+        "title": "Annual Performance and Strategic Review",
+        "source_url": null
+      },
+      "actuals": {
+        "Net fees": 40.0,
+        "Pre-exceptional basic EPS": 138.3,
+        "Pre-exceptional operating profit": 57.0
+      }
+    },
+    {
+      "company": "HAS",
+      "report_date": "2022-08-25",
+      "cutoff": "2022-08-24",
+      "document": {
+        "doc_id": "2022-08-25__has-ln-20220825-h2-8k-2__671215",
+        "path": "challenge/offline-data/hays/filings/2022-08-25__has-ln-20220825-h2-8k-2__671215.md",
+        "company": "HAS",
+        "published_at": "2022-08-25",
+        "document_type": "FILING",
+        "period": "FY 2022",
+        "title": "Annual Financial and Strategic Review",
+        "source_url": null
+      },
+      "actuals": {
+        "Net fees": 40.0,
+        "Pre-exceptional basic EPS": 8.93,
+        "Pre-exceptional operating profit": 43.7
+      }
+    },
+    {
+      "company": "HAS",
+      "report_date": "2021-08-26",
+      "cutoff": "2021-08-25",
+      "document": {
+        "doc_id": "2021-08-26__has-ln-20210826-h2-8k-2__671213",
+        "path": "challenge/offline-data/hays/filings/2021-08-26__has-ln-20210826-h2-8k-2__671213.md",
+        "company": "HAS",
+        "published_at": "2021-08-26",
+        "document_type": "FILING",
+        "period": "FY 2021",
+        "title": "Annual Report & Financial Statements",
+        "source_url": null
+      },
+      "actuals": {
+        "Net fees": 3.3,
+        "Pre-exceptional basic EPS": 61.5,
+        "Pre-exceptional operating profit": 95.1
+      }
+    },
+    {
+      "company": "HAS",
+      "report_date": "2020-08-27",
+      "cutoff": "2020-08-26",
+      "document": {
+        "doc_id": "2020-08-27__has-ln-20200827-h2-8k-2__671211",
+        "path": "challenge/offline-data/hays/filings/2020-08-27__has-ln-20200827-h2-8k-2__671211.md",
+        "company": "HAS",
+        "published_at": "2020-08-27",
+        "document_type": "FILING",
+        "period": "FY 2020",
+        "title": "Annual Report and Financial Statements",
+        "source_url": null
+      },
+      "actuals": {
+        "Net fees": 3.5,
+        "Pre-exceptional basic EPS": 47.5,
+        "Pre-exceptional operating profit": 135.0
+      }
+    },
+    {
+      "company": "HAS",
+      "report_date": "2019-08-29",
+      "cutoff": "2019-08-28",
+      "document": {
+        "doc_id": "2019-08-29__has-ln-20190829-h2-8k-2__671212",
+        "path": "challenge/offline-data/hays/filings/2019-08-29__has-ln-20190829-h2-8k-2__671212.md",
+        "company": "HAS",
+        "published_at": "2019-08-29",
+        "document_type": "FILING",
+        "period": "FY 2019",
+        "title": "Annual Report and Financial Statements",
+        "source_url": null
+      },
+      "actuals": {
+        "Net fees": 1.1,
+        "Pre-exceptional basic EPS": 161.7,
+        "Pre-exceptional operating profit": 248.8
+      }
+    },
+    {
+      "company": "HAS",
+      "report_date": "2018-10-03",
+      "cutoff": "2018-10-02",
+      "document": {
+        "doc_id": "2018-10-03__has-ln-20181003-h2-8k__671214",
+        "path": "challenge/offline-data/hays/filings/2018-10-03__has-ln-20181003-h2-8k__671214.md",
+        "company": "HAS",
+        "published_at": "2018-10-03",
+        "document_type": "FILING",
+        "period": "FY 2018",
+        "title": "Annual Report and Financial Statements",
+        "source_url": null
+      },
+      "actuals": {
+        "Net fees": 1000.0,
+        "Pre-exceptional basic EPS": -0.14,
+        "Pre-exceptional operating profit": 243.4
+      }
+    },
+    {
+      "company": "DE",
+      "report_date": "2026-05-21",
+      "cutoff": "2026-05-20",
+      "document": {
+        "doc_id": "2026-05-21__de-us-20260521-q2-8k-2__1042168",
+        "path": "challenge/offline-data/deere/filings/2026-05-21__de-us-20260521-q2-8k-2__1042168.md",
+        "company": "DE",
+        "published_at": "2026-05-21",
+        "document_type": "FILING",
+        "period": "Q2 2026",
+        "title": "Second Quarter Financial Results and Fiscal Year Outlook",
+        "source_url": null
+      },
+      "actuals": {
+        "Worldwide net sales and revenues": 11778.0,
+        "Diluted EPS (GAAP)": 6.55,
+        "Production & Precision Ag operating profit": 845.0
+      }
+    },
+    {
+      "company": "DE",
+      "report_date": "2026-02-19",
+      "cutoff": "2026-02-18",
+      "document": {
+        "doc_id": "2026-02-19__de-us-20260219-q1-8k__603009",
+        "path": "challenge/offline-data/deere/filings/2026-02-19__de-us-20260219-q1-8k__603009.md",
+        "company": "DE",
+        "published_at": "2026-02-19",
+        "document_type": "FILING",
+        "period": "Q1 2026",
+        "title": "First Quarter Earnings Release",
+        "source_url": null
+      },
+      "actuals": {
+        "Worldwide net sales and revenues": 8001.0,
+        "Diluted EPS (GAAP)": 2.42,
+        "Production & Precision Ag operating profit": 139.0
+      }
+    },
+    {
+      "company": "DE",
+      "report_date": "2025-11-26",
+      "cutoff": "2025-11-25",
+      "document": {
+        "doc_id": "2025-11-26__de-us-20251126-q4-8k__361233",
+        "path": "challenge/offline-data/deere/filings/2025-11-26__de-us-20251126-q4-8k__361233.md",
+        "company": "DE",
+        "published_at": "2025-11-26",
+        "document_type": "FILING",
+        "period": "FY 2025",
+        "title": "Fourth Quarter and Fiscal Year Earnings Release",
+        "source_url": null
+      },
+      "actuals": {
+        "Worldwide net sales and revenues": 10579.0,
+        "Diluted EPS (GAAP)": 3.93,
+        "Production & Precision Ag operating profit": 77.0
+      }
+    },
+    {
+      "company": "DE",
+      "report_date": "2025-08-15",
+      "cutoff": "2025-08-14",
+      "document": {
+        "doc_id": "2025-08-15__de-us-20250815-q3-8k__143410",
+        "path": "challenge/offline-data/deere/filings/2025-08-15__de-us-20250815-q3-8k__143410.md",
+        "company": "DE",
+        "published_at": "2025-08-15",
+        "document_type": "FILING",
+        "period": "Q3 2025",
+        "title": "Third Quarter and Nine Months 2025 Financial Results",
+        "source_url": null
+      },
+      "actuals": {
+        "Worldwide net sales and revenues": 10357.0,
+        "Diluted EPS (GAAP)": 4.75,
+        "Production & Precision Ag operating profit": 580.0
+      }
+    },
+    {
+      "company": "DE",
+      "report_date": "2025-05-15",
+      "cutoff": "2025-05-14",
+      "document": {
+        "doc_id": "2025-05-15__de-us-20250515-q2-8k__105808",
+        "path": "challenge/offline-data/deere/filings/2025-05-15__de-us-20250515-q2-8k__105808.md",
+        "company": "DE",
+        "published_at": "2025-05-15",
+        "document_type": "FILING",
+        "period": "Q2 2025",
+        "title": "Second Quarter Financial Results and Fiscal Year Outlook",
+        "source_url": null
+      },
+      "actuals": {
+        "Worldwide net sales and revenues": 11171.0,
+        "Diluted EPS (GAAP)": 6.64,
+        "Production & Precision Ag operating profit": 1148.0
+      }
+    },
+    {
+      "company": "DE",
+      "report_date": "2025-02-13",
+      "cutoff": "2025-02-12",
+      "document": {
+        "doc_id": "2025-02-13__de-us-20250213-q1-8k__105841",
+        "path": "challenge/offline-data/deere/filings/2025-02-13__de-us-20250213-q1-8k__105841.md",
+        "company": "DE",
+        "published_at": "2025-02-13",
+        "document_type": "FILING",
+        "period": "Q1 2025",
+        "title": "First Quarter Financial Results and Fiscal Year Outlook",
+        "source_url": null
+      },
+      "actuals": {
+        "Worldwide net sales and revenues": 6809.0,
+        "Diluted EPS (GAAP)": 3.19,
+        "Production & Precision Ag operating profit": 338.0
+      }
+    },
+    {
+      "company": "DE",
+      "report_date": "2024-11-21",
+      "cutoff": "2024-11-20",
+      "document": {
+        "doc_id": "2024-11-21__de-us-20241121-q4-8k__105840",
+        "path": "challenge/offline-data/deere/filings/2024-11-21__de-us-20241121-q4-8k__105840.md",
+        "company": "DE",
+        "published_at": "2024-11-21",
+        "document_type": "FILING",
+        "period": "FY 2024",
+        "title": "Fourth Quarter and Fiscal Year Financial Results and 2025 Outlook",
+        "source_url": null
+      },
+      "actuals": {
+        "Worldwide net sales and revenues": 9275.0,
+        "Diluted EPS (GAAP)": 4.55,
+        "Production & Precision Ag operating profit": 40.0
+      }
+    },
+    {
+      "company": "DE",
+      "report_date": "2024-08-15",
+      "cutoff": "2024-08-14",
+      "document": {
+        "doc_id": "2024-08-15__de-us-20240815-q3-8k__105836",
+        "path": "challenge/offline-data/deere/filings/2024-08-15__de-us-20240815-q3-8k__105836.md",
+        "company": "DE",
+        "published_at": "2024-08-15",
+        "document_type": "FILING",
+        "period": "Q3 2024",
+        "title": "Third Quarter and Nine Months Financial Results",
+        "source_url": null
+      },
+      "actuals": {
+        "Worldwide net sales and revenues": 11387.0,
+        "Diluted EPS (GAAP)": 6.29,
+        "Production & Precision Ag operating profit": 496.0
+      }
+    }
+  ],
+  "outcomes": [
+    {
+      "company": "HD",
+      "metric": "Net sales",
+      "units": "USDm",
+      "report_date": "2026-05-19",
+      "forecast": 41200.81504702194,
+      "actual": 41800.0,
+      "absolute_error": 599.184953,
+      "percentage_error": 0.014335,
+      "confidence": "medium",
+      "method": "seasonal naive with drift: 2025-05-20 value 3.99e+04 grown by +3.3% year-on-year",
+      "citations": [
+        "challenge/offline-data/home-depot/filings/2025-05-20__hd-us-20250520-q1-8k__101847.md",
+        "challenge/offline-data/home-depot/filings/2026-02-24__hd-us-20260224-q4-8k__615609.md"
+      ]
+    },
+    {
+      "company": "HD",
+      "metric": "Adjusted diluted EPS",
+      "units": "USD / share",
+      "report_date": "2026-05-19",
+      "forecast": 2.9473509933774835,
+      "actual": 3.3,
+      "absolute_error": 0.352649,
+      "percentage_error": 0.106863,
+      "confidence": "medium",
+      "method": "seasonal naive with drift: 2025-05-20 value 3.45 grown by -14.6% year-on-year",
+      "citations": [
+        "challenge/offline-data/home-depot/filings/2025-05-20__hd-us-20250520-q1-8k__101847.md",
+        "challenge/offline-data/home-depot/filings/2026-02-24__hd-us-20260224-q4-8k__615609.md"
+      ]
+    },
+    {
+      "company": "HD",
+      "metric": "Comparable sales, total company",
+      "units": "%",
+      "report_date": "2026-05-19",
+      "forecast": 0.2,
+      "actual": 0.4,
+      "absolute_error": 0.2,
+      "percentage_error": 0.5,
+      "confidence": "medium",
+      "method": "seasonal naive: same period a year earlier (2025-05-20)",
+      "citations": [
+        "challenge/offline-data/home-depot/filings/2025-05-20__hd-us-20250520-q1-8k__101847.md",
+        "challenge/offline-data/home-depot/filings/2026-02-24__hd-us-20260224-q4-8k__615609.md"
+      ]
+    },
+    {
+      "company": "HD",
+      "metric": "Net sales",
+      "units": "USDm",
+      "report_date": "2026-02-24",
+      "forecast": 164261.19402985077,
+      "actual": 164700.0,
+      "absolute_error": 438.80597,
+      "percentage_error": 0.002664,
+      "confidence": "medium",
+      "method": "seasonal naive with drift: 2025-02-25 value 1.595e+05 grown by +3.0% year-on-year",
+      "citations": [
+        "challenge/offline-data/home-depot/filings/2025-02-25__hd-us-20250225-q4-8k__101827.md",
+        "challenge/offline-data/home-depot/filings/2025-11-18__hd-us-20251118-q3-8k__359994.md"
+      ]
+    },
+    {
+      "company": "HD",
+      "metric": "Adjusted diluted EPS",
+      "units": "USD / share",
+      "report_date": "2026-02-24",
+      "forecast": 2.9788555858310626,
+      "actual": 2.58,
+      "absolute_error": 0.398856,
+      "percentage_error": 0.154595,
+      "confidence": "medium",
+      "method": "seasonal naive with drift: 2025-02-25 value 3.02 grown by -1.4% year-on-year",
+      "citations": [
+        "challenge/offline-data/home-depot/filings/2025-02-25__hd-us-20250225-q4-8k__101827.md",
+        "challenge/offline-data/home-depot/filings/2025-11-18__hd-us-20251118-q3-8k__359994.md"
+      ]
+    },
+    {
+      "company": "HD",
+      "metric": "Comparable sales, total company",
+      "units": "%",
+      "report_date": "2026-02-24",
+      "forecast": 1.3,
+      "actual": 0.3,
+      "absolute_error": 1.0,
+      "percentage_error": 3.333333,
+      "confidence": "medium",
+      "method": "seasonal naive: same period a year earlier (2025-02-25)",
+      "citations": [
+        "challenge/offline-data/home-depot/filings/2025-02-25__hd-us-20250225-q4-8k__101827.md",
+        "challenge/offline-data/home-depot/filings/2025-11-18__hd-us-20251118-q3-8k__359994.md"
+      ]
+    },
+    {
+      "company": "HD",
+      "metric": "Net sales",
+      "units": "USDm",
+      "report_date": "2025-11-18",
+      "forecast": 42154.16666666667,
+      "actual": 41400.0,
+      "absolute_error": 754.166667,
+      "percentage_error": 0.018217,
+      "confidence": "medium",
+      "method": "seasonal naive with drift: 2024-11-12 value 4.02e+04 grown by +4.9% year-on-year",
+      "citations": [
+        "challenge/offline-data/home-depot/filings/2024-11-12__hd-us-20241112-q3-8k__101844.md",
+        "challenge/offline-data/home-depot/filings/2025-08-20__hd-us-20250820-q2-8k__143688.md"
+      ]
+    },
+    {
+      "company": "HD",
+      "metric": "Adjusted diluted EPS",
+      "units": "USD / share",
+      "report_date": "2025-11-18",
+      "forecast": 3.65404347826087,
+      "actual": 3.62,
+      "absolute_error": 0.034043,
+      "percentage_error": 0.009404,
+      "confidence": "medium",
+      "method": "seasonal naive with drift: 2024-11-12 value 3.67 grown by -0.4% year-on-year",
+      "citations": [
+        "challenge/offline-data/home-depot/filings/2024-11-12__hd-us-20241112-q3-8k__101844.md",
+        "challenge/offline-data/home-depot/filings/2025-08-20__hd-us-20250820-q2-8k__143688.md"
+      ]
+    },
+    {
+      "company": "HD",
+      "metric": "Comparable sales, total company",
+      "units": "%",
+      "report_date": "2025-11-18",
+      "forecast": 1.2,
+      "actual": 0.1,
+      "absolute_error": 1.1,
+      "percentage_error": 11.0,
+      "confidence": "medium",
+      "method": "seasonal naive: same period a year earlier (2024-11-12)",
+      "citations": [
+        "challenge/offline-data/home-depot/filings/2024-11-12__hd-us-20241112-q3-8k__101844.md",
+        "challenge/offline-data/home-depot/filings/2025-08-20__hd-us-20250820-q2-8k__143688.md"
+      ]
+    },
+    {
+      "company": "HD",
+      "metric": "Net sales",
+      "units": "USDm",
+      "report_date": "2025-08-20",
+      "forecast": 45303.958333333336,
+      "actual": 45300.0,
+      "absolute_error": 3.958333,
+      "percentage_error": 8.7e-05,
+      "confidence": "medium",
+      "method": "65% published guidance, 35% seasonal naive with drift: 2024-11-12 value 4.02e+04 grown by +4.9% year-on-year",
+      "citations": [
+        "challenge/offline-data/home-depot/filings/2024-11-12__hd-us-20241112-q3-8k__101844.md",
+        "challenge/offline-data/home-depot/filings/2025-08-19__hd-us-20250819-q2-8k__143666.md"
+      ]
+    },
+    {
+      "company": "HD",
+      "metric": "Adjusted diluted EPS",
+      "units": "USD / share",
+      "report_date": "2025-08-20",
+      "forecast": 3.65404347826087,
+      "actual": 4.58,
+      "absolute_error": 0.925957,
+      "percentage_error": 0.202174,
+      "confidence": "medium",
+      "method": "seasonal naive with drift: 2024-11-12 value 3.67 grown by -0.4% year-on-year",
+      "citations": [
+        "challenge/offline-data/home-depot/filings/2024-11-12__hd-us-20241112-q3-8k__101844.md",
+        "challenge/offline-data/home-depot/filings/2025-08-19__hd-us-20250819-q2-8k__143666.md"
+      ]
+    },
+    {
+      "company": "HD",
+      "metric": "Comparable sales, total company",
+      "units": "%",
+      "report_date": "2025-08-20",
+      "forecast": 1.2,
+      "actual": 1.4,
+      "absolute_error": 0.2,
+      "percentage_error": 0.142857,
+      "confidence": "medium",
+      "method": "seasonal naive: same period a year earlier (2024-11-12)",
+      "citations": [
+        "challenge/offline-data/home-depot/filings/2024-11-12__hd-us-20241112-q3-8k__101844.md",
+        "challenge/offline-data/home-depot/filings/2025-08-19__hd-us-20250819-q2-8k__143666.md"
+      ]
+    },
+    {
+      "company": "HD",
+      "metric": "Net sales",
+      "units": "USDm",
+      "report_date": "2025-08-19",
+      "forecast": 47123.846153846156,
+      "actual": 45300.0,
+      "absolute_error": 1823.846154,
+      "percentage_error": 0.040262,
+      "confidence": "medium",
+      "method": "65% published guidance, 35% seasonal naive with drift: 2024-08-13 value 4.32e+04 grown by +9.6% year-on-year",
+      "citations": [
+        "challenge/offline-data/home-depot/filings/2024-08-13__hd-us-20240813-q2-8k__101849.md",
+        "challenge/offline-data/home-depot/filings/2025-05-20__hd-us-20250520-q1-8k__101847.md"
+      ]
+    },
+    {
+      "company": "HD",
+      "metric": "Adjusted diluted EPS",
+      "units": "USD / share",
+      "report_date": "2025-08-19",
+      "forecast": 4.371900826446281,
+      "actual": 4.58,
+      "absolute_error": 0.208099,
+      "percentage_error": 0.045437,
+      "confidence": "medium",
+      "method": "seasonal naive with drift: 2024-08-13 value 4.6 grown by -5.0% year-on-year",
+      "citations": [
+        "challenge/offline-data/home-depot/filings/2024-08-13__hd-us-20240813-q2-8k__101849.md",
+        "challenge/offline-data/home-depot/filings/2025-05-20__hd-us-20250520-q1-8k__101847.md"
+      ]
+    },
+    {
+      "company": "HD",
+      "metric": "Comparable sales, total company",
+      "units": "%",
+      "report_date": "2025-08-19",
+      "forecast": 3.6,
+      "actual": 1.4,
+      "absolute_error": 2.2,
+      "percentage_error": 1.571429,
+      "confidence": "medium",
+      "method": "seasonal naive: same period a year earlier (2024-08-13)",
+      "citations": [
+        "challenge/offline-data/home-depot/filings/2024-08-13__hd-us-20240813-q2-8k__101849.md",
+        "challenge/offline-data/home-depot/filings/2025-05-20__hd-us-20250520-q1-8k__101847.md"
+      ]
+    },
+    {
+      "company": "HD",
+      "metric": "Net sales",
+      "units": "USDm",
+      "report_date": "2025-05-20",
+      "forecast": 166833.33333333334,
+      "actual": 39900.0,
+      "absolute_error": 126933.333333,
+      "percentage_error": 3.181287,
+      "confidence": "medium",
+      "method": "seasonal naive with drift: 2024-05-14 value 3.64e+04 grown by +358.3% year-on-year",
+      "citations": [
+        "challenge/offline-data/home-depot/filings/2024-05-14__hd-us-20240514-q1-8k__101830.md",
+        "challenge/offline-data/home-depot/filings/2025-02-25__hd-us-20250225-q4-8k__101827.md"
+      ]
+    },
+    {
+      "company": "HD",
+      "metric": "Adjusted diluted EPS",
+      "units": "USD / share",
+      "report_date": "2025-05-20",
+      "forecast": 3.8874468085106386,
+      "actual": 3.45,
+      "absolute_error": 0.437447,
+      "percentage_error": 0.126796,
+      "confidence": "medium",
+      "method": "seasonal naive with drift: 2024-05-14 value 3.63 grown by +7.1% year-on-year",
+      "citations": [
+        "challenge/offline-data/home-depot/filings/2024-05-14__hd-us-20240514-q1-8k__101830.md",
+        "challenge/offline-data/home-depot/filings/2025-02-25__hd-us-20250225-q4-8k__101827.md"
+      ]
+    },
+    {
+      "company": "HD",
+      "metric": "Comparable sales, total company",
+      "units": "%",
+      "report_date": "2025-05-20",
+      "forecast": 3.2,
+      "actual": 0.2,
+      "absolute_error": 3.0,
+      "percentage_error": 15.0,
+      "confidence": "medium",
+      "method": "seasonal naive: same period a year earlier (2024-05-14)",
+      "citations": [
+        "challenge/offline-data/home-depot/filings/2024-05-14__hd-us-20240514-q1-8k__101830.md",
+        "challenge/offline-data/home-depot/filings/2025-02-25__hd-us-20250225-q4-8k__101827.md"
+      ]
+    },
+    {
+      "company": "HD",
+      "metric": "Net sales",
+      "units": "USDm",
+      "report_date": "2025-02-25",
+      "forecast": 43537.692307692305,
+      "actual": 159500.0,
+      "absolute_error": 115962.307692,
+      "percentage_error": 0.727036,
+      "confidence": "medium",
+      "method": "65% published guidance, 35% seasonal naive with drift: 2024-02-20 value 3.48e+04 grown by +6.6% year-on-year",
+      "citations": [
+        "challenge/offline-data/home-depot/filings/2024-02-20__hd-us-20240220-q4-8k__101851.md",
+        "challenge/offline-data/home-depot/filings/2024-11-12__hd-us-20241112-q3-8k__101844.md"
+      ]
+    },
+    {
+      "company": "HD",
+      "metric": "Adjusted diluted EPS",
+      "units": "USD / share",
+      "report_date": "2025-02-25",
+      "forecast": 2.7163779527559053,
+      "actual": 3.02,
+      "absolute_error": 0.303622,
+      "percentage_error": 0.100537,
+      "confidence": "medium",
+      "method": "seasonal naive with drift: 2024-02-20 value 2.82 grown by -3.7% year-on-year",
+      "citations": [
+        "challenge/offline-data/home-depot/filings/2024-02-20__hd-us-20240220-q4-8k__101851.md",
+        "challenge/offline-data/home-depot/filings/2024-11-12__hd-us-20241112-q3-8k__101844.md"
+      ]
+    },
+    {
+      "company": "HD",
+      "metric": "Comparable sales, total company",
+      "units": "%",
+      "report_date": "2025-02-25",
+      "forecast": 4.0,
+      "actual": 1.3,
+      "absolute_error": 2.7,
+      "percentage_error": 2.076923,
+      "confidence": "medium",
+      "method": "seasonal naive: same period a year earlier (2024-02-20)",
+      "citations": [
+        "challenge/offline-data/home-depot/filings/2024-02-20__hd-us-20240220-q4-8k__101851.md",
+        "challenge/offline-data/home-depot/filings/2024-11-12__hd-us-20241112-q3-8k__101844.md"
+      ]
+    },
+    {
+      "company": "HD",
+      "metric": "Net sales",
+      "units": "USDm",
+      "report_date": "2024-11-12",
+      "forecast": 43837.27272727273,
+      "actual": 40200.0,
+      "absolute_error": 3637.272727,
+      "percentage_error": 0.090479,
+      "confidence": "medium",
+      "method": "65% published guidance, 35% seasonal naive with drift: 2023-11-14 value 3.77e+04 grown by +0.7% year-on-year",
+      "citations": [
+        "challenge/offline-data/home-depot/filings/2023-11-14__hd-us-20231114-q3-8k__101815.md",
+        "challenge/offline-data/home-depot/filings/2024-08-13__hd-us-20240813-q2-8k__101849.md"
+      ]
+    },
+    {
+      "company": "HD",
+      "metric": "Adjusted diluted EPS",
+      "units": "USD / share",
+      "report_date": "2024-11-12",
+      "forecast": 3.47049504950495,
+      "actual": 3.67,
+      "absolute_error": 0.199505,
+      "percentage_error": 0.054361,
+      "confidence": "medium",
+      "method": "seasonal naive with drift: 2023-11-14 value 3.81 grown by -8.9% year-on-year",
+      "citations": [
+        "challenge/offline-data/home-depot/filings/2023-11-14__hd-us-20231114-q3-8k__101815.md",
+        "challenge/offline-data/home-depot/filings/2024-08-13__hd-us-20240813-q2-8k__101849.md"
+      ]
+    },
+    {
+      "company": "HD",
+      "metric": "Comparable sales, total company",
+      "units": "%",
+      "report_date": "2024-11-12",
+      "forecast": 3.5,
+      "actual": 1.2,
+      "absolute_error": 2.3,
+      "percentage_error": 1.916667,
+      "confidence": "medium",
+      "method": "seasonal naive: same period a year earlier (2023-11-14)",
+      "citations": [
+        "challenge/offline-data/home-depot/filings/2023-11-14__hd-us-20231114-q3-8k__101815.md",
+        "challenge/offline-data/home-depot/filings/2024-08-13__hd-us-20240813-q2-8k__101849.md"
+      ]
+    },
+    {
+      "company": "ADI",
+      "metric": "Revenue",
+      "units": "USDm",
+      "report_date": "2026-05-20",
+      "forecast": 3199.0,
+      "actual": 3620.0,
+      "absolute_error": 421.0,
+      "percentage_error": 0.116298,
+      "confidence": "medium",
+      "method": "65% published guidance, 35% seasonal naive: same period a year earlier (2025-05-22)",
+      "citations": [
+        "challenge/offline-data/analog-devices/filings/2025-05-22__adi-us-20250522-q2-8k__102679.md",
+        "challenge/offline-data/analog-devices/filings/2026-02-18__adi-us-20260218-q1-8k-2__602115.md"
+      ]
+    },
+    {
+      "company": "ADI",
+      "metric": "Adjusted diluted EPS",
+      "units": "USD / share",
+      "report_date": "2026-05-20",
+      "forecast": 2.792024539877301,
+      "actual": 3.09,
+      "absolute_error": 0.297975,
+      "percentage_error": 0.096432,
+      "confidence": "medium",
+      "method": "seasonal naive with drift: 2025-05-22 value 1.85 grown by +50.9% year-on-year",
+      "citations": [
+        "challenge/offline-data/analog-devices/filings/2025-05-22__adi-us-20250522-q2-8k__102679.md",
+        "challenge/offline-data/analog-devices/filings/2026-02-18__adi-us-20260218-q1-8k-2__602115.md"
+      ]
+    },
+    {
+      "company": "ADI",
+      "metric": "Adjusted gross margin",
+      "units": "%",
+      "report_date": "2026-05-20",
+      "forecast": 69.4,
+      "actual": 67.3,
+      "absolute_error": 2.1,
+      "percentage_error": 0.031204,
+      "confidence": "medium",
+      "method": "seasonal naive: same period a year earlier (2025-05-22)",
+      "citations": [
+        "challenge/offline-data/analog-devices/filings/2025-05-22__adi-us-20250522-q2-8k__102679.md",
+        "challenge/offline-data/analog-devices/filings/2026-02-18__adi-us-20260218-q1-8k-2__602115.md"
+      ]
+    },
+    {
+      "company": "ADI",
+      "metric": "Revenue",
+      "units": "USDm",
+      "report_date": "2026-02-18",
+      "forecast": 3093.0,
+      "actual": 3160.0,
+      "absolute_error": 67.0,
+      "percentage_error": 0.021203,
+      "confidence": "medium",
+      "method": "65% published guidance, 35% persistence: most recent reported value",
+      "citations": [
+        "challenge/offline-data/analog-devices/filings/2025-11-25__adi-us-20251125-q4-8k__361005.md"
+      ]
+    },
+    {
+      "company": "ADI",
+      "metric": "Adjusted diluted EPS",
+      "units": "USD / share",
+      "report_date": "2026-02-18",
+      "forecast": 2.2058682634730538,
+      "actual": 2.46,
+      "absolute_error": 0.254132,
+      "percentage_error": 0.103306,
+      "confidence": "medium",
+      "method": "seasonal naive with drift: 2025-02-19 value 1.63 grown by +35.3% year-on-year",
+      "citations": [
+        "challenge/offline-data/analog-devices/filings/2025-02-19__adi-us-20250219-q1-8k__102670.md",
+        "challenge/offline-data/analog-devices/filings/2025-11-25__adi-us-20251125-q4-8k__361005.md"
+      ]
+    },
+    {
+      "company": "ADI",
+      "metric": "Adjusted gross margin",
+      "units": "%",
+      "report_date": "2026-02-18",
+      "forecast": 68.8,
+      "actual": 64.7,
+      "absolute_error": 4.1,
+      "percentage_error": 0.063369,
+      "confidence": "medium",
+      "method": "seasonal naive: same period a year earlier (2025-02-19)",
+      "citations": [
+        "challenge/offline-data/analog-devices/filings/2025-02-19__adi-us-20250219-q1-8k__102670.md",
+        "challenge/offline-data/analog-devices/filings/2025-11-25__adi-us-20251125-q4-8k__361005.md"
+      ]
+    },
+    {
+      "company": "ADI",
+      "metric": "Revenue",
+      "units": "USDm",
+      "report_date": "2025-11-25",
+      "forecast": 2958.0,
+      "actual": 3080.0,
+      "absolute_error": 122.0,
+      "percentage_error": 0.03961,
+      "confidence": "medium",
+      "method": "65% published guidance, 35% persistence: most recent reported value",
+      "citations": [
+        "challenge/offline-data/analog-devices/filings/2025-08-20__adi-us-20250820-q3-8k__155976.md"
+      ]
+    },
+    {
+      "company": "ADI",
+      "metric": "Adjusted diluted EPS",
+      "units": "USD / share",
+      "report_date": "2025-11-25",
+      "forecast": 2.166772151898734,
+      "actual": 2.26,
+      "absolute_error": 0.093228,
+      "percentage_error": 0.041251,
+      "confidence": "medium",
+      "method": "seasonal naive with drift: 2024-11-26 value 1.67 grown by +29.7% year-on-year",
+      "citations": [
+        "challenge/offline-data/analog-devices/filings/2024-11-26__adi-us-20241126-q4-8k__102666.md",
+        "challenge/offline-data/analog-devices/filings/2025-08-20__adi-us-20250820-q3-8k__155976.md"
+      ]
+    },
+    {
+      "company": "ADI",
+      "metric": "Adjusted gross margin",
+      "units": "%",
+      "report_date": "2025-11-25",
+      "forecast": 67.9,
+      "actual": 61.5,
+      "absolute_error": 6.4,
+      "percentage_error": 0.104065,
+      "confidence": "medium",
+      "method": "seasonal naive: same period a year earlier (2024-11-26)",
+      "citations": [
+        "challenge/offline-data/analog-devices/filings/2024-11-26__adi-us-20241126-q4-8k__102666.md",
+        "challenge/offline-data/analog-devices/filings/2025-08-20__adi-us-20250820-q3-8k__155976.md"
+      ]
+    },
+    {
+      "company": "ADI",
+      "metric": "Revenue",
+      "units": "USDm",
+      "report_date": "2025-08-20",
+      "forecast": 2711.5,
+      "actual": 2880.0,
+      "absolute_error": 168.5,
+      "percentage_error": 0.058507,
+      "confidence": "medium",
+      "method": "65% published guidance, 35% persistence: most recent reported value",
+      "citations": [
+        "challenge/offline-data/analog-devices/filings/2025-05-22__adi-us-20250522-q2-8k__102679.md"
+      ]
+    },
+    {
+      "company": "ADI",
+      "metric": "Adjusted diluted EPS",
+      "units": "USD / share",
+      "report_date": "2025-08-20",
+      "forecast": 2.087857142857143,
+      "actual": 4.0,
+      "absolute_error": 1.912143,
+      "percentage_error": 0.478036,
+      "confidence": "medium",
+      "method": "seasonal naive with drift: 2024-08-21 value 1.58 grown by +32.1% year-on-year",
+      "citations": [
+        "challenge/offline-data/analog-devices/filings/2024-08-21__adi-us-20240821-q3-8k__102648.md",
+        "challenge/offline-data/analog-devices/filings/2025-05-22__adi-us-20250522-q2-8k__102679.md"
+      ]
+    },
+    {
+      "company": "ADI",
+      "metric": "Adjusted gross margin",
+      "units": "%",
+      "report_date": "2025-08-20",
+      "forecast": 56.7,
+      "actual": 69.2,
+      "absolute_error": 12.5,
+      "percentage_error": 0.180636,
+      "confidence": "medium",
+      "method": "seasonal naive: same period a year earlier (2024-08-21)",
+      "citations": [
+        "challenge/offline-data/analog-devices/filings/2024-08-21__adi-us-20240821-q3-8k__102648.md",
+        "challenge/offline-data/analog-devices/filings/2025-05-22__adi-us-20250522-q2-8k__102679.md"
+      ]
+    },
+    {
+      "company": "ADI",
+      "metric": "Revenue",
+      "units": "USDm",
+      "report_date": "2025-05-22",
+      "forecast": 2502.6923076923076,
+      "actual": 2640.0,
+      "absolute_error": 137.307692,
+      "percentage_error": 0.05201,
+      "confidence": "medium",
+      "method": "65% published guidance, 35% seasonal naive with drift: 2023-05-24 value 3,260 grown by -23.1% year-on-year",
+      "citations": [
+        "challenge/offline-data/analog-devices/filings/2023-05-24__adi-us-20230524-q2-8k__102668.md",
+        "challenge/offline-data/analog-devices/filings/2024-02-21__adi-us-20240221-q1-8k__102673.md"
+      ]
+    },
+    {
+      "company": "ADI",
+      "metric": "Adjusted diluted EPS",
+      "units": "USD / share",
+      "report_date": "2025-05-22",
+      "forecast": 1.3190751445086704,
+      "actual": 1.85,
+      "absolute_error": 0.530925,
+      "percentage_error": 0.286986,
+      "confidence": "medium",
+      "method": "seasonal naive with drift: 2024-05-22 value 1.4 grown by -5.8% year-on-year",
+      "citations": [
+        "challenge/offline-data/analog-devices/filings/2024-05-22__adi-us-20240522-q2-8k__102675.md",
+        "challenge/offline-data/analog-devices/filings/2025-02-19__adi-us-20250219-q1-8k__102670.md"
+      ]
+    },
+    {
+      "company": "ADI",
+      "metric": "Adjusted gross margin",
+      "units": "%",
+      "report_date": "2025-05-22",
+      "forecast": 66.7,
+      "actual": 61.0,
+      "absolute_error": 5.7,
+      "percentage_error": 0.093443,
+      "confidence": "medium",
+      "method": "seasonal naive: same period a year earlier (2024-05-22)",
+      "citations": [
+        "challenge/offline-data/analog-devices/filings/2024-05-22__adi-us-20240522-q2-8k__102675.md",
+        "challenge/offline-data/analog-devices/filings/2025-02-19__adi-us-20250219-q1-8k__102670.md"
+      ]
+    },
+    {
+      "company": "ADI",
+      "metric": "Revenue",
+      "units": "USDm",
+      "report_date": "2025-02-19",
+      "forecast": 2405.1923076923076,
+      "actual": 2500.0,
+      "absolute_error": 94.807692,
+      "percentage_error": 0.037923,
+      "confidence": "medium",
+      "method": "65% published guidance, 35% seasonal naive with drift: 2023-05-24 value 3,260 grown by -23.1% year-on-year",
+      "citations": [
+        "challenge/offline-data/analog-devices/filings/2023-05-24__adi-us-20230524-q2-8k__102668.md",
+        "challenge/offline-data/analog-devices/filings/2024-02-21__adi-us-20240221-q1-8k__102673.md"
+      ]
+    },
+    {
+      "company": "ADI",
+      "metric": "Adjusted diluted EPS",
+      "units": "USD / share",
+      "report_date": "2025-02-19",
+      "forecast": 1.4373631840796022,
+      "actual": 1.63,
+      "absolute_error": 0.192637,
+      "percentage_error": 0.118182,
+      "confidence": "medium",
+      "method": "seasonal naive with drift: 2024-02-21 value 1.73 grown by -16.9% year-on-year",
+      "citations": [
+        "challenge/offline-data/analog-devices/filings/2024-02-21__adi-us-20240221-q1-8k__102673.md",
+        "challenge/offline-data/analog-devices/filings/2024-11-26__adi-us-20241126-q4-8k__102666.md"
+      ]
+    },
+    {
+      "company": "ADI",
+      "metric": "Adjusted gross margin",
+      "units": "%",
+      "report_date": "2025-02-19",
+      "forecast": 69.0,
+      "actual": 59.0,
+      "absolute_error": 10.0,
+      "percentage_error": 0.169492,
+      "confidence": "medium",
+      "method": "seasonal naive: same period a year earlier (2024-02-21)",
+      "citations": [
+        "challenge/offline-data/analog-devices/filings/2024-02-21__adi-us-20240221-q1-8k__102673.md",
+        "challenge/offline-data/analog-devices/filings/2024-11-26__adi-us-20241126-q4-8k__102666.md"
+      ]
+    },
+    {
+      "company": "ADI",
+      "metric": "Revenue",
+      "units": "USDm",
+      "report_date": "2024-11-26",
+      "forecast": 2437.6923076923076,
+      "actual": 2400.0,
+      "absolute_error": 37.692308,
+      "percentage_error": 0.015705,
+      "confidence": "medium",
+      "method": "65% published guidance, 35% seasonal naive with drift: 2023-05-24 value 3,260 grown by -23.1% year-on-year",
+      "citations": [
+        "challenge/offline-data/analog-devices/filings/2023-05-24__adi-us-20230524-q2-8k__102668.md",
+        "challenge/offline-data/analog-devices/filings/2024-02-21__adi-us-20240221-q1-8k__102673.md"
+      ]
+    },
+    {
+      "company": "ADI",
+      "metric": "Adjusted diluted EPS",
+      "units": "USD / share",
+      "report_date": "2024-11-26",
+      "forecast": 1.0585999999999998,
+      "actual": 1.67,
+      "absolute_error": 0.6114,
+      "percentage_error": 0.366108,
+      "confidence": "medium",
+      "method": "seasonal naive with drift: 2023-11-21 value 2.01 grown by -47.3% year-on-year",
+      "citations": [
+        "challenge/offline-data/analog-devices/filings/2023-11-21__adi-us-20231121-q4-8k__102653.md",
+        "challenge/offline-data/analog-devices/filings/2024-08-21__adi-us-20240821-q3-8k__102648.md"
+      ]
+    },
+    {
+      "company": "ADI",
+      "metric": "Adjusted gross margin",
+      "units": "%",
+      "report_date": "2024-11-26",
+      "forecast": 70.2,
+      "actual": 57.1,
+      "absolute_error": 13.1,
+      "percentage_error": 0.229422,
+      "confidence": "medium",
+      "method": "seasonal naive: same period a year earlier (2023-11-21)",
+      "citations": [
+        "challenge/offline-data/analog-devices/filings/2023-11-21__adi-us-20231121-q4-8k__102653.md",
+        "challenge/offline-data/analog-devices/filings/2024-08-21__adi-us-20240821-q3-8k__102648.md"
+      ]
+    },
+    {
+      "company": "ADI",
+      "metric": "Revenue",
+      "units": "USDm",
+      "report_date": "2024-08-21",
+      "forecast": 2353.1923076923076,
+      "actual": 2310.0,
+      "absolute_error": 43.192308,
+      "percentage_error": 0.018698,
+      "confidence": "medium",
+      "method": "65% published guidance, 35% seasonal naive with drift: 2023-05-24 value 3,260 grown by -23.1% year-on-year",
+      "citations": [
+        "challenge/offline-data/analog-devices/filings/2023-05-24__adi-us-20230524-q2-8k__102668.md",
+        "challenge/offline-data/analog-devices/filings/2024-02-21__adi-us-20240221-q1-8k__102673.md"
+      ]
+    },
+    {
+      "company": "ADI",
+      "metric": "Adjusted diluted EPS",
+      "units": "USD / share",
+      "report_date": "2024-08-21",
+      "forecast": 2.1875,
+      "actual": 1.58,
+      "absolute_error": 0.6075,
+      "percentage_error": 0.384494,
+      "confidence": "medium",
+      "method": "seasonal naive with drift: 2023-08-23 value 3 grown by -27.1% year-on-year",
+      "citations": [
+        "challenge/offline-data/analog-devices/filings/2023-08-23__adi-us-20230823-q3-8k-2__488074.md",
+        "challenge/offline-data/analog-devices/filings/2024-05-22__adi-us-20240522-q2-8k__102675.md"
+      ]
+    },
+    {
+      "company": "ADI",
+      "metric": "Adjusted gross margin",
+      "units": "%",
+      "report_date": "2024-08-21",
+      "forecast": 63.8,
+      "actual": 56.7,
+      "absolute_error": 7.1,
+      "percentage_error": 0.12522,
+      "confidence": "medium",
+      "method": "seasonal naive: same period a year earlier (2023-08-23)",
+      "citations": [
+        "challenge/offline-data/analog-devices/filings/2023-08-23__adi-us-20230823-q3-8k-2__488074.md",
+        "challenge/offline-data/analog-devices/filings/2024-05-22__adi-us-20240522-q2-8k__102675.md"
+      ]
+    },
+    {
+      "company": "HAS",
+      "metric": "Net fees",
+      "units": "GBPm",
+      "report_date": "2025-08-21",
+      "forecast": 13.102962962962964,
+      "actual": 40.0,
+      "absolute_error": 26.897037,
+      "percentage_error": 0.672426,
+      "confidence": "low",
+      "method": "persistence with drift: latest value grown by -1.5%",
+      "citations": [
+        "challenge/offline-data/hays/filings/2025-02-20__has-ln-20250220-q2-8k__119730.md"
+      ]
+    },
+    {
+      "company": "HAS",
+      "metric": "Pre-exceptional basic EPS",
+      "units": "GBp",
+      "report_date": "2025-08-21",
+      "forecast": 0.95,
+      "actual": 32.6,
+      "absolute_error": 31.65,
+      "percentage_error": 0.970859,
+      "confidence": "low",
+      "method": "persistence with drift: latest value grown by +0.0%",
+      "citations": [
+        "challenge/offline-data/hays/filings/2025-02-20__has-ln-20250220-q2-8k__119730.md"
+      ]
+    },
+    {
+      "company": "HAS",
+      "metric": "Pre-exceptional operating profit",
+      "units": "GBPm",
+      "report_date": "2025-08-21",
+      "forecast": 1171.4705882352941,
+      "actual": 3.0,
+      "absolute_error": 1168.470588,
+      "percentage_error": 389.490196,
+      "confidence": "medium",
+      "method": "seasonal naive with drift: 2024-08-22 value 105 grown by +1015.7% year-on-year",
+      "citations": [
+        "challenge/offline-data/hays/filings/2024-08-22__has-ln-20240822-h2-8k-2__671217.md",
+        "challenge/offline-data/hays/filings/2025-04-16__has-ln-20250416-q3-8k__119733.md"
+      ]
+    },
+    {
+      "company": "HAS",
+      "metric": "Net fees",
+      "units": "GBPm",
+      "report_date": "2024-08-22",
+      "forecast": 142.77486910994762,
+      "actual": 40.0,
+      "absolute_error": 102.774869,
+      "percentage_error": 2.569372,
+      "confidence": "medium",
+      "method": "seasonal naive with drift: 2023-04-14 value 202 grown by -29.3% year-on-year",
+      "citations": [
+        "challenge/offline-data/hays/filings/2023-04-14__has-ln-20230414-q3-8k__119726.md",
+        "challenge/offline-data/hays/filings/2024-02-22__has-ln-20240222-h1-8k__119744.md"
+      ]
+    },
+    {
+      "company": "HAS",
+      "metric": "Pre-exceptional basic EPS",
+      "units": "GBp",
+      "report_date": "2024-08-22",
+      "forecast": 0.10106382978723408,
+      "actual": 202.0,
+      "absolute_error": 201.898936,
+      "percentage_error": 0.9995,
+      "confidence": "low",
+      "method": "persistence with drift: latest value grown by -89.4%",
+      "citations": [
+        "challenge/offline-data/hays/filings/2024-02-22__has-ln-20240222-h1-8k__119744.md"
+      ]
+    },
+    {
+      "company": "HAS",
+      "metric": "Pre-exceptional operating profit",
+      "units": "GBPm",
+      "report_date": "2024-08-22",
+      "forecast": 16.105263157894736,
+      "actual": 105.0,
+      "absolute_error": 88.894737,
+      "percentage_error": 0.846617,
+      "confidence": "medium",
+      "method": "seasonal naive with drift: 2023-04-14 value 6 grown by +168.4% year-on-year",
+      "citations": [
+        "challenge/offline-data/hays/filings/2023-04-14__has-ln-20230414-q3-8k__119726.md",
+        "challenge/offline-data/hays/filings/2024-02-22__has-ln-20240222-h1-8k__119744.md"
+      ]
+    },
+    {
+      "company": "HAS",
+      "metric": "Net fees",
+      "units": "GBPm",
+      "report_date": "2023-08-24",
+      "forecast": 1616.0,
+      "actual": 40.0,
+      "absolute_error": 1576.0,
+      "percentage_error": 39.4,
+      "confidence": "medium",
+      "method": "seasonal naive with drift: 2022-08-25 value 40 grown by +3940.0% year-on-year",
+      "citations": [
+        "challenge/offline-data/hays/filings/2022-08-25__has-ln-20220825-h2-8k-2__671215.md",
+        "challenge/offline-data/hays/filings/2023-04-14__has-ln-20230414-q3-8k__119726.md"
+      ]
+    },
+    {
+      "company": "HAS",
+      "metric": "Pre-exceptional basic EPS",
+      "units": "GBp",
+      "report_date": "2023-08-24",
+      "forecast": 125.8,
+      "actual": 138.3,
+      "absolute_error": 12.5,
+      "percentage_error": 0.090383,
+      "confidence": "medium",
+      "method": "seasonal naive with drift: 2022-04-14 value 125.8 grown by +0.0% year-on-year",
+      "citations": [
+        "challenge/offline-data/hays/filings/2022-04-14__has-ln-20220414-q3-8k__119725.md",
+        "challenge/offline-data/hays/filings/2023-02-23__has-ln-20230223-h1-8k__119736.md"
+      ]
+    },
+    {
+      "company": "HAS",
+      "metric": "Pre-exceptional operating profit",
+      "units": "GBPm",
+      "report_date": "2023-08-24",
+      "forecast": 263.2835820895522,
+      "actual": 57.0,
+      "absolute_error": 206.283582,
+      "percentage_error": 3.61901,
+      "confidence": "medium",
+      "method": "seasonal naive with drift: 2022-10-13 value 9 grown by +2825.4% year-on-year",
+      "citations": [
+        "challenge/offline-data/hays/filings/2022-10-13__has-ln-20221013-q1-8k__119738.md",
+        "challenge/offline-data/hays/filings/2023-07-13__has-ln-20230713-q4-8k__119742.md"
+      ]
+    },
+    {
+      "company": "HAS",
+      "metric": "Net fees",
+      "units": "GBPm",
+      "report_date": "2022-08-25",
+      "forecast": 2.3514851485148536,
+      "actual": 40.0,
+      "absolute_error": 37.648515,
+      "percentage_error": 0.941213,
+      "confidence": "medium",
+      "method": "seasonal naive with drift: 2021-07-15 value 95 grown by -97.5% year-on-year",
+      "citations": [
+        "challenge/offline-data/hays/filings/2021-07-15__has-ln-20210715-q4-8k__119740.md",
+        "challenge/offline-data/hays/filings/2022-04-14__has-ln-20220414-q3-8k__119725.md"
+      ]
+    },
+    {
+      "company": "HAS",
+      "metric": "Pre-exceptional basic EPS",
+      "units": "GBp",
+      "report_date": "2022-08-25",
+      "forecast": 70.39763421292082,
+      "actual": 8.93,
+      "absolute_error": 61.467634,
+      "percentage_error": 6.883274,
+      "confidence": "medium",
+      "method": "seasonal naive with drift: 2021-08-26 value 61.5 grown by +14.5% year-on-year",
+      "citations": [
+        "challenge/offline-data/hays/filings/2021-08-26__has-ln-20210826-h2-8k-2__671213.md",
+        "challenge/offline-data/hays/filings/2022-04-14__has-ln-20220414-q3-8k__119725.md"
+      ]
+    },
+    {
+      "company": "HAS",
+      "metric": "Pre-exceptional operating profit",
+      "units": "GBPm",
+      "report_date": "2022-08-25",
+      "forecast": 7.450819672131146,
+      "actual": 43.7,
+      "absolute_error": 36.24918,
+      "percentage_error": 0.829501,
+      "confidence": "medium",
+      "method": "seasonal naive with drift: 2021-07-15 value 90.9 grown by -91.8% year-on-year",
+      "citations": [
+        "challenge/offline-data/hays/filings/2021-07-15__has-ln-20210715-q4-8k__119740.md",
+        "challenge/offline-data/hays/filings/2022-04-14__has-ln-20220414-q3-8k__119725.md"
+      ]
+    },
+    {
+      "company": "HAS",
+      "metric": "Net fees",
+      "units": "GBPm",
+      "report_date": "2021-08-26",
+      "forecast": 25.06944444444444,
+      "actual": 3.3,
+      "absolute_error": 21.769444,
+      "percentage_error": 6.596801,
+      "confidence": "medium",
+      "method": "seasonal naive with drift: 2020-10-15 value 1.9 grown by +1219.4% year-on-year",
+      "citations": [
+        "challenge/offline-data/hays/filings/2020-10-15__has-ln-20201015-q1-8k__119749.md",
+        "challenge/offline-data/hays/filings/2021-07-15__has-ln-20210715-q4-8k__119740.md"
+      ]
+    },
+    {
+      "company": "HAS",
+      "metric": "Pre-exceptional basic EPS",
+      "units": "GBp",
+      "report_date": "2021-08-26",
+      "forecast": 10881.09009009009,
+      "actual": 61.5,
+      "absolute_error": 10819.59009,
+      "percentage_error": 175.928294,
+      "confidence": "low",
+      "method": "persistence with drift: latest value grown by +9800.9%",
+      "citations": [
+        "challenge/offline-data/hays/filings/2021-02-18__has-ln-20210218-h1-8k__119751.md"
+      ]
+    },
+    {
+      "company": "HAS",
+      "metric": "Pre-exceptional operating profit",
+      "units": "GBPm",
+      "report_date": "2021-08-26",
+      "forecast": 87.065,
+      "actual": 95.1,
+      "absolute_error": 8.035,
+      "percentage_error": 0.08449,
+      "confidence": "medium",
+      "method": "65% published guidance, 35% seasonal naive with drift: 2020-08-27 value 135 grown by -32.7% year-on-year",
+      "citations": [
+        "challenge/offline-data/hays/filings/2020-08-27__has-ln-20200827-h2-8k-2__671211.md",
+        "challenge/offline-data/hays/filings/2021-07-15__has-ln-20210715-q4-8k__119740.md"
+      ]
+    },
+    {
+      "company": "HAS",
+      "metric": "Net fees",
+      "units": "GBPm",
+      "report_date": "2020-08-27",
+      "forecast": 202.0,
+      "actual": 3.5,
+      "absolute_error": 198.5,
+      "percentage_error": 56.714286,
+      "confidence": "medium",
+      "method": "seasonal naive with drift: 2019-08-29 value 1.1 grown by +18263.6% year-on-year",
+      "citations": [
+        "challenge/offline-data/hays/filings/2019-08-29__has-ln-20190829-h2-8k-2__671212.md",
+        "challenge/offline-data/hays/filings/2020-04-02__has-ln-20200402-q3-8k__545545.md"
+      ]
+    },
+    {
+      "company": "HAS",
+      "metric": "Pre-exceptional basic EPS",
+      "units": "GBp",
+      "report_date": "2020-08-27",
+      "forecast": 1.11,
+      "actual": 47.5,
+      "absolute_error": 46.39,
+      "percentage_error": 0.976632,
+      "confidence": "low",
+      "method": "persistence with drift: latest value grown by +0.0%",
+      "citations": [
+        "challenge/offline-data/hays/filings/2020-02-20__has-ln-20200220-h1-8k__545729.md"
+      ]
+    },
+    {
+      "company": "HAS",
+      "metric": "Pre-exceptional operating profit",
+      "units": "GBPm",
+      "report_date": "2020-08-27",
+      "forecast": 208.84210526315792,
+      "actual": 135.0,
+      "absolute_error": 73.842105,
+      "percentage_error": 0.546979,
+      "confidence": "medium",
+      "method": "seasonal naive with drift: 2019-07-16 value 248 grown by -15.8% year-on-year",
+      "citations": [
+        "challenge/offline-data/hays/filings/2019-07-16__has-ln-20190716-q4-8k__545941.md",
+        "challenge/offline-data/hays/filings/2020-02-20__has-ln-20200220-h1-8k__545729.md"
+      ]
+    },
+    {
+      "company": "HAS",
+      "metric": "Net fees",
+      "units": "GBPm",
+      "report_date": "2019-08-29",
+      "forecast": 1.1,
+      "actual": 1.1,
+      "absolute_error": 0.0,
+      "percentage_error": 0.0,
+      "confidence": "low",
+      "method": "persistence: most recent reported value",
+      "citations": [
+        "challenge/offline-data/hays/filings/2019-02-21__has-ln-20190221-h1-8k__545552.md"
+      ]
+    },
+    {
+      "company": "HAS",
+      "metric": "Pre-exceptional basic EPS",
+      "units": "GBp",
+      "report_date": "2019-08-29",
+      "forecast": 1.11,
+      "actual": 161.7,
+      "absolute_error": 160.59,
+      "percentage_error": 0.993135,
+      "confidence": "low",
+      "method": "persistence: most recent reported value",
+      "citations": [
+        "challenge/offline-data/hays/filings/2019-02-21__has-ln-20190221-h1-8k__545552.md"
+      ]
+    },
+    {
+      "company": "HAS",
+      "metric": "Pre-exceptional operating profit",
+      "units": "GBPm",
+      "report_date": "2019-08-29",
+      "forecast": 8.0,
+      "actual": 248.8,
+      "absolute_error": 240.8,
+      "percentage_error": 0.967846,
+      "confidence": "medium",
+      "method": "seasonal naive: same period a year earlier (2018-10-11)",
+      "citations": [
+        "challenge/offline-data/hays/filings/2018-10-11__has-ln-20181011-q1-8k__545962.md",
+        "challenge/offline-data/hays/filings/2019-07-16__has-ln-20190716-q4-8k__545941.md"
+      ]
+    },
+    {
+      "company": "HAS",
+      "metric": "Net fees",
+      "units": "GBPm",
+      "report_date": "2018-10-03",
+      "forecast": 0.14492753623188404,
+      "actual": 1000.0,
+      "absolute_error": 999.855072,
+      "percentage_error": 0.999855,
+      "confidence": "low",
+      "method": "persistence with drift: latest value grown by -85.5%",
+      "citations": [
+        "challenge/offline-data/hays/filings/2017-09-22__has-ln-20170922-h2-8k__671210.md"
+      ]
+    },
+    {
+      "company": "HAS",
+      "metric": "Pre-exceptional basic EPS",
+      "units": "GBp",
+      "report_date": "2018-10-03",
+      "forecast": 1224.0,
+      "actual": -0.14,
+      "absolute_error": 1224.14,
+      "percentage_error": 8743.857143,
+      "confidence": "low",
+      "method": "persistence with drift: latest value grown by +10100.0%",
+      "citations": [
+        "challenge/offline-data/hays/filings/2017-09-22__has-ln-20170922-h2-8k__671210.md"
+      ]
+    },
+    {
+      "company": "HAS",
+      "metric": "Pre-exceptional operating profit",
+      "units": "GBPm",
+      "report_date": "2018-10-03",
+      "forecast": 247.13950276243094,
+      "actual": 243.4,
+      "absolute_error": 3.739503,
+      "percentage_error": 0.015364,
+      "confidence": "low",
+      "method": "persistence with drift: latest value grown by +16.9%",
+      "citations": [
+        "challenge/offline-data/hays/filings/2017-09-22__has-ln-20170922-h2-8k__671210.md"
+      ]
+    },
+    {
+      "company": "DE",
+      "metric": "Worldwide net sales and revenues",
+      "units": "USDm",
+      "report_date": "2026-05-21",
+      "forecast": 13126.62226464973,
+      "actual": 11778.0,
+      "absolute_error": 1348.622265,
+      "percentage_error": 0.114504,
+      "confidence": "medium",
+      "method": "seasonal naive with drift: 2025-05-15 value 1.117e+04 grown by +17.5% year-on-year",
+      "citations": [
+        "challenge/offline-data/deere/filings/2025-05-15__de-us-20250515-q2-8k__105808.md",
+        "challenge/offline-data/deere/filings/2026-02-19__de-us-20260219-q1-8k__603009.md"
+      ]
+    },
+    {
+      "company": "DE",
+      "metric": "Diluted EPS (GAAP)",
+      "units": "USD / share",
+      "report_date": "2026-05-21",
+      "forecast": 5.037241379310345,
+      "actual": 6.55,
+      "absolute_error": 1.512759,
+      "percentage_error": 0.230956,
+      "confidence": "medium",
+      "method": "seasonal naive with drift: 2025-05-15 value 6.64 grown by -24.1% year-on-year",
+      "citations": [
+        "challenge/offline-data/deere/filings/2025-05-15__de-us-20250515-q2-8k__105808.md",
+        "challenge/offline-data/deere/filings/2026-02-19__de-us-20260219-q1-8k__603009.md"
+      ]
+    },
+    {
+      "company": "DE",
+      "metric": "Production & Precision Ag operating profit",
+      "units": "USDm",
+      "report_date": "2026-05-21",
+      "forecast": 665.7041420118344,
+      "actual": 845.0,
+      "absolute_error": 179.295858,
+      "percentage_error": 0.212184,
+      "confidence": "medium",
+      "method": "seasonal naive with drift: 2025-05-15 value 1,148 grown by -42.0% year-on-year",
+      "citations": [
+        "challenge/offline-data/deere/filings/2025-05-15__de-us-20250515-q2-8k__105808.md",
+        "challenge/offline-data/deere/filings/2026-02-19__de-us-20260219-q1-8k__603009.md"
+      ]
+    },
+    {
+      "company": "DE",
+      "metric": "Worldwide net sales and revenues",
+      "units": "USDm",
+      "report_date": "2026-02-19",
+      "forecast": 7766.2976819407,
+      "actual": 8001.0,
+      "absolute_error": 234.702318,
+      "percentage_error": 0.029334,
+      "confidence": "medium",
+      "method": "seasonal naive with drift: 2025-02-13 value 6,809 grown by +14.1% year-on-year",
+      "citations": [
+        "challenge/offline-data/deere/filings/2025-02-13__de-us-20250213-q1-8k__105841.md",
+        "challenge/offline-data/deere/filings/2025-11-26__de-us-20251126-q4-8k__361233.md"
+      ]
+    },
+    {
+      "company": "DE",
+      "metric": "Diluted EPS (GAAP)",
+      "units": "USD / share",
+      "report_date": "2026-02-19",
+      "forecast": 2.7553186813186814,
+      "actual": 2.42,
+      "absolute_error": 0.335319,
+      "percentage_error": 0.138561,
+      "confidence": "medium",
+      "method": "seasonal naive with drift: 2025-02-13 value 3.19 grown by -13.6% year-on-year",
+      "citations": [
+        "challenge/offline-data/deere/filings/2025-02-13__de-us-20250213-q1-8k__105841.md",
+        "challenge/offline-data/deere/filings/2025-11-26__de-us-20251126-q4-8k__361233.md"
+      ]
+    },
+    {
+      "company": "DE",
+      "metric": "Production & Precision Ag operating profit",
+      "units": "USDm",
+      "report_date": "2026-02-19",
+      "forecast": 5103.8,
+      "actual": 139.0,
+      "absolute_error": 4964.8,
+      "percentage_error": 35.717986,
+      "confidence": "medium",
+      "method": "seasonal naive with drift: 2025-02-13 value 338 grown by +1410.0% year-on-year",
+      "citations": [
+        "challenge/offline-data/deere/filings/2025-02-13__de-us-20250213-q1-8k__105841.md",
+        "challenge/offline-data/deere/filings/2025-11-26__de-us-20251126-q4-8k__361233.md"
+      ]
+    },
+    {
+      "company": "DE",
+      "metric": "Worldwide net sales and revenues",
+      "units": "USDm",
+      "report_date": "2025-11-26",
+      "forecast": 8436.038904013349,
+      "actual": 10579.0,
+      "absolute_error": 2142.961096,
+      "percentage_error": 0.202567,
+      "confidence": "medium",
+      "method": "seasonal naive with drift: 2024-11-21 value 9,275 grown by -9.0% year-on-year",
+      "citations": [
+        "challenge/offline-data/deere/filings/2024-11-21__de-us-20241121-q4-8k__105840.md",
+        "challenge/offline-data/deere/filings/2025-08-15__de-us-20250815-q3-8k__143410.md"
+      ]
+    },
+    {
+      "company": "DE",
+      "metric": "Diluted EPS (GAAP)",
+      "units": "USD / share",
+      "report_date": "2025-11-26",
+      "forecast": 3.436009538950715,
+      "actual": 3.93,
+      "absolute_error": 0.49399,
+      "percentage_error": 0.125697,
+      "confidence": "medium",
+      "method": "seasonal naive with drift: 2024-11-21 value 4.55 grown by -24.5% year-on-year",
+      "citations": [
+        "challenge/offline-data/deere/filings/2024-11-21__de-us-20241121-q4-8k__105840.md",
+        "challenge/offline-data/deere/filings/2025-08-15__de-us-20250815-q3-8k__143410.md"
+      ]
+    },
+    {
+      "company": "DE",
+      "metric": "Production & Precision Ag operating profit",
+      "units": "USDm",
+      "report_date": "2025-11-26",
+      "forecast": 46.7741935483871,
+      "actual": 77.0,
+      "absolute_error": 30.225806,
+      "percentage_error": 0.392543,
+      "confidence": "medium",
+      "method": "seasonal naive with drift: 2024-11-21 value 40 grown by +16.9% year-on-year",
+      "citations": [
+        "challenge/offline-data/deere/filings/2024-11-21__de-us-20241121-q4-8k__105840.md",
+        "challenge/offline-data/deere/filings/2025-08-15__de-us-20250815-q3-8k__143410.md"
+      ]
+    },
+    {
+      "company": "DE",
+      "metric": "Worldwide net sales and revenues",
+      "units": "USDm",
+      "report_date": "2025-08-15",
+      "forecast": 9346.375973548862,
+      "actual": 10357.0,
+      "absolute_error": 1010.624026,
+      "percentage_error": 0.097579,
+      "confidence": "medium",
+      "method": "seasonal naive with drift: 2024-08-15 value 1.139e+04 grown by -17.9% year-on-year",
+      "citations": [
+        "challenge/offline-data/deere/filings/2024-08-15__de-us-20240815-q3-8k__105836.md",
+        "challenge/offline-data/deere/filings/2025-05-15__de-us-20250515-q2-8k__105808.md"
+      ]
+    },
+    {
+      "company": "DE",
+      "metric": "Diluted EPS (GAAP)",
+      "units": "USD / share",
+      "report_date": "2025-08-15",
+      "forecast": 4.896318874560376,
+      "actual": 4.75,
+      "absolute_error": 0.146319,
+      "percentage_error": 0.030804,
+      "confidence": "medium",
+      "method": "seasonal naive with drift: 2024-08-15 value 6.29 grown by -22.2% year-on-year",
+      "citations": [
+        "challenge/offline-data/deere/filings/2024-08-15__de-us-20240815-q3-8k__105836.md",
+        "challenge/offline-data/deere/filings/2025-05-15__de-us-20250515-q2-8k__105808.md"
+      ]
+    },
+    {
+      "company": "DE",
+      "metric": "Production & Precision Ag operating profit",
+      "units": "USDm",
+      "report_date": "2025-08-15",
+      "forecast": 997.2119089316989,
+      "actual": 580.0,
+      "absolute_error": 417.211909,
+      "percentage_error": 0.719331,
+      "confidence": "medium",
+      "method": "seasonal naive with drift: 2024-08-15 value 496 grown by +101.1% year-on-year",
+      "citations": [
+        "challenge/offline-data/deere/filings/2024-08-15__de-us-20240815-q3-8k__105836.md",
+        "challenge/offline-data/deere/filings/2025-05-15__de-us-20250515-q2-8k__105808.md"
+      ]
+    },
+    {
+      "company": "DE",
+      "metric": "Worldwide net sales and revenues",
+      "units": "USDm",
+      "report_date": "2025-05-15",
+      "forecast": 8837.54434484074,
+      "actual": 11171.0,
+      "absolute_error": 2333.455655,
+      "percentage_error": 0.208885,
+      "confidence": "medium",
+      "method": "seasonal naive with drift: 2024-05-16 value 1.361e+04 grown by -35.1% year-on-year",
+      "citations": [
+        "challenge/offline-data/deere/filings/2024-05-16__de-us-20240516-q2-8k__105819.md",
+        "challenge/offline-data/deere/filings/2025-02-13__de-us-20250213-q1-8k__105841.md"
+      ]
+    },
+    {
+      "company": "DE",
+      "metric": "Diluted EPS (GAAP)",
+      "units": "USD / share",
+      "report_date": "2025-05-15",
+      "forecast": 4.3676886035313,
+      "actual": 6.64,
+      "absolute_error": 2.272311,
+      "percentage_error": 0.342216,
+      "confidence": "medium",
+      "method": "seasonal naive with drift: 2024-05-16 value 8.53 grown by -48.8% year-on-year",
+      "citations": [
+        "challenge/offline-data/deere/filings/2024-05-16__de-us-20240516-q2-8k__105819.md",
+        "challenge/offline-data/deere/filings/2025-02-13__de-us-20250213-q1-8k__105841.md"
+      ]
+    },
+    {
+      "company": "DE",
+      "metric": "Production & Precision Ag operating profit",
+      "units": "USDm",
+      "report_date": "2025-05-15",
+      "forecast": 184.6870813397129,
+      "actual": 1148.0,
+      "absolute_error": 963.312919,
+      "percentage_error": 0.839123,
+      "confidence": "medium",
+      "method": "seasonal naive with drift: 2024-05-16 value 571 grown by -67.7% year-on-year",
+      "citations": [
+        "challenge/offline-data/deere/filings/2024-05-16__de-us-20240516-q2-8k__105819.md",
+        "challenge/offline-data/deere/filings/2025-02-13__de-us-20250213-q1-8k__105841.md"
+      ]
+    },
+    {
+      "company": "DE",
+      "metric": "Worldwide net sales and revenues",
+      "units": "USDm",
+      "report_date": "2025-02-13",
+      "forecast": 7047.145134410551,
+      "actual": 6809.0,
+      "absolute_error": 238.145134,
+      "percentage_error": 0.034975,
+      "confidence": "medium",
+      "method": "seasonal naive with drift: 2024-02-15 value 1.049e+04 grown by -32.8% year-on-year",
+      "citations": [
+        "challenge/offline-data/deere/filings/2024-02-15__de-us-20240215-q1-8k__105824.md",
+        "challenge/offline-data/deere/filings/2024-11-21__de-us-20241121-q4-8k__105840.md"
+      ]
+    },
+    {
+      "company": "DE",
+      "metric": "Diluted EPS (GAAP)",
+      "units": "USD / share",
+      "report_date": "2025-02-13",
+      "forecast": 3.4317796610169493,
+      "actual": 3.19,
+      "absolute_error": 0.24178,
+      "percentage_error": 0.075793,
+      "confidence": "medium",
+      "method": "seasonal naive with drift: 2024-02-15 value 6.23 grown by -44.9% year-on-year",
+      "citations": [
+        "challenge/offline-data/deere/filings/2024-02-15__de-us-20240215-q1-8k__105824.md",
+        "challenge/offline-data/deere/filings/2024-11-21__de-us-20241121-q4-8k__105840.md"
+      ]
+    },
+    {
+      "company": "DE",
+      "metric": "Production & Precision Ag operating profit",
+      "units": "USDm",
+      "report_date": "2025-02-13",
+      "forecast": 94.14414414414411,
+      "actual": 338.0,
+      "absolute_error": 243.855856,
+      "percentage_error": 0.721467,
+      "confidence": "medium",
+      "method": "seasonal naive with drift: 2024-02-15 value 1,045 grown by -91.0% year-on-year",
+      "citations": [
+        "challenge/offline-data/deere/filings/2024-02-15__de-us-20240215-q1-8k__105824.md",
+        "challenge/offline-data/deere/filings/2024-11-21__de-us-20241121-q4-8k__105840.md"
+      ]
+    },
+    {
+      "company": "DE",
+      "metric": "Worldwide net sales and revenues",
+      "units": "USDm",
+      "report_date": "2024-11-21",
+      "forecast": 11001.959325119014,
+      "actual": 9275.0,
+      "absolute_error": 1726.959325,
+      "percentage_error": 0.186195,
+      "confidence": "medium",
+      "method": "seasonal naive with drift: 2023-11-22 value 1.38e+04 grown by -20.3% year-on-year",
+      "citations": [
+        "challenge/offline-data/deere/filings/2023-11-22__de-us-20231122-q4-8k__105823.md",
+        "challenge/offline-data/deere/filings/2024-08-15__de-us-20240815-q3-8k__105836.md"
+      ]
+    },
+    {
+      "company": "DE",
+      "metric": "Diluted EPS (GAAP)",
+      "units": "USD / share",
+      "report_date": "2024-11-21",
+      "forecast": 8.434318181818181,
+      "actual": 4.55,
+      "absolute_error": 3.884318,
+      "percentage_error": 0.853696,
+      "confidence": "medium",
+      "method": "seasonal naive with drift: 2023-11-22 value 8.26 grown by +2.1% year-on-year",
+      "citations": [
+        "challenge/offline-data/deere/filings/2023-11-22__de-us-20231122-q4-8k__105823.md",
+        "challenge/offline-data/deere/filings/2024-08-15__de-us-20240815-q3-8k__105836.md"
+      ]
+    },
+    {
+      "company": "DE",
+      "metric": "Production & Precision Ag operating profit",
+      "units": "USDm",
+      "report_date": "2024-11-21",
+      "forecast": 123.58249158249156,
+      "actual": 40.0,
+      "absolute_error": 83.582492,
+      "percentage_error": 2.089562,
+      "confidence": "medium",
+      "method": "seasonal naive with drift: 2023-11-22 value 444 grown by -72.2% year-on-year",
+      "citations": [
+        "challenge/offline-data/deere/filings/2023-11-22__de-us-20231122-q4-8k__105823.md",
+        "challenge/offline-data/deere/filings/2024-08-15__de-us-20240815-q3-8k__105836.md"
+      ]
+    },
+    {
+      "company": "DE",
+      "metric": "Worldwide net sales and revenues",
+      "units": "USDm",
+      "report_date": "2024-08-15",
+      "forecast": 12090.630014304372,
+      "actual": 11387.0,
+      "absolute_error": 703.630014,
+      "percentage_error": 0.061792,
+      "confidence": "medium",
+      "method": "seasonal naive with drift: 2023-08-18 value 1.428e+04 grown by -15.4% year-on-year",
+      "citations": [
+        "challenge/offline-data/deere/filings/2023-08-18__de-us-20230818-q3-8k__105829.md",
+        "challenge/offline-data/deere/filings/2024-05-16__de-us-20240516-q2-8k__105819.md"
+      ]
+    },
+    {
+      "company": "DE",
+      "metric": "Diluted EPS (GAAP)",
+      "units": "USD / share",
+      "report_date": "2024-08-15",
+      "forecast": 5.4450569948186525,
+      "actual": 6.29,
+      "absolute_error": 0.844943,
+      "percentage_error": 0.134331,
+      "confidence": "medium",
+      "method": "seasonal naive with drift: 2023-08-18 value 6.16 grown by -11.6% year-on-year",
+      "citations": [
+        "challenge/offline-data/deere/filings/2023-08-18__de-us-20230818-q3-8k__105829.md",
+        "challenge/offline-data/deere/filings/2024-05-16__de-us-20240516-q2-8k__105819.md"
+      ]
+    },
+    {
+      "company": "DE",
+      "metric": "Production & Precision Ag operating profit",
+      "units": "USDm",
+      "report_date": "2024-08-15",
+      "forecast": 468.90414746543775,
+      "actual": 496.0,
+      "absolute_error": 27.095853,
+      "percentage_error": 0.054629,
+      "confidence": "medium",
+      "method": "seasonal naive with drift: 2023-08-18 value 1,782 grown by -73.7% year-on-year",
+      "citations": [
+        "challenge/offline-data/deere/filings/2023-08-18__de-us-20230818-q3-8k__105829.md",
+        "challenge/offline-data/deere/filings/2024-05-16__de-us-20240516-q2-8k__105819.md"
+      ]
+    }
+  ],
+  "leakage": {
+    "detected": 0,
+    "events_replayed": 32,
+    "status": "clean",
+    "details": []
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "calls": 3,
+  "cache_hits": 3,
+  "input_tokens": 17661,
+  "output_tokens": 5787,
+  "estimated_usd": 0.1224,
+  "failures": 0,
+  "by_model": {
+    "gpt-5.5": 3
+  }
+}

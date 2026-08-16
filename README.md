@@ -1,4 +1,4 @@
-# EPS-Winners
+﻿# EPS-Winners
 
 Team repository for **Agents vs Wall Street** — the forecasting-agent hackathon held in
 London on Sunday 16 August 2026, hosted by OpenStocks with Primer, AI Tinkerers and OpenAI.
@@ -42,3 +42,42 @@ the same metric, capped at 5.0 and averaged across all twelve.
 
 Initial commit. See the individual member branches and repositories above for the working
 code and the architecture write-up.
+
+---
+
+## This branch: Asof
+
+A forecasting system built around a single point-in-time cutoff.
+
+`ash
+npm install && python -m pip install openpyxl
+python run.py --as-of 2026-08-16     # writes submission/*.xlsx
+npm run check:submission             # the organisers validator
+`
+
+--as-of is one global guard that every retrieval must ask for, and which raises
+when no cutoff is configured. The same mechanism does three jobs: it makes the
+backtest honest, it makes the competition run reproduce exactly after the event,
+and dropping it turns the system into a live forecaster for future earnings events.
+
+| Command | What it does |
+|---|---|
+| python run.py --as-of 2025-11-18 | Replays a quarter whose result we know, to score the method |
+| python run.py --as-of 2026-08-16 | The competition run |
+| python run.py | Live mode |
+
+The backtest runs before forecasting and decides where model budget is spent:
+metrics it scores under 15% never reach a model at all. Six of twelve qualified,
+each failing deterministically for a structural reason rather than a tuning one.
+
+- dashboard/index.html - presentation dashboard, opens with a double click
+- rchitecture/index.html - the judged write-up, self-contained, no scripts
+- logs/ - timestamped clear-run logs
+- 
+uns/ - per-run artifacts, including the backtest report
+
+`ash
+python -m unittest discover -s tests -t .   # 132 tests
+python scripts/build_dashboard.py
+python scripts/build_architecture.py
+`
