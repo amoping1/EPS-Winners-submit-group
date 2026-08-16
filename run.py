@@ -21,6 +21,7 @@ from src.config import PATHS, Company, Settings, find_company, load_companies, l
 from src.context import RunContext, create_run_context
 from src.corpus import get_index
 from src.errors import ForecastSystemError
+from src.validate import validate_company
 from src.workbook import verify_workbook, write_company_workbook
 
 
@@ -138,11 +139,27 @@ def forecast_company(context: RunContext, company: Company) -> dict:
             )
 
         values = {label: estimate.value for label, estimate in estimates.items()}
+
+        # Validate before writing. The organisers' check confirms a workbook is
+        # well-formed; it cannot tell that 41.8 was written where 41,800 belonged.
+        validation = validate_company(index, company, values)
+        for check in validation.failures + validation.warnings:
+            logger.event(
+                "validation.flag",
+                company=company.slug,
+                metric=check.metric,
+                check=check.name,
+                status=check.status,
+                detail=check.detail,
+            )
+
         path, written = write_company_workbook(company, values)
         verified = verify_workbook(company, path)
 
         state["metrics"] = len(written)
         state["workbook"] = str(path.relative_to(PATHS.root))
+        state["validation"] = validation.as_dict()["status"]
+        state["validation_flags"] = len(validation.failures) + len(validation.warnings)
 
         context.write_artifact(
             f"{company.slug}/baseline.json",
@@ -151,6 +168,7 @@ def forecast_company(context: RunContext, company: Company) -> dict:
                 "as_of": context.as_of.isoformat(),
                 "estimates": [estimate.as_dict() for estimate in estimates.values()],
                 "written_cells": [cell.as_dict() for cell in written],
+                "validation": validation.as_dict(),
             },
         )
         return {
@@ -215,4 +233,5 @@ def run_pipeline(
 
 if __name__ == "__main__":
     sys.exit(main())
+
 
