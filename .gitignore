@@ -8,3 +8,13 @@ research/
 !.env.example
 entry.json
 submission/*.xlsx
+
+# Forecasting system
+# LLM response cache: a speed optimisation, not evidence. Safe to discard.
+.cache/
+# Development runs. The final run and its backtest are force-added before
+# submission so judges can open the dashboard from a fresh clone:
+#   git add -f runs/<final-run-id>
+runs/
+# data/news-cache/ is deliberately NOT ignored: it is retrieved evidence with
+# provenance, and committing it is what lets the run reproduce offline later.
