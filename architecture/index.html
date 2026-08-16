@@ -66,13 +66,13 @@ footer{margin-top:52px;padding-top:22px;border-top:1px solid var(--line);
     what makes our backtest honest, what makes this run reproducible after the event, and what lets
     the agent be reused for the next earnings season.</p>
 
-  <div class="chips"><span class="chip">As of <b>2026-08-16</b></span><span class="chip">Commit <b>65c01ea7fc</b></span><span class="chip">Forecasts <b>12/12</b></span><span class="chip">Documents <b>1,139</b></span><span class="chip ok">Leakage guard <b>clean</b> over 32 replays</span></div>
+  <div class="chips"><span class="chip">As of <b>2026-08-16</b></span><span class="chip">Commit <b>3a815e3ff4</b></span><span class="chip">Forecasts <b>12/12</b></span><span class="chip">Documents <b>1,139</b></span><span class="chip ok">Leakage guard <b>clean</b> over 32 replays</span></div>
 
   <div class="card">
     <p>Build style: <strong>coding harness</strong></p>
     <p>Languages: <strong>Python 3.13, no third-party runtime dependencies beyond openpyxl</strong></p>
     <p>Final command: <code>python run.py --as-of 2026-08-16</code></p>
-    <p>Final commit: <code>65c01ea7fc6379dd02cf37aebbb71f2a1d24b903</code></p>
+    <p>Final commit: <code>3a815e3ff41514f14ec18f1865e902c8fbd293aa</code></p>
   </div>
 
   <h2>The idea</h2>
@@ -227,6 +227,34 @@ python run.py                      # live mode, for future earnings events</code
   <table><thead><tr><th>Co</th><th>Metric</th><th class="num">Forecast</th><th>Units</th>
     <th>Confidence</th></tr></thead><tbody><tr><td><b>ADI</b></td><td>Revenue</td><td class='num'>3,917</td><td>USDm</td><td>medium</td></tr><tr><td><b>ADI</b></td><td>Adjusted diluted EPS</td><td class='num'>3.42</td><td>USD / share</td><td>medium</td></tr><tr><td><b>ADI</b></td><td>Adjusted gross margin</td><td class='num'>69.20</td><td>%</td><td>medium</td></tr><tr><td><b>DE</b></td><td>Worldwide net sales and revenues</td><td class='num'>10,920</td><td>USDm</td><td>medium</td></tr><tr><td><b>DE</b></td><td>Diluted EPS (GAAP)</td><td class='num'>4.69</td><td>USD / share</td><td>medium</td></tr><tr><td><b>DE</b></td><td>Production & Precision Ag operating profit</td><td class='num'>356.69</td><td>USDm</td><td>medium</td></tr><tr><td><b>HAS</b></td><td>Net fees</td><td class='num'>890.40</td><td>GBPm</td><td>medium</td></tr><tr><td><b>HAS</b></td><td>Pre-exceptional basic EPS</td><td class='num'>0.75</td><td>GBp</td><td>medium</td></tr><tr><td><b>HAS</b></td><td>Pre-exceptional operating profit</td><td class='num'>40.20</td><td>GBPm</td><td>medium</td></tr><tr><td><b>HD</b></td><td>Net sales</td><td class='num'>47,457</td><td>USDm</td><td>medium</td></tr><tr><td><b>HD</b></td><td>Adjusted diluted EPS</td><td class='num'>4.38</td><td>USD / share</td><td>medium</td></tr><tr><td><b>HD</b></td><td>Comparable sales, total company</td><td class='num'>0.60</td><td>%</td><td>medium</td></tr></tbody></table>
 
+  
+  <h2>The submitted figures come from a three-system ensemble</h2>
+  <p>Three of us built three forecasting systems independently, from the same brief, the same
+    frozen corpus and the same twelve targets, without sharing code. That is the one situation
+    where an ensemble reliably beats its members: the errors are independent, so they partly
+    cancel.</p>
+  <p>No code was merged. Each system stays in its own repository with its own dependencies;
+    only the twelve outputs are read. Merging three codebases an hour before a deadline risks
+    all three and buys nothing the numbers do not already give.</p>
+  <p>The rule is two-against-one. Sort the three estimates; if the gap on one side is more than
+    twice the gap on the other, the far value is an outlier and the two that agree are averaged.
+    Otherwise the median stands. With three points, anything more elaborate is fitting noise.</p>
+  <p>On the 6 metrics where sell-side consensus was available, the ensemble sits a median of 1.1% away from it. That closeness is a calibration signal, not a target: the accuracy prize divides our error by Wall Street's, so matching consensus scores 1.0 by construction and guarantees a tie. Consensus is used as a rail, never as the answer.</p>
+  <table><thead><tr><th>Co</th><th>Metric</th><th class="num">Neva</th><th class="num">Adrian</th>
+    <th class="num">Dimitris</th><th class="num">Submitted</th><th>Rule</th></tr></thead>
+    <tbody><tr><td><b>HD</b></td><td>Net sales</td><td class='num'>47,457.14</td><td class='num'>47,324.52</td><td class='num'>47,250.00</td><td class='num'><b>47,324.52</b></td><td>median</td></tr><tr><td><b>HD</b></td><td>Adjusted diluted EPS</td><td class='num'>4.38</td><td class='num'>4.62</td><td class='num'>4.70</td><td class='num'><b>4.66</b></td><td>outlier: neva</td></tr><tr><td><b>HD</b></td><td>Comparable sales, total company</td><td class='num'>0.60</td><td class='num'>1.80</td><td class='num'>1.10</td><td class='num'><b>1.10</b></td><td>median</td></tr><tr><td><b>ADI</b></td><td>Revenue</td><td class='num'>3,917.18</td><td class='num'>3,925.01</td><td class='num'>3,950.00</td><td class='num'><b>3,921.10</b></td><td>outlier: dimitris</td></tr><tr><td><b>ADI</b></td><td>Adjusted diluted EPS</td><td class='num'>3.42</td><td class='num'>3.33</td><td class='num'>3.36</td><td class='num'><b>3.35</b></td><td>outlier: neva</td></tr><tr><td><b>ADI</b></td><td>Adjusted gross margin</td><td class='num'>69.20</td><td class='num'>73.00</td><td class='num'>74.10</td><td class='num'><b>73.55</b></td><td>outlier: neva</td></tr><tr><td><b>HAS</b></td><td>Net fees</td><td class='num'>890.40</td><td class='num'>950.00</td><td class='num'>933.50</td><td class='num'><b>941.75</b></td><td>outlier: neva</td></tr><tr><td><b>HAS</b></td><td>Pre-exceptional basic EPS</td><td class='num'>0.75</td><td class='num'>1.00</td><td class='num'>1.32</td><td class='num'><b>1.00</b></td><td>median</td></tr><tr><td><b>HAS</b></td><td>Pre-exceptional operating profit</td><td class='num'>40.20</td><td class='num'>43.99</td><td class='num'>46.00</td><td class='num'><b>43.99</b></td><td>median</td></tr><tr><td><b>DE</b></td><td>Worldwide net sales and revenues</td><td class='num'>10,919.77</td><td class='num'>10,903.68</td><td class='num'>12,700.00</td><td class='num'><b>10,911.73</b></td><td>outlier: dimitris</td></tr><tr><td><b>DE</b></td><td>Diluted EPS (GAAP)</td><td class='num'>4.69</td><td class='num'>4.42</td><td class='num'>4.75</td><td class='num'><b>4.72</b></td><td>outlier: adrian</td></tr><tr><td><b>DE</b></td><td>Production & Precision Ag operating profit</td><td class='num'>356.69</td><td class='num'>400.00</td><td class='num'>525.00</td><td class='num'><b>378.34</b></td><td>outlier: dimitris</td></tr></tbody></table>
+  <p>Agreement across the twelve targets: 3 tight,
+    6 moderate, 3 wide, with a median
+    relative spread of 7.0%.
+    Outliers discarded by source: adrian 1, dimitris 3, neva 4.</p>
+  <div class="callout">
+    <p>This system contributed four of the twelve discarded outliers &mdash; more than either of
+      the others. Its adjusted gross margin for ADI read 69.2 against 73.0 and 74.1 from the other
+      two, and was correctly voted out. Being outvoted is the ensemble working, and it is worth
+      recording rather than hiding.</p>
+  </div>
+
+
   <h2>Checks and tests</h2>
   <p>78 timestamped events were written during this run to the clear-run log
     submitted with the entry. The test suite covers cutoff boundaries, thread-local guard isolation,
@@ -358,7 +386,7 @@ python scripts/build_architecture.py  # regenerates this page</code></pre>
     a rerun needs no network access and produces the same figures.</p>
 
   <div class="card">
-    <p>Final commit: <code>65c01ea7fc6379dd02cf37aebbb71f2a1d24b903</code></p>
+    <p>Final commit: <code>3a815e3ff41514f14ec18f1865e902c8fbd293aa</code></p>
     <p>Final command: <code>python run.py --as-of 2026-08-16</code></p>
     <p>Expected output: four completed workbooks in <code>submission/</code>.</p>
   </div>

@@ -133,6 +133,82 @@ def backtest_table(backtest: dict[str, Any]) -> str:
     return "".join(rows)
 
 
+def ensemble_section() -> str:
+    """Describe the team ensemble, if it produced the submitted figures.
+
+    The rules require this page to describe the system that produced the
+    forecasts. When the submitted workbooks come from the ensemble rather than
+    from this repository alone, the page has to say so.
+    """
+    path = ROOT / "runs" / "ensemble.json"
+    if not path.exists():
+        return ""
+    payload = json.loads(path.read_text(encoding="utf-8"))
+    summary = payload.get("summary", {})
+    metrics = payload.get("metrics", [])
+    if not metrics:
+        return ""
+
+    rows = []
+    for item in metrics:
+        members = item.get("members", {})
+        cells = "".join(
+            f"<td class='num'>{members[name]:,.2f}</td>" if name in members else "<td class='num'>--</td>"
+            for name in ("neva", "adrian", "dimitris")
+        )
+        dropped = item.get("dropped")
+        note = f"outlier: {dropped}" if dropped else "median"
+        rows.append(
+            f"<tr><td><b>{item['company']}</b></td><td>{item['metric']}</td>"
+            f"{cells}<td class='num'><b>{item['value']:,.2f}</b></td>"
+            f"<td>{note}</td></tr>"
+        )
+
+    dropped_counts = summary.get("outliers_discarded_by_source", {})
+    dropped_text = ", ".join(f"{k} {v}" for k, v in sorted(dropped_counts.items())) or "none"
+    agreement = summary.get("agreement", {})
+
+    with_market = [m for m in metrics if m.get("market_consensus") is not None]
+    gaps = [abs(m["market_gap"]) for m in with_market if m.get("market_gap") is not None]
+    market_line = ""
+    if gaps:
+        market_line = (
+            f"<p>On the {len(with_market)} metrics where sell-side consensus was available, "
+            f"the ensemble sits a median of {sorted(gaps)[len(gaps)//2]*100:.1f}% away from it. "
+            f"That closeness is a calibration signal, not a target: the accuracy prize divides our "
+            f"error by Wall Street's, so matching consensus scores 1.0 by construction and "
+            f"guarantees a tie. Consensus is used as a rail, never as the answer.</p>"
+        )
+
+    return f"""
+  <h2>The submitted figures come from a three-system ensemble</h2>
+  <p>Three of us built three forecasting systems independently, from the same brief, the same
+    frozen corpus and the same twelve targets, without sharing code. That is the one situation
+    where an ensemble reliably beats its members: the errors are independent, so they partly
+    cancel.</p>
+  <p>No code was merged. Each system stays in its own repository with its own dependencies;
+    only the twelve outputs are read. Merging three codebases an hour before a deadline risks
+    all three and buys nothing the numbers do not already give.</p>
+  <p>The rule is two-against-one. Sort the three estimates; if the gap on one side is more than
+    twice the gap on the other, the far value is an outlier and the two that agree are averaged.
+    Otherwise the median stands. With three points, anything more elaborate is fitting noise.</p>
+  {market_line}
+  <table><thead><tr><th>Co</th><th>Metric</th><th class="num">Neva</th><th class="num">Adrian</th>
+    <th class="num">Dimitris</th><th class="num">Submitted</th><th>Rule</th></tr></thead>
+    <tbody>{''.join(rows)}</tbody></table>
+  <p>Agreement across the twelve targets: {agreement.get('tight', 0)} tight,
+    {agreement.get('moderate', 0)} moderate, {agreement.get('wide', 0)} wide, with a median
+    relative spread of {summary.get('median_spread', 0) * 100:.1f}%.
+    Outliers discarded by source: {dropped_text}.</p>
+  <div class="callout">
+    <p>This system contributed four of the twelve discarded outliers &mdash; more than either of
+      the others. Its adjusted gross margin for ADI read 69.2 against 73.0 and 74.1 from the other
+      two, and was correctly voted out. Being outvoted is the ensemble working, and it is worth
+      recording rather than hiding.</p>
+  </div>
+"""
+
+
 def build_html(data: dict[str, Any]) -> str:
     manifest = data["manifest"]
     backtest = data.get("backtest") or {}
@@ -254,6 +330,8 @@ python run.py                      # live mode, for future earnings events</code
   <h2>The twelve submitted forecasts</h2>
   <table><thead><tr><th>Co</th><th>Metric</th><th class="num">Forecast</th><th>Units</th>
     <th>Confidence</th></tr></thead><tbody>{forecast_table(data['companies'])}</tbody></table>
+
+  {ensemble_section()}
 
   <h2>Checks and tests</h2>
   <p>{len(data.get('log', []))} timestamped events were written during this run to the clear-run log
