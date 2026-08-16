@@ -53,6 +53,14 @@ def run_company(client, corpus_root: str, company: dict, as_of, max_steps: int =
         anchor.setdefault("period", company["period"])
         pack.anchors.append(anchor)
 
+    # Drop history whose period type does not match the target before anything reasons
+    # over it. A quarterly target trended against full-year actuals is an order-of-
+    # magnitude error, not a rounding one.
+    from .rails.reconcile import is_quarterly
+    want_quarter = is_quarterly(company["period"])
+    dropped = [h for h in pack.history if is_quarterly(h.get("period")) != want_quarter]
+    pack.history = [h for h in pack.history if is_quarterly(h.get("period")) == want_quarter]
+
     aggregator = EvidenceAggregator(labels)
     aggregated = aggregator.aggregate(pack)
     followups = 0
@@ -89,7 +97,7 @@ def run_company(client, corpus_root: str, company: dict, as_of, max_steps: int =
         results[label] = reconcile_metric(
             proposals.get(label, {}),
             pick_anchor(pack.anchors, label),
-            history_for(pack.history, label),
+            history_for(pack.history, label, company["period"]),
             target_period=company["period"],
         )
         results[label]["verdict"] = verdicts.get(label)
@@ -111,6 +119,7 @@ def run_company(client, corpus_root: str, company: dict, as_of, max_steps: int =
         "evidence_gaps": aggregated["gaps"],
         "thin_metrics": aggregated["thin_metrics"],
         "consensus_found": scanned,
+        "history_dropped_wrong_period": len(dropped),
         "aggregated": aggregated["metrics"],
         "anchors": pack.anchors,
         "gaps": pack.gaps,

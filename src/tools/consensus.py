@@ -197,3 +197,12 @@ def scan_consensus(tools: DocumentTools, metric_labels: list[str],
         if not current or (anchor["published_at"] or "") > (current["published_at"] or ""):
             best[anchor["metric"]] = anchor
     return list(best.values())
+
+
+# A deterministic guidance scanner was attempted here and removed. ADI publishes
+# "revenue of $3.9 billion, +/- $100 million" for the exact target quarter, and two
+# consecutive runs landed at 4,106 and 3,625 - both outside a band management printed -
+# because the guidance rail only engages when the research pass happens to record the
+# anchor. The scan itself proved fiddly (filings spell quarters out, guidance blocks span
+# several sentences, magnitudes mix billions and millions) and was cut at feature freeze
+# rather than shipped half-working. The gap is real and is declared in the write-up.

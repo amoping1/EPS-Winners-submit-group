@@ -213,8 +213,29 @@ def pick_anchor(anchors: list[dict], metric_label: str) -> dict | None:
     return max(candidates, key=lambda a: ranked.get(a.get("kind", "derived"), 0))
 
 
-def history_for(history: list[dict], metric_label: str) -> list[float]:
-    return [
-        float(h["value"]) for h in history
-        if align_label(h.get("metric", ""), [metric_label]) and isinstance(h.get("value"), (int, float))
+def is_quarterly(period) -> bool:
+    """True when a period label denotes a quarter rather than a full year."""
+    import re
+
+    return bool(re.search(r"Q[1-4]", str(period).upper()))
+
+
+def history_for(history: list[dict], metric_label: str,
+                target_period: str | None = None) -> list[float]:
+    """Historical values for a metric, restricted to the target's period TYPE.
+
+    A quarterly forecast must never be trended against full-year actuals. When a research
+    pass returned Deere's FY totals instead of Q3 comparables, the clamp had a full-year
+    range to work with and passed 40,516 for a quarter that runs around 11,000 - three
+    capped 5.0s on one company. Period type is filtered here, deterministically, rather
+    than hoped for in a prompt.
+    """
+    rows = [
+        h for h in history
+        if align_label(h.get("metric", ""), [metric_label])
+        and isinstance(h.get("value"), (int, float))
     ]
+    if target_period:
+        want_quarter = is_quarterly(target_period)
+        rows = [h for h in rows if is_quarterly(h.get("period")) == want_quarter]
+    return [float(h["value"]) for h in rows]
