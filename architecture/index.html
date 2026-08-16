@@ -66,13 +66,13 @@ footer{margin-top:52px;padding-top:22px;border-top:1px solid var(--line);
     what makes our backtest honest, what makes this run reproducible after the event, and what lets
     the agent be reused for the next earnings season.</p>
 
-  <div class="chips"><span class="chip">As of <b>2026-08-16</b></span><span class="chip">Commit <b>6ff915607a</b></span><span class="chip">Forecasts <b>12/12</b></span><span class="chip">Documents <b>1,139</b></span><span class="chip ok">Leakage guard <b>clean</b> over 32 replays</span></div>
+  <div class="chips"><span class="chip">As of <b>2026-08-16</b></span><span class="chip">Commit <b>bce90cebe1</b></span><span class="chip">Forecasts <b>12/12</b></span><span class="chip">Documents <b>1,139</b></span><span class="chip ok">Leakage guard <b>clean</b> over 32 replays</span></div>
 
   <div class="card">
     <p>Build style: <strong>coding harness</strong></p>
     <p>Languages: <strong>Python 3.13, no third-party runtime dependencies beyond openpyxl</strong></p>
     <p>Final command: <code>python run.py --as-of 2026-08-16</code></p>
-    <p>Final commit: <code>6ff915607ad881d4463b7caad8025fe524af876d</code></p>
+    <p>Final commit: <code>bce90cebe15dcf745f1344689ad68d9f5b7d5a2c</code></p>
   </div>
 
   <h2>The idea</h2>
@@ -102,76 +102,78 @@ python run.py                      # live mode, for future earnings events</code
   <h2>How it works</h2>
   <figure class="figure">
     
-<svg viewBox="0 0 940 460" xmlns="http://www.w3.org/2000/svg" role="img"
-     aria-label="Pipeline: orchestrator fans out to four company pipelines, each running retrieval, series, forecast and validation, then the workbook writer">
+<svg class="diagram" viewBox="0 0 940 470" xmlns="http://www.w3.org/2000/svg" role="img"
+     aria-label="Orchestrator fans out to four company pipelines; each runs retrieval, series, forecast and validation behind the point-in-time guard, then the workbook writer">
   <defs>
-    <marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
-      <path d="M0 0 L10 5 L0 10 z" fill="#8695a8"/>
+    <marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+      <path d="M0 0 L10 5 L0 10 z" fill="#8b909b"/>
     </marker>
+    <pattern id="hatch" width="7" height="7" patternTransform="rotate(-45)" patternUnits="userSpaceOnUse">
+      <line x1="0" y1="0" x2="0" y2="7" stroke="rgba(147,51,31,.20)" stroke-width="2"/>
+    </pattern>
     <style>
-      .b{fill:#fff;stroke:#dfe5ee;stroke-width:1.5;rx:10}
-      .bl{fill:#e8f0ff;stroke:#155eef;stroke-width:1.5;rx:10}
-      .gd{fill:#eaf7f1;stroke:#0d8a5f;stroke-width:1.5;rx:10}
-      .t{font:600 13px Inter,system-ui,sans-serif;fill:#0d1421}
-      .s{font:11px Inter,system-ui,sans-serif;fill:#5b6b82}
-      .l{stroke:#8695a8;stroke-width:1.4;fill:none;marker-end:url(#a)}
-      .lab{font:700 10px Inter,system-ui,sans-serif;fill:#155eef;letter-spacing:.06em}
+      .bx{fill:#fffefc;stroke:#dcd8cf;stroke-width:1.5}
+      .bi{fill:#15171c;stroke:#15171c}
+      .bg{fill:rgba(15,92,88,.08);stroke:#0f5c58;stroke-width:1.5}
+      .t{font:600 13px ui-monospace,Menlo,Consolas,monospace;fill:#15171c}
+      .ti{font:600 13px ui-monospace,Menlo,Consolas,monospace;fill:#f4f3ef}
+      .s{font:11.5px Inter,system-ui,sans-serif;fill:#4e535d}
+      .si{font:11.5px Inter,system-ui,sans-serif;fill:#a9aeb8}
+      .lb{font:700 9.5px ui-monospace,Menlo,Consolas,monospace;fill:#93331f;letter-spacing:.12em}
+      .ln{stroke:#8b909b;stroke-width:1.4;fill:none;marker-end:url(#ar)}
     </style>
   </defs>
 
-  <rect class="bl" x="330" y="14" width="280" height="46"/>
-  <text class="t" x="470" y="34" text-anchor="middle">Orchestrator</text>
-  <text class="s" x="470" y="50" text-anchor="middle">reads companies.json, fans out four pipelines</text>
+  <rect class="bi" x="322" y="12" width="296" height="48" rx="2"/>
+  <text class="ti" x="470" y="33" text-anchor="middle">ORCHESTRATOR</text>
+  <text class="si" x="470" y="50" text-anchor="middle">reads companies.json, fans out four pipelines</text>
 
-  <rect class="gd" x="30" y="96" width="200" height="62"/>
-  <text class="t" x="130" y="118" text-anchor="middle">Point-in-time guard</text>
-  <text class="s" x="130" y="134" text-anchor="middle">published_at &lt;= as_of</text>
-  <text class="s" x="130" y="148" text-anchor="middle">a leak aborts the run</text>
+  <rect class="bg" x="24" y="96" width="206" height="72" rx="2"/>
+  <text class="t" x="127" y="120" text-anchor="middle">--as-of GUARD</text>
+  <text class="s" x="127" y="138" text-anchor="middle">published_at &lt;= cutoff</text>
+  <text class="s" x="127" y="155" text-anchor="middle">unguarded read raises</text>
 
-  <path class="l" d="M470 60 L470 88"/>
-  <path class="l" d="M230 127 L300 127"/>
+  <path class="ln" d="M470 60 L470 90"/>
+  <path class="ln" d="M230 132 L306 132"/>
 
-  <g>
-    <rect class="b" x="310" y="96" width="140" height="46"/>
-    <text class="t" x="380" y="116" text-anchor="middle">HD</text>
-    <text class="s" x="380" y="132" text-anchor="middle">FY2026Q2</text>
-    <rect class="b" x="466" y="96" width="140" height="46"/>
-    <text class="t" x="536" y="116" text-anchor="middle">ADI</text>
-    <text class="s" x="536" y="132" text-anchor="middle">FY2026Q3</text>
-    <rect class="b" x="622" y="96" width="140" height="46"/>
-    <text class="t" x="692" y="116" text-anchor="middle">HAS</text>
-    <text class="s" x="692" y="132" text-anchor="middle">FY2026</text>
-    <rect class="b" x="778" y="96" width="140" height="46"/>
-    <text class="t" x="848" y="116" text-anchor="middle">DE</text>
-    <text class="s" x="848" y="132" text-anchor="middle">FY2026Q3</text>
-  </g>
+  <rect class="bx" x="316" y="98" width="140" height="48" rx="2"/>
+  <text class="t" x="386" y="120" text-anchor="middle">HD</text>
+  <text class="s" x="386" y="136" text-anchor="middle">FY2026Q2</text>
+  <rect class="bx" x="470" y="98" width="140" height="48" rx="2"/>
+  <text class="t" x="540" y="120" text-anchor="middle">ADI</text>
+  <text class="s" x="540" y="136" text-anchor="middle">FY2026Q3</text>
+  <rect class="bx" x="624" y="98" width="140" height="48" rx="2"/>
+  <text class="t" x="694" y="120" text-anchor="middle">HAS</text>
+  <text class="s" x="694" y="136" text-anchor="middle">FY2026</text>
+  <rect class="bx" x="778" y="98" width="138" height="48" rx="2"/>
+  <text class="t" x="847" y="120" text-anchor="middle">DE</text>
+  <text class="s" x="847" y="136" text-anchor="middle">FY2026Q3</text>
 
-  <path class="l" d="M470 142 L470 178"/>
-  <text class="lab" x="486" y="166">EACH PIPELINE</text>
+  <path class="ln" d="M470 146 L470 184"/>
+  <text class="lb" x="486" y="172">EACH PIPELINE</text>
 
-  <rect class="b" x="120" y="182" width="700" height="58"/>
-  <text class="t" x="146" y="206">Retrieval</text>
-  <text class="s" x="146" y="224">BM25 over 69,229 passages, recency-weighted, cutoff-filtered</text>
-  <path class="l" d="M470 240 L470 262"/>
+  <rect class="bx" x="118" y="188" width="700" height="56" rx="2"/>
+  <text class="t" x="142" y="211">RETRIEVAL</text>
+  <text class="s" x="142" y="229">BM25 over 69,229 passages, recency-weighted, cutoff-filtered</text>
+  <path class="ln" d="M470 244 L470 266"/>
 
-  <rect class="b" x="120" y="266" width="700" height="58"/>
-  <text class="t" x="146" y="290">Series and statistics</text>
-  <text class="s" x="146" y="308">earnings releases read end to end; seasonality, 6m/2y/5y/10y trend, guidance bias</text>
-  <path class="l" d="M470 324 L470 346"/>
+  <rect class="bx" x="118" y="270" width="700" height="56" rx="2"/>
+  <text class="t" x="142" y="293">SERIES</text>
+  <text class="s" x="142" y="311">earnings releases read end to end; seasonality, trend, guidance bias</text>
+  <path class="ln" d="M470 326 L470 348"/>
 
-  <rect class="b" x="120" y="350" width="700" height="58"/>
-  <text class="t" x="146" y="374">Forecast and validation</text>
-  <text class="s" x="146" y="392">seasonal naive with drift; unit, range and consistency checks</text>
+  <rect class="bx" x="118" y="352" width="700" height="56" rx="2"/>
+  <text class="t" x="142" y="375">FORECAST + VALIDATION</text>
+  <text class="s" x="142" y="393">seasonal naive with drift, guidance-blended; unit, range and margin checks</text>
 
-  <path class="l" d="M820 379 L868 379 L868 432 L640 432"/>
-  <rect class="bl" x="330" y="410" width="300" height="44"/>
-  <text class="t" x="480" y="430" text-anchor="middle">Workbook writer</text>
-  <text class="s" x="480" y="446" text-anchor="middle">Summary!C7:C9, native numbers, re-verified</text>
+  <path class="ln" d="M127 168 L127 380 L110 380"/>
+  <path class="ln" d="M818 380 L866 380 L866 438 L634 438"/>
 
-  <rect class="gd" x="30" y="266" width="70" height="142" opacity="0"/>
-  <path class="l" d="M130 158 L130 379 L112 379"/>
-  <text class="s" x="36" y="424">guard active</text>
-  <text class="s" x="36" y="438">for every read</text>
+  <rect class="bi" x="330" y="416" width="304" height="44" rx="2"/>
+  <text class="ti" x="482" y="435" text-anchor="middle">WORKBOOK WRITER</text>
+  <text class="si" x="482" y="451" text-anchor="middle">Summary!C7:C9, native numbers, re-verified</text>
+
+  <rect x="866" y="188" width="50" height="220" fill="url(#hatch)" opacity="0"/>
 </svg>
 
     <figcaption>The orchestrator fans out one pipeline per company. Every read in every stage passes
@@ -356,7 +358,7 @@ python scripts/build_architecture.py  # regenerates this page</code></pre>
     a rerun needs no network access and produces the same figures.</p>
 
   <div class="card">
-    <p>Final commit: <code>6ff915607ad881d4463b7caad8025fe524af876d</code></p>
+    <p>Final commit: <code>bce90cebe15dcf745f1344689ad68d9f5b7d5a2c</code></p>
     <p>Final command: <code>python run.py --as-of 2026-08-16</code></p>
     <p>Expected output: four completed workbooks in <code>submission/</code>.</p>
   </div>
