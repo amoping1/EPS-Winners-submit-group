@@ -8,7 +8,7 @@
       "ticker": "HD",
       "period": "FY2026Q2",
       "periodType": "quarter",
-      "periodEnd": null,
+      "periodEnd": "2026-08-02",
       "periodEndVerified": false,
       "corpusDir": "home-depot",
       "reportingCurrency": "USD",
@@ -35,14 +35,16 @@
           "scoreFloor": "0.5pp",
           "bounds": null
         }
-      ]
+      ],
+      "periodEndBasis": "Q1 FY2026 ended May 3 2026 per 10-Q; +13 weeks",
+      "periodEndMethod": "derived"
     },
     {
       "company": "Analog Devices",
       "ticker": "ADI",
       "period": "FY2026Q3",
       "periodType": "quarter",
-      "periodEnd": null,
+      "periodEnd": "2026-08-01",
       "periodEndVerified": false,
       "corpusDir": "analog-devices",
       "reportingCurrency": "USD",
@@ -69,15 +71,17 @@
           "scoreFloor": "0.5pp",
           "bounds": null
         }
-      ]
+      ],
+      "periodEndBasis": "Q2 FY2026 ended May 2 2026 per 10-Q; +13 weeks",
+      "periodEndMethod": "derived"
     },
     {
       "company": "Hays plc",
       "ticker": "LSE:HAS",
       "period": "FY2026",
       "periodType": "full_year",
-      "periodEnd": null,
-      "periodEndVerified": false,
+      "periodEnd": "2026-06-30",
+      "periodEndVerified": true,
       "corpusDir": "hays",
       "reportingCurrency": "GBP",
       "outputFile": "HAS-FY2026.xlsx",
@@ -104,14 +108,16 @@
           "scoreFloor": "0.5% of reported",
           "bounds": null
         }
-      ]
+      ],
+      "periodEndBasis": "'30 June 2026' stated in 2026-07-10 Q4 trading update",
+      "periodEndMethod": "stated"
     },
     {
       "company": "Deere & Company",
       "ticker": "DE",
       "period": "FY2026Q3",
       "periodType": "quarter",
-      "periodEnd": null,
+      "periodEnd": "2026-08-02",
       "periodEndVerified": false,
       "corpusDir": "deere",
       "reportingCurrency": "USD",
@@ -140,7 +146,9 @@
           "scoreFloor": "0.5% of reported",
           "bounds": null
         }
-      ]
+      ],
+      "periodEndBasis": "Q2 FY2026 ended May 3 2026 per Q2 10-Q segment table; +13 weeks",
+      "periodEndMethod": "derived"
     }
   ]
 }
