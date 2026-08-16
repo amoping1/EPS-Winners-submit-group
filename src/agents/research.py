@@ -170,7 +170,23 @@ def run_research(
         profile=profile.key, as_of=as_of_str,
     )
 
+    warned = False
     for step in range(1, max_steps + 1):
+        # Budget nudge. Without this the loop gets guillotined mid-research and returns
+        # nothing, which scores 5.0. Warn early enough that it can still write findings.
+        remaining = max_steps - step
+        if remaining <= 3 and not warned:
+            warned = True
+            messages.append({
+                "role": "user",
+                "content": (
+                    f"You have {remaining} steps left. Stop gathering and reply NOW with "
+                    "the final JSON object described in your instructions, using whatever "
+                    "evidence you already have. Record anything still missing in 'gaps'. "
+                    "Partial findings are far better than none."
+                ),
+            })
+
         completion: Completion = client.complete(messages, TOOL_SPECS)
 
         if not completion.tool_calls:

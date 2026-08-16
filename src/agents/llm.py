@@ -151,8 +151,28 @@ class ScriptedClient:
         )
 
 
+def load_env(path: str = ".env") -> None:
+    """Load KEY=value lines from .env into the environment.
+
+    Kept dependency-free on purpose. Existing environment variables win, so an exported
+    key overrides the file rather than the other way round.
+    """
+    from pathlib import Path
+
+    file = Path(path)
+    if not file.exists():
+        return
+    for line in file.read_text(encoding="utf-8").splitlines():
+        line = line.strip()
+        if not line or line.startswith("#") or "=" not in line:
+            continue
+        key, value = line.split("=", 1)
+        os.environ.setdefault(key.strip(), value.strip())
+
+
 def build_client(spec: str | None = None) -> LLMClient:
     """Pick a client from config or environment. Fails loudly rather than silently."""
+    load_env()
     spec = spec or os.environ.get("AGENT_MODEL", "")
     if spec.startswith("openai:"):
         return OpenAIClient(model=spec.split(":", 1)[1])
