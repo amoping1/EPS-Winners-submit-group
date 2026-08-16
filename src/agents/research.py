@@ -59,12 +59,37 @@ Method:
    range"). If it exists it is extremely valuable - say so and record it.
 5. Build 8-12 periods of history for each metric so a trend can be fitted.
 
-When you have enough, reply with a JSON object and no other text:
-{{"status": "complete", "findings": [
-   {{"metric": "...", "observation": "...", "value": <number or null>,
-     "units": "...", "basis": "...", "period": "...", "doc_id": "...", "confidence": "high|medium|low"}}
- ],
- "drivers": ["..."], "gaps": ["..."], "consensus": "... or null"}}
+When you have enough, reply with a JSON object and no other text. Keep reported history
+separate from forward-looking anchors - they are used differently downstream.
+
+{{"status": "complete",
+  "history": [
+    {{"metric": "<exact metric label>", "period": "FY2025Q3", "value": 12018,
+      "units": "USDm", "basis": "reported", "doc_id": "..."}}
+  ],
+  "anchors": [
+    {{"metric": "<exact metric label>", "kind": "guidance|consensus|last_actual|derived",
+      "value": 3900, "low": 3800, "high": 4000, "units": "USDm", "period": "FY2026Q3",
+      "note": "company guided revenue $3.9bn +/- $100m", "doc_id": "...",
+      "confidence": "high|medium|low"}}
+  ],
+  "drivers": ["..."], "gaps": ["..."], "consensus": "... or null"}}
+
+Rules for these two lists:
+- history: ONE ENTRY PER PERIOD PER METRIC, value must be a number, never null. This is the
+  time series a trend is fitted to, so give at least 4 prior comparable periods per metric
+  (same fiscal quarter in prior years for a quarterly target, prior full years for an
+  annual target). Do not put prose in 'value'.
+- anchors: forward-looking or most-recent reference points. 'guidance' means the company
+  stated it. 'consensus' means analysts' published estimate. 'last_actual' is the most
+  recent reported figure for that metric. Use low/high when a range was given.
+- Never put a margin in a metric whose label is a profit, or vice versa. Match the exact
+  metric label given above.
+- The "metric" field must be ONLY the quoted label text, e.g. "Revenue". Do not append
+  units or basis to it.
+- An anchor is only "guidance" if the company guided THAT EXACT measure. Operating margin
+  is not gross margin; full-year guidance is not quarterly guidance. If the company
+  guided a different measure, record kind="derived" and say so in the note.
 """
 
 
@@ -84,7 +109,8 @@ class EvidencePack:
     period: str
     profile: str
     as_of: str
-    findings: list[dict] = field(default_factory=list)
+    history: list[dict] = field(default_factory=list)
+    anchors: list[dict] = field(default_factory=list)
     drivers: list[str] = field(default_factory=list)
     gaps: list[str] = field(default_factory=list)
     consensus: str | None = None
@@ -99,7 +125,8 @@ class EvidencePack:
             "period": self.period,
             "profile": self.profile,
             "as_of": self.as_of,
-            "findings": self.findings,
+            "history": self.history,
+            "anchors": self.anchors,
             "drivers": self.drivers,
             "gaps": self.gaps,
             "consensus": self.consensus,
@@ -142,7 +169,7 @@ def run_research(
     as_of_str = str(as_of)
 
     metric_lines = "\n".join(
-        f"  - {m['label']} ({m['units']}, basis: {m.get('basis', 'reported')})"
+        f"  - label: \"{m['label']}\"  |  units: {m['units']}  |  basis: {m.get('basis', 'reported')}"
         for m in company["metrics"]
     )
     system = SYSTEM_PROMPT.format(
@@ -236,7 +263,8 @@ def _parse_final(pack: EvidencePack, content: str | None) -> None:
     except json.JSONDecodeError:
         pack.stopped_because = "final message was not valid JSON"
         return
-    pack.findings = data.get("findings", [])
+    pack.history = [h for h in data.get("history", []) if isinstance(h.get("value"), (int, float))]
+    pack.anchors = data.get("anchors", [])
     pack.drivers = data.get("drivers", [])
     pack.gaps = data.get("gaps", [])
     pack.consensus = data.get("consensus")
