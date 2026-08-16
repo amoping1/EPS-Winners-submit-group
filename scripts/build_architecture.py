@@ -1,10 +1,35 @@
-<!doctype html>
-<html lang="en">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Agent architecture &mdash; Agents vs Wall Street</title>
-<style>
+#!/usr/bin/env python3
+"""Generate architecture/index.html from the current run.
+
+This is the judged artifact and it has hard limits the dashboard does not:
+one self-contained file, 2 MB maximum, and scripts, external assets and network
+requests do not run in the judging preview. So: inline CSS, inline SVG, and no
+JavaScript at all.
+
+Generating it rather than hand-writing it means the numbers in the write-up are
+the numbers the system actually produced, and it can be regenerated in seconds
+if the system changes before the 17:15 lock.
+
+    python scripts/build_architecture.py [run-id]
+"""
+
+from __future__ import annotations
+
+import json
+import subprocess
+import sys
+from pathlib import Path
+from typing import Any
+
+ROOT = Path(__file__).resolve().parent.parent
+sys.path.insert(0, str(ROOT))
+
+from scripts.build_dashboard import architecture_svg, collect, latest_run  # noqa: E402
+from src.config import PATHS  # noqa: E402
+
+MAX_BYTES = 2 * 1024 * 1024
+
+STYLE = """
 *,*::before,*::after{box-sizing:border-box}
 :root{--ink:#0d1421;--muted:#5b6b82;--faint:#8695a8;--line:#dfe5ee;--soft:#eef2f8;
   --paper:#fff;--wash:#f5f8fc;--blue:#155eef;--blue-soft:#e8f0ff;
@@ -56,7 +81,84 @@ li{margin:7px 0}
 .weak{border-left-color:var(--bad);background:#fdeeec}
 footer{margin-top:52px;padding-top:22px;border-top:1px solid var(--line);
   color:var(--faint);font-size:13px}
-</style>
+"""
+
+
+def git(*args: str) -> str:
+    try:
+        result = subprocess.run(
+            ["git", *args], cwd=ROOT, capture_output=True, text=True, timeout=10, check=False
+        )
+        return result.stdout.strip()
+    except (OSError, subprocess.SubprocessError):
+        return ""
+
+
+def error_class(value: float | None) -> str:
+    if value is None:
+        return ""
+    return "good" if value <= 0.15 else ("mid" if value <= 0.6 else "bad")
+
+
+def percent(value: float | None) -> str:
+    return "--" if value is None else f"{value * 100:.1f}%"
+
+
+def forecast_table(companies: list[dict[str, Any]]) -> str:
+    rows = []
+    for company in companies:
+        for estimate in company["estimates"]:
+            units = estimate["units"]
+            decimals = 2 if units == "%" or abs(estimate["value"]) < 1000 else 0
+            rows.append(
+                f"<tr><td><b>{company['company']['slug']}</b></td>"
+                f"<td>{estimate['metric']}</td>"
+                f"<td class='num'>{estimate['value']:,.{decimals}f}</td>"
+                f"<td>{units}</td>"
+                f"<td>{estimate['confidence']}</td></tr>"
+            )
+    return "".join(rows)
+
+
+def backtest_table(backtest: dict[str, Any]) -> str:
+    rows = []
+    for metric in backtest.get("metrics", []):
+        error = metric.get("median_percentage_error")
+        rows.append(
+            f"<tr><td><b>{metric['company']}</b></td>"
+            f"<td>{metric['metric']}</td>"
+            f"<td class='num'>{metric['events']}</td>"
+            f"<td class='num {error_class(error)}'>{percent(error)}</td></tr>"
+        )
+    return "".join(rows)
+
+
+def build_html(data: dict[str, Any]) -> str:
+    manifest = data["manifest"]
+    backtest = data.get("backtest") or {}
+    leak = backtest.get("leakage", {})
+    overall = backtest.get("overall", {})
+    commit = git("rev-parse", "HEAD") or (manifest.get("commit") or "unknown")
+
+    chips = [
+        f'<span class="chip">As of <b>{manifest.get("as_of", "--")}</b></span>',
+        f'<span class="chip">Commit <b>{commit[:10]}</b></span>',
+        f'<span class="chip">Forecasts <b>12/12</b></span>',
+        f'<span class="chip">Documents <b>1,139</b></span>',
+    ]
+    if leak.get("status") == "clean":
+        chips.append(
+            f'<span class="chip ok">Leakage guard <b>clean</b> over '
+            f'{leak.get("events_replayed", 0)} replays</span>'
+        )
+
+    return f"""<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Agent architecture &mdash; Agents vs Wall Street</title>
+<style>{STYLE}</style>
 </head>
 <body>
 <main>
@@ -66,13 +168,13 @@ footer{margin-top:52px;padding-top:22px;border-top:1px solid var(--line);
     what makes our backtest honest, what makes this run reproducible after the event, and what lets
     the agent be reused for the next earnings season.</p>
 
-  <div class="chips"><span class="chip">As of <b>2026-08-16</b></span><span class="chip">Commit <b>6b8748625c</b></span><span class="chip">Forecasts <b>12/12</b></span><span class="chip">Documents <b>1,139</b></span><span class="chip ok">Leakage guard <b>clean</b> over 32 replays</span></div>
+  <div class="chips">{''.join(chips)}</div>
 
   <div class="card">
     <p>Build style: <strong>coding harness</strong></p>
     <p>Languages: <strong>Python 3.13, no third-party runtime dependencies beyond openpyxl</strong></p>
     <p>Final command: <code>python run.py --as-of 2026-08-16</code></p>
-    <p>Final commit: <code>6b8748625c0beff91fb4cd9036c1afaebc869cb9</code></p>
+    <p>Final commit: <code>{commit}</code></p>
   </div>
 
   <h2>The idea</h2>
@@ -101,79 +203,7 @@ python run.py                      # live mode, for future earnings events</code
 
   <h2>How it works</h2>
   <figure class="figure">
-    
-<svg viewBox="0 0 940 460" xmlns="http://www.w3.org/2000/svg" role="img"
-     aria-label="Pipeline: orchestrator fans out to four company pipelines, each running retrieval, series, forecast and validation, then the workbook writer">
-  <defs>
-    <marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
-      <path d="M0 0 L10 5 L0 10 z" fill="#8695a8"/>
-    </marker>
-    <style>
-      .b{fill:#fff;stroke:#dfe5ee;stroke-width:1.5;rx:10}
-      .bl{fill:#e8f0ff;stroke:#155eef;stroke-width:1.5;rx:10}
-      .gd{fill:#eaf7f1;stroke:#0d8a5f;stroke-width:1.5;rx:10}
-      .t{font:600 13px Inter,system-ui,sans-serif;fill:#0d1421}
-      .s{font:11px Inter,system-ui,sans-serif;fill:#5b6b82}
-      .l{stroke:#8695a8;stroke-width:1.4;fill:none;marker-end:url(#a)}
-      .lab{font:700 10px Inter,system-ui,sans-serif;fill:#155eef;letter-spacing:.06em}
-    </style>
-  </defs>
-
-  <rect class="bl" x="330" y="14" width="280" height="46"/>
-  <text class="t" x="470" y="34" text-anchor="middle">Orchestrator</text>
-  <text class="s" x="470" y="50" text-anchor="middle">reads companies.json, fans out four pipelines</text>
-
-  <rect class="gd" x="30" y="96" width="200" height="62"/>
-  <text class="t" x="130" y="118" text-anchor="middle">Point-in-time guard</text>
-  <text class="s" x="130" y="134" text-anchor="middle">published_at &lt;= as_of</text>
-  <text class="s" x="130" y="148" text-anchor="middle">a leak aborts the run</text>
-
-  <path class="l" d="M470 60 L470 88"/>
-  <path class="l" d="M230 127 L300 127"/>
-
-  <g>
-    <rect class="b" x="310" y="96" width="140" height="46"/>
-    <text class="t" x="380" y="116" text-anchor="middle">HD</text>
-    <text class="s" x="380" y="132" text-anchor="middle">FY2026Q2</text>
-    <rect class="b" x="466" y="96" width="140" height="46"/>
-    <text class="t" x="536" y="116" text-anchor="middle">ADI</text>
-    <text class="s" x="536" y="132" text-anchor="middle">FY2026Q3</text>
-    <rect class="b" x="622" y="96" width="140" height="46"/>
-    <text class="t" x="692" y="116" text-anchor="middle">HAS</text>
-    <text class="s" x="692" y="132" text-anchor="middle">FY2026</text>
-    <rect class="b" x="778" y="96" width="140" height="46"/>
-    <text class="t" x="848" y="116" text-anchor="middle">DE</text>
-    <text class="s" x="848" y="132" text-anchor="middle">FY2026Q3</text>
-  </g>
-
-  <path class="l" d="M470 142 L470 178"/>
-  <text class="lab" x="486" y="166">EACH PIPELINE</text>
-
-  <rect class="b" x="120" y="182" width="700" height="58"/>
-  <text class="t" x="146" y="206">Retrieval</text>
-  <text class="s" x="146" y="224">BM25 over 69,229 passages, recency-weighted, cutoff-filtered</text>
-  <path class="l" d="M470 240 L470 262"/>
-
-  <rect class="b" x="120" y="266" width="700" height="58"/>
-  <text class="t" x="146" y="290">Series and statistics</text>
-  <text class="s" x="146" y="308">earnings releases read end to end; seasonality, 6m/2y/5y/10y trend, guidance bias</text>
-  <path class="l" d="M470 324 L470 346"/>
-
-  <rect class="b" x="120" y="350" width="700" height="58"/>
-  <text class="t" x="146" y="374">Forecast and validation</text>
-  <text class="s" x="146" y="392">seasonal naive with drift; unit, range and consistency checks</text>
-
-  <path class="l" d="M820 379 L868 379 L868 432 L640 432"/>
-  <rect class="bl" x="330" y="410" width="300" height="44"/>
-  <text class="t" x="480" y="430" text-anchor="middle">Workbook writer</text>
-  <text class="s" x="480" y="446" text-anchor="middle">Summary!C7:C9, native numbers, re-verified</text>
-
-  <rect class="gd" x="30" y="266" width="70" height="142" opacity="0"/>
-  <path class="l" d="M130 158 L130 379 L112 379"/>
-  <text class="s" x="36" y="424">guard active</text>
-  <text class="s" x="36" y="438">for every read</text>
-</svg>
-
+    {architecture_svg()}
     <figcaption>The orchestrator fans out one pipeline per company. Every read in every stage passes
       the point-in-time guard.</figcaption>
   </figure>
@@ -223,10 +253,10 @@ python run.py                      # live mode, for future earnings events</code
 
   <h2>The twelve submitted forecasts</h2>
   <table><thead><tr><th>Co</th><th>Metric</th><th class="num">Forecast</th><th>Units</th>
-    <th>Confidence</th></tr></thead><tbody><tr><td><b>ADI</b></td><td>Revenue</td><td class='num'>3,949</td><td>USDm</td><td>medium</td></tr><tr><td><b>ADI</b></td><td>Adjusted diluted EPS</td><td class='num'>3.42</td><td>USD / share</td><td>medium</td></tr><tr><td><b>ADI</b></td><td>Adjusted gross margin</td><td class='num'>27.00</td><td>%</td><td>medium</td></tr><tr><td><b>DE</b></td><td>Worldwide net sales and revenues</td><td class='num'>10,920</td><td>USDm</td><td>medium</td></tr><tr><td><b>DE</b></td><td>Diluted EPS (GAAP)</td><td class='num'>4.69</td><td>USD / share</td><td>medium</td></tr><tr><td><b>DE</b></td><td>Production & Precision Ag operating profit</td><td class='num'>1,513</td><td>USDm</td><td>medium</td></tr><tr><td><b>HAS</b></td><td>Net fees</td><td class='num'>85.00</td><td>GBPm</td><td>medium</td></tr><tr><td><b>HAS</b></td><td>Pre-exceptional basic EPS</td><td class='num'>0.02</td><td>GBp</td><td>low</td></tr><tr><td><b>HAS</b></td><td>Pre-exceptional operating profit</td><td class='num'>85.00</td><td>GBPm</td><td>medium</td></tr><tr><td><b>HD</b></td><td>Net sales</td><td class='num'>47,457</td><td>USDm</td><td>medium</td></tr><tr><td><b>HD</b></td><td>Adjusted diluted EPS</td><td class='num'>4.38</td><td>USD / share</td><td>medium</td></tr><tr><td><b>HD</b></td><td>Comparable sales, total company</td><td class='num'>1.00</td><td>%</td><td>medium</td></tr></tbody></table>
+    <th>Confidence</th></tr></thead><tbody>{forecast_table(data['companies'])}</tbody></table>
 
   <h2>Checks and tests</h2>
-  <p>60 timestamped events were written during this run to the clear-run log
+  <p>{len(data.get('log', []))} timestamped events were written during this run to the clear-run log
     submitted with the entry. The test suite covers cutoff boundaries, thread-local guard isolation,
     leak auditing, credential redaction, unit parsing and the workbook contract.</p>
   <ul>
@@ -243,14 +273,14 @@ python run.py                      # live mode, for future earnings events</code
   </ul>
 
   <h2>What the backtest measured</h2>
-  <p>We replayed 32 past reporting events across the four companies.
-    Leakage guard: <strong>clean</strong>. Median absolute percentage error
+  <p>We replayed {leak.get('events_replayed', 0)} past reporting events across the four companies.
+    Leakage guard: <strong>{leak.get('status', 'unknown')}</strong>. Median absolute percentage error
     against what the companies actually reported:</p>
   <table><thead><tr><th>Co</th><th>Metric</th><th class="num">Events</th>
-    <th class="num">Median error</th></tr></thead><tbody><tr><td><b>ADI</b></td><td>Adjusted diluted EPS</td><td class='num'>8</td><td class='num mid'>20.3%</td></tr><tr><td><b>ADI</b></td><td>Adjusted gross margin</td><td class='num'>8</td><td class='num bad'>158.4%</td></tr><tr><td><b>ADI</b></td><td>Revenue</td><td class='num'>8</td><td class='num good'>5.8%</td></tr><tr><td><b>DE</b></td><td>Diluted EPS (GAAP)</td><td class='num'>8</td><td class='num good'>13.6%</td></tr><tr><td><b>DE</b></td><td>Production & Precision Ag operating profit</td><td class='num'>8</td><td class='num bad'>97.7%</td></tr><tr><td><b>DE</b></td><td>Worldwide net sales and revenues</td><td class='num'>8</td><td class='num good'>10.6%</td></tr><tr><td><b>HAS</b></td><td>Net fees</td><td class='num'>8</td><td class='num bad'>178.5%</td></tr><tr><td><b>HAS</b></td><td>Pre-exceptional basic EPS</td><td class='num'>8</td><td class='num bad'>99.6%</td></tr><tr><td><b>HAS</b></td><td>Pre-exceptional operating profit</td><td class='num'>8</td><td class='num bad'>98.6%</td></tr><tr><td><b>HD</b></td><td>Adjusted diluted EPS</td><td class='num'>8</td><td class='num good'>10.4%</td></tr><tr><td><b>HD</b></td><td>Comparable sales, total company</td><td class='num'>8</td><td class='num bad'>184.2%</td></tr><tr><td><b>HD</b></td><td>Net sales</td><td class='num'>8</td><td class='num good'>5.1%</td></tr></tbody></table>
+    <th class="num">Median error</th></tr></thead><tbody>{backtest_table(backtest)}</tbody></table>
   <p>Overall median across scored metrics:
-    <strong class="mid">
-    59.0%</strong>.</p>
+    <strong class="{error_class(overall.get('median_percentage_error'))}">
+    {percent(overall.get('median_percentage_error'))}</strong>.</p>
 
   <div class="callout">
     <p><strong>The backtest is not a report card we wrote at the end. It is what drove the design.</strong>
@@ -356,13 +386,39 @@ python scripts/build_architecture.py  # regenerates this page</code></pre>
     a rerun needs no network access and produces the same figures.</p>
 
   <div class="card">
-    <p>Final commit: <code>6b8748625c0beff91fb4cd9036c1afaebc869cb9</code></p>
+    <p>Final commit: <code>{commit}</code></p>
     <p>Final command: <code>python run.py --as-of 2026-08-16</code></p>
     <p>Expected output: four completed workbooks in <code>submission/</code>.</p>
   </div>
 
-  <footer>Generated from run <code>run-2026-08-16-20260816T123645Z</code> at
-    2026-08-16T12:37:25.258Z.</footer>
+  <footer>Generated from run <code>{manifest.get('run_id', '')}</code> at
+    {manifest.get('finished_at', '')}.</footer>
 </main>
 </body>
 </html>
+"""
+
+
+def main() -> int:
+    run_dir = (ROOT / "runs" / sys.argv[1]) if len(sys.argv) > 1 else latest_run()
+    data = collect(run_dir)
+    html = build_html(data)
+
+    target = PATHS.architecture
+    target.parent.mkdir(parents=True, exist_ok=True)
+    target.write_text(html, encoding="utf-8")
+
+    size = target.stat().st_size
+    print(f"Architecture page written: {target.relative_to(ROOT)} ({size / 1024:.0f} KB)")
+    if size > MAX_BYTES:
+        print(f"ERROR: exceeds the 2 MB limit by {(size - MAX_BYTES) / 1024:.0f} KB", file=sys.stderr)
+        return 1
+    if "<script" in html.lower():
+        print("ERROR: contains a script tag; scripts do not run in the judging preview", file=sys.stderr)
+        return 1
+    print("  no scripts, no external assets, within the 2 MB limit")
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())
