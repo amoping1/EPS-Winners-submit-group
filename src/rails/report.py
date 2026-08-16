@@ -141,7 +141,9 @@ def confidence_for(res: dict) -> tuple[str, str]:
     reasons = []
 
     if verdict.get("plausible") is False:
-        return "low", "critic objected"
+        if res.get("critic_bound"):
+            return "medium", "critic objected and corrected the value"
+        return "low", "critic objected, not resolved"
     if res.get("guidance_bound") or (res.get("anchor") or {}).get("kind") in ("guidance", "consensus"):
         reasons.append("published anchor")
         level = "high"
@@ -198,21 +200,31 @@ def _metric_block(label: str, res: dict, evidence: dict) -> str:
     verdict = res.get("verdict") or {}
     flagged = verdict.get("plausible") is False
 
+    # A rail firing is the system working, not a defect. Only an objection that was NOT
+    # acted on is a real warning, so those read differently.
+    bound = res.get("critic_bound")
+    unresolved = flagged and not bound
+
     pills = []
     if res.get("guidance_bound"):
         pills.append('<span class="pill pass">held to guidance</span>')
-    if res.get("anchor") and res["anchor"].get("kind") == "consensus":
-        pills.append('<span class="pill pass">consensus anchor</span>')
+    anchor_kind = (res.get("anchor") or {}).get("kind")
+    if anchor_kind == "consensus":
+        pills.append('<span class="pill pass">anchored to consensus</span>')
+    elif anchor_kind == "last_actual":
+        pills.append('<span class="pill pass">recovered from filing</span>')
     if res.get("anchor_rejected"):
         pills.append('<span class="pill pass">wrong-period anchor rejected</span>')
+    if bound:
+        pills.append('<span class="pill pass">corrected by critic</span>')
     if res.get("clamped"):
-        pills.append('<span class="pill warn">clamped to history</span>')
+        pills.append('<span class="pill pass">clamped to history</span>')
     if res.get("outliers"):
-        pills.append(f'<span class="pill warn">{len(res["outliers"])} outlier cut</span>')
-    if flagged:
-        pills.append('<span class="pill fail">critic flagged</span>')
+        pills.append(f'<span class="pill pass">{len(res["outliers"])} outlier down-weighted</span>')
+    if unresolved:
+        pills.append('<span class="pill fail">objection unresolved</span>')
 
-    css = "flag" if flagged else ("soft" if (res.get("clamped") or res.get("outliers")) else "ok")
+    css = "flag" if unresolved else ("ok" if pills else "soft")
 
     methods = {k: v for k, v in (res.get("method_values") or {}).items() if k != "_anchor"}
     method_line = " &middot; ".join(
@@ -248,6 +260,13 @@ def _metric_block(label: str, res: dict, evidence: dict) -> str:
     if not calls:
         lines.append('<div class="m-line"><span class="k">guidance / estimate</span> '
                      '<span class="pill na">none published</span></div>')
+
+    if bound:
+        lines.append(
+            f'<div class="m-line"><span class="k">critic</span> moved '
+            f'{_fmt(bound["from"], units)} into {_fmt(bound["low"], units)}&ndash;'
+            f'{_fmt(bound["high"], units)}</div>'
+        )
 
     cited = [f.get("doc_id") for f in finance if f.get("doc_id")][:1]
     if cited:
