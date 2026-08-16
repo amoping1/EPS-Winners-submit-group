@@ -124,6 +124,17 @@ def main() -> int:
     lines.append(f"run end (utc): {finished.isoformat()}")
     lines.append(f"elapsed: {(finished - started).total_seconds():.1f}s")
     (log_dir / "clear-run.log").write_text("\n".join(lines) + "\n", encoding="utf-8")
+    if use_agent:
+        try:
+            from src.rails.report import build as build_dashboard
+            page = build_dashboard(as_of=SETTINGS["run"]["asOf"],
+                                   model=os.environ.get("AGENT_MODEL", "openai:gpt-4.1"))
+            print(f"dashboard: {page}")
+            lines.append(f"dashboard: {page}")
+        except Exception as exc:                       # never let the report break a run
+            print(f"dashboard generation skipped: {exc}")
+
+    (log_dir / "clear-run.log").write_text("\n".join(lines) + "\n", encoding="utf-8")
     print(f"\nlog: {log_dir / 'clear-run.log'}")
     return 0
 

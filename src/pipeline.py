@@ -85,11 +85,11 @@ def run_company(client, corpus_root: str, company: dict, as_of, max_steps: int =
 
     proposals: dict[str, dict] = {}
     for method in METHODS:
-        aligned = align_all(run_forecaster(client, company, pack, method), labels)
+        aligned = align_all(run_forecaster(client, company, pack, method, profile), labels)
         for label, forecast in aligned.items():
             proposals.setdefault(label, {})[method] = forecast
 
-    verdicts = align_all(run_critic(client, company, pack, proposals), labels)
+    verdicts = align_all(run_critic(client, company, pack, proposals, profile), labels)
 
     results = {}
     for metric in company["metrics"]:
@@ -111,6 +111,10 @@ def run_company(client, corpus_root: str, company: dict, as_of, max_steps: int =
         "profile": profile.key,
         "profile_confidence": confidence,
         "profile_signals": hits,
+        "profile_label": profile.label,
+        "predictors": profile.predictors,
+        "catalysts": profile.catalysts,
+        "kpis": profile.kpis,
         "elapsed_s": round(time.time() - started, 1),
         "tool_calls": len(pack.trace),
         "history_rows": len(pack.history),

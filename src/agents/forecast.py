@@ -32,6 +32,9 @@ ANCHORS (guidance, consensus, most recent actuals):
 CYCLICAL / SEASONAL (derived from the reported series, not quoted from any document):
 {cyclical}
 
+VARIABLES TO REASON OVER (industry-specific):
+{predictors}
+
 DRIVERS:
 {drivers}
 
@@ -156,7 +159,7 @@ def _fmt_cyclical(cyclical) -> str:
     return "\n".join(out) or "  (none)"
 
 
-def _context(company: dict, pack) -> dict:
+def _context(company: dict, pack, profile=None) -> dict:
     return {
         "company": company["company"],
         "ticker": company["ticker"],
@@ -171,6 +174,8 @@ def _context(company: dict, pack) -> dict:
         "cyclical": _fmt_cyclical(getattr(pack, "cyclical", None)),
         "drivers": "\n".join(f"  - {d}" for d in pack.drivers) or "  (none)",
         "gaps": "\n".join(f"  - {g}" for g in pack.gaps) or "  (none)",
+        "predictors": ("\n".join(f"  - {p}" for p in profile.predictors)
+                       if profile and profile.predictors else "  (none)"),
     }
 
 
@@ -187,9 +192,9 @@ def _json_reply(client: LLMClient, system: str, user: str) -> dict:
         return {}
 
 
-def run_forecaster(client: LLMClient, company: dict, pack, method: str) -> dict:
+def run_forecaster(client: LLMClient, company: dict, pack, method: str, profile=None) -> dict:
     """One forecaster. Returns {metric label: {value, units, reasoning, confidence}}."""
-    ctx = _context(company, pack)
+    ctx = _context(company, pack, profile)
     system = METHODS[method] + "\n" + _SHARED.format(**ctx)
     data = _json_reply(client, system, f"Forecast {company['company']} {company['period']}.")
     out = {}
@@ -206,9 +211,9 @@ def run_forecaster(client: LLMClient, company: dict, pack, method: str) -> dict:
     return out
 
 
-def run_critic(client: LLMClient, company: dict, pack, proposals: dict) -> dict:
+def run_critic(client: LLMClient, company: dict, pack, proposals: dict, profile=None) -> dict:
     """Adversarial pass. Returns {metric label: verdict}. Sees numbers, not reasoning."""
-    ctx = _context(company, pack)
+    ctx = _context(company, pack, profile)
     stripped = {
         label: {m: round(v["value"], 4) for m, v in by_method.items()}
         for label, by_method in proposals.items()

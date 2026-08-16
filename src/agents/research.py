@@ -35,6 +35,10 @@ Metrics to gather evidence for:
 Industry profile: {profile_label}
 Known drivers for this industry:
 {drivers}
+Variables that move this metric - reason over these explicitly, not just the headline series:
+{predictors}
+Catalysts that push a number away from trend - hunt for these in the calls channel:
+{catalysts}
 Known failure modes for this industry:
 {risks}
 
@@ -185,6 +189,8 @@ def run_research(
         metric_lines=metric_lines,
         profile_label=profile.label,
         drivers="\n".join(f"  - {d}" for d in profile.forecast_drivers),
+        predictors="\n".join(f"  - {p}" for p in profile.predictors) or "  (none)",
+        catalysts="\n".join(f"  - {c}" for c in profile.catalysts) or "  (none)",
         risks="\n".join(f"  - {r}" for r in profile.risks),
         as_of=as_of_str,
     )

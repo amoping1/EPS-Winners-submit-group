@@ -27,6 +27,10 @@ class IndustryProfile:
     forecast_drivers: list[str]
     # Known ways a forecast goes wrong here.
     risks: list[str] = field(default_factory=list)
+    # Events that move the number away from trend - what to hunt for in the calls channel.
+    catalysts: list[str] = field(default_factory=list)
+    # Variables the forecaster should reason over explicitly, beyond the headline series.
+    predictors: list[str] = field(default_factory=list)
 
 
 RETAIL = IndustryProfile(
@@ -48,6 +52,8 @@ RETAIL = IndustryProfile(
         "seasonality - which quarter carries the year",
         "FX impact on comps",
     ],
+    catalysts=['housing turnover and mortgage rates', 'weather and seasonal timing', 'promotional cadence', 'acquisition close dates', 'tariff pass-through to pricing'],
+    predictors=['ticket vs transaction split', 'US vs total comp spread', 'FX contribution to comps', 'inorganic (acquired) revenue contribution', 'quarter share of full-year sales', 'adjusted operating margin guide vs realised'],
     risks=[
         "Acquisitions inflate net sales while comps exclude them - the two diverge.",
         "53-week fiscal years distort YoY growth.",
@@ -73,6 +79,8 @@ SEMICONDUCTORS = IndustryProfile(
         "utilization and its pull-through to gross margin",
         "inventory correction cycle stage",
     ],
+    catalysts=['inventory correction stage', 'data-centre and AI capex cycle', 'export restrictions', 'end-market inflection in automotive or industrial'],
+    predictors=['book-to-bill and bookings growth', 'end-market revenue mix', 'utilisation rate', 'guided midpoint vs prior-quarter beat/miss pattern', 'opex as percent of revenue', 'gross-to-operating margin gap'],
     risks=[
         "Companies guide operating margin but not always gross margin - derive it.",
         "Adjusted vs GAAP diverge sharply on acquisition amortisation.",
@@ -99,6 +107,8 @@ INDUSTRIAL = IndustryProfile(
         "price realization vs currency translation",
         "seasonality by fiscal quarter",
     ],
+    catalysts=['farm income and crop prices', 'dealer inventory destocking', 'interest rates on equipment finance', 'industry unit outlook revisions'],
+    predictors=['segment share of group sales', 'price realisation vs volume', 'currency translation impact', 'quarter share of full-year net income', 'segment operating margin trend', 'order backlog cover'],
     risks=[
         "Segment operating profit lives in the segment note, not the income statement.",
         "Fiscal quarters are offset from calendar quarters - verify period end dates.",
@@ -125,6 +135,8 @@ STAFFING = IndustryProfile(
         "cost savings programme run-rate",
         "published company-compiled consensus, where available",
     ],
+    catalysts=['white-collar hiring confidence', 'German average hours worked', 'country exits and disposals', 'cost-savings programme run-rate'],
+    predictors=['LFL vs actual net fee growth gap', 'perm vs temp mix', 'consultant headcount and productivity', 'net fees to operating profit conversion', 'disposal contribution to prior-year base', 'exceptional items excluded from the measure'],
     risks=[
         "Net fees is gross profit, NOT revenue. Revenue includes contractor pay-through.",
         "UK companies report EPS in PENCE. 45p is 45, not 0.45.",
