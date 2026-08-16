@@ -11,10 +11,12 @@ import time
 from concurrent.futures import ThreadPoolExecutor
 from datetime import date
 
+from .agents.aggregator import EvidenceAggregator, followup_brief
 from .agents.forecast import run_critic, run_forecaster
 from .agents.profiles import PROFILES, classify
 from .agents.research import run_research
 from .rails.reconcile import align_all, history_for, pick_anchor, reconcile_metric
+from .tools.consensus import scan_consensus
 from .tools.documents import DocumentTools
 
 METHODS = ("guidance", "statistical", "qualitative")
@@ -38,6 +40,40 @@ def run_company(client, corpus_root: str, company: dict, as_of, max_steps: int =
     profile, confidence, hits = classify_company(corpus_root, company, as_of)
     pack = run_research(client, corpus_root, company, profile, as_of,
                         max_steps=max_steps, verbose=False)
+
+    # Aggregate into four channels and check depth. Thin history means the statistical
+    # forecaster is guessing and the clamp cannot engage, so go back for exactly what is
+    # missing rather than accepting whatever the first pass happened to find.
+    # Deterministic consensus hunt. The accuracy score is our error over Wall Street's
+    # error, so a published consensus is the number we are measured against. Too valuable
+    # to leave to the agent noticing it.
+    consensus_tools = DocumentTools(corpus_root, company["corpusDir"], as_of=as_of)
+    scanned = scan_consensus(consensus_tools, labels)
+    for anchor in scanned:
+        anchor.setdefault("period", company["period"])
+        pack.anchors.append(anchor)
+
+    aggregator = EvidenceAggregator(labels)
+    aggregated = aggregator.aggregate(pack)
+    followups = 0
+    if aggregated["thin_metrics"]:
+        followups = 1
+        brief = followup_brief(aggregated["thin_metrics"], aggregated, company["period"])
+        extra = run_research(client, corpus_root, company, profile, as_of,
+                             max_steps=max(8, max_steps // 2), verbose=False,
+                             followup=brief)
+        seen = {(h.get("metric"), h.get("period")) for h in pack.history}
+        for row in extra.history:
+            if (row.get("metric"), row.get("period")) not in seen:
+                pack.history.append(row)
+        for anchor in extra.anchors:
+            pack.anchors.append(anchor)
+        pack.trace.extend(extra.trace)
+        aggregated = aggregator.aggregate(pack)
+
+    pack.cyclical = {
+        label: data["cyclical"] for label, data in aggregated["metrics"].items()
+    }
 
     proposals: dict[str, dict] = {}
     for method in METHODS:
@@ -70,6 +106,12 @@ def run_company(client, corpus_root: str, company: dict, as_of, max_steps: int =
         "elapsed_s": round(time.time() - started, 1),
         "tool_calls": len(pack.trace),
         "history_rows": len(pack.history),
+        "followup_passes": followups,
+        "channels": aggregated["coverage"],
+        "evidence_gaps": aggregated["gaps"],
+        "thin_metrics": aggregated["thin_metrics"],
+        "consensus_found": scanned,
+        "aggregated": aggregated["metrics"],
         "anchors": pack.anchors,
         "gaps": pack.gaps,
         "consensus": pack.consensus,

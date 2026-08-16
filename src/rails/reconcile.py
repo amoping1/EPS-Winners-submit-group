@@ -24,6 +24,9 @@ CONFIDENCE_WEIGHTS = {"high": 1.0, "medium": 0.7, "low": 0.4}
 # precision, so we lean hard against outliers.
 OUTLIER_RATIO = 0.35
 
+# Fallback half-width when guidance is given as a point with no stated range.
+GUIDANCE_BAND = 0.05
+
 
 def _relative_spread(value: float, ref: float) -> float:
     if ref == 0:
@@ -113,6 +116,25 @@ def reconcile_metric(
     total = sum(weights.values()) or 1.0
     combined = sum(values[m] * w for m, w in weights.items()) / total
 
+    # Hard bound to explicit company guidance. Management publishing "revenue $3.9bn +/-
+    # $100m" for the exact period we are forecasting is not one opinion among three - it is
+    # the tightest information anyone outside the company has. A model that lands outside
+    # that band has not found an edge, it has drifted.
+    guidance_bound = None
+    if anchor and anchor.get("kind") == "guidance" and isinstance(anchor.get("value"), (int, float)):
+        if isinstance(anchor.get("low"), (int, float)) and isinstance(anchor.get("high"), (int, float)):
+            low, high = sorted((float(anchor["low"]), float(anchor["high"])))
+        else:
+            # The agent did not return the guided range, only the point. Guidance bands on
+            # these companies run roughly +/-3% (ADI guided $3.9bn +/- $100m, ~2.6%), so
+            # bound generously rather than not at all - the failure we are preventing is a
+            # forecast drifting well outside a range management published.
+            point = float(anchor["value"])
+            low, high = point * (1 - GUIDANCE_BAND), point * (1 + GUIDANCE_BAND)
+        if not low <= combined <= high:
+            guidance_bound = {"from": round(combined, 4), "low": low, "high": high}
+            combined = min(max(combined, low), high)
+
     # Clamp against observed history. A forecast far outside everything ever reported is
     # more likely a unit error than an insight.
     clamp = None
@@ -133,6 +155,7 @@ def reconcile_metric(
         "outliers": outliers,
         "anchor": anchor_pull,
         "anchor_rejected": anchor_rejected,
+        "guidance_bound": guidance_bound,
         "clamped": clamp,
         "agreement": round(1.0 - min(
             _relative_spread(max(values.values()), ref),

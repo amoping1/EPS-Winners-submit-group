@@ -163,8 +163,13 @@ def run_research(
     as_of: date | str,
     max_steps: int = 20,
     verbose: bool = True,
+    followup: str | None = None,
 ) -> EvidencePack:
-    """Run the research loop for one company."""
+    """Run the research loop for one company.
+
+    `followup` names a specific hole to fill; used for the second pass when the
+    aggregator reports a metric has too little history to trend or clamp.
+    """
     tools = DocumentTools(corpus_root, company["corpusDir"], as_of=as_of)
     as_of_str = str(as_of)
 
@@ -186,7 +191,7 @@ def run_research(
 
     messages: list[dict] = [
         {"role": "system", "content": system},
-        {"role": "user", "content": (
+        {"role": "user", "content": followup or (
             f"Gather evidence for {company['company']} {company['period']}. "
             "Begin with list_index."
         )},

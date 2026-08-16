@@ -29,6 +29,9 @@ HISTORY (reported actuals):
 ANCHORS (guidance, consensus, most recent actuals):
 {anchors}
 
+CYCLICAL / SEASONAL (derived from the reported series, not quoted from any document):
+{cyclical}
+
 DRIVERS:
 {drivers}
 
@@ -135,6 +138,24 @@ def _fmt(rows: list[dict], keys: tuple[str, ...]) -> str:
     return "\n".join(out)
 
 
+def _fmt_cyclical(cyclical) -> str:
+    """Render the derived seasonal channel. Labelled as derived so it is never mistaken
+    for something a document said."""
+    if not cyclical:
+        return "  (not derived)"
+    out = []
+    for metric, shape in cyclical.items():
+        if not shape.get("available"):
+            out.append(f"  - {metric}: insufficient series ({shape.get('reason')})")
+            continue
+        out.append(
+            f"  - {metric}: {shape['points']} points, latest={shape['latest']}, "
+            f"recent growth={shape['recent_growth']:+.1%}, mean={shape['mean_growth']:+.1%}, "
+            f"{shape['direction']}, naive projection={shape['naive_projection']}"
+        )
+    return "\n".join(out) or "  (none)"
+
+
 def _context(company: dict, pack) -> dict:
     return {
         "company": company["company"],
@@ -147,6 +168,7 @@ def _context(company: dict, pack) -> dict:
         ),
         "history": _fmt(pack.history, ("metric", "period", "value", "units", "basis", "doc_id")),
         "anchors": _fmt(pack.anchors, ("metric", "kind", "value", "low", "high", "units", "note")),
+        "cyclical": _fmt_cyclical(getattr(pack, "cyclical", None)),
         "drivers": "\n".join(f"  - {d}" for d in pack.drivers) or "  (none)",
         "gaps": "\n".join(f"  - {g}" for g in pack.gaps) or "  (none)",
     }
