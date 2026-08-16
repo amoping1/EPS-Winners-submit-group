@@ -66,13 +66,13 @@ footer{margin-top:52px;padding-top:22px;border-top:1px solid var(--line);
     what makes our backtest honest, what makes this run reproducible after the event, and what lets
     the agent be reused for the next earnings season.</p>
 
-  <div class="chips"><span class="chip">As of <b>2026-08-16</b></span><span class="chip">Commit <b>bce90cebe1</b></span><span class="chip">Forecasts <b>12/12</b></span><span class="chip">Documents <b>1,139</b></span><span class="chip ok">Leakage guard <b>clean</b> over 32 replays</span></div>
+  <div class="chips"><span class="chip">As of <b>2026-08-16</b></span><span class="chip">Commit <b>fd0ac54c95</b></span><span class="chip">Forecasts <b>12/12</b></span><span class="chip">Documents <b>1,139</b></span><span class="chip ok">Leakage guard <b>clean</b> over 32 replays</span></div>
 
   <div class="card">
     <p>Build style: <strong>coding harness</strong></p>
     <p>Languages: <strong>Python 3.13, no third-party runtime dependencies beyond openpyxl</strong></p>
     <p>Final command: <code>python run.py --as-of 2026-08-16</code></p>
-    <p>Final commit: <code>bce90cebe15dcf745f1344689ad68d9f5b7d5a2c</code></p>
+    <p>Final commit: <code>fd0ac54c95c39ad756159c53062036caf79cd183</code></p>
   </div>
 
   <h2>The idea</h2>
@@ -225,10 +225,10 @@ python run.py                      # live mode, for future earnings events</code
 
   <h2>The twelve submitted forecasts</h2>
   <table><thead><tr><th>Co</th><th>Metric</th><th class="num">Forecast</th><th>Units</th>
-    <th>Confidence</th></tr></thead><tbody><tr><td><b>ADI</b></td><td>Revenue</td><td class='num'>3,917</td><td>USDm</td><td>medium</td></tr><tr><td><b>ADI</b></td><td>Adjusted diluted EPS</td><td class='num'>3.42</td><td>USD / share</td><td>medium</td></tr><tr><td><b>ADI</b></td><td>Adjusted gross margin</td><td class='num'>69.20</td><td>%</td><td>medium</td></tr><tr><td><b>DE</b></td><td>Worldwide net sales and revenues</td><td class='num'>10,920</td><td>USDm</td><td>medium</td></tr><tr><td><b>DE</b></td><td>Diluted EPS (GAAP)</td><td class='num'>4.69</td><td>USD / share</td><td>medium</td></tr><tr><td><b>DE</b></td><td>Production & Precision Ag operating profit</td><td class='num'>356.69</td><td>USDm</td><td>medium</td></tr><tr><td><b>HAS</b></td><td>Net fees</td><td class='num'>85.00</td><td>GBPm</td><td>medium</td></tr><tr><td><b>HAS</b></td><td>Pre-exceptional basic EPS</td><td class='num'>0.02</td><td>GBp</td><td>low</td></tr><tr><td><b>HAS</b></td><td>Pre-exceptional operating profit</td><td class='num'>85.00</td><td>GBPm</td><td>medium</td></tr><tr><td><b>HD</b></td><td>Net sales</td><td class='num'>47,457</td><td>USDm</td><td>medium</td></tr><tr><td><b>HD</b></td><td>Adjusted diluted EPS</td><td class='num'>4.38</td><td>USD / share</td><td>medium</td></tr><tr><td><b>HD</b></td><td>Comparable sales, total company</td><td class='num'>1.40</td><td>%</td><td>medium</td></tr></tbody></table>
+    <th>Confidence</th></tr></thead><tbody><tr><td><b>ADI</b></td><td>Revenue</td><td class='num'>3,917</td><td>USDm</td><td>medium</td></tr><tr><td><b>ADI</b></td><td>Adjusted diluted EPS</td><td class='num'>3.42</td><td>USD / share</td><td>medium</td></tr><tr><td><b>ADI</b></td><td>Adjusted gross margin</td><td class='num'>69.20</td><td>%</td><td>medium</td></tr><tr><td><b>DE</b></td><td>Worldwide net sales and revenues</td><td class='num'>10,920</td><td>USDm</td><td>medium</td></tr><tr><td><b>DE</b></td><td>Diluted EPS (GAAP)</td><td class='num'>4.69</td><td>USD / share</td><td>medium</td></tr><tr><td><b>DE</b></td><td>Production & Precision Ag operating profit</td><td class='num'>356.69</td><td>USDm</td><td>medium</td></tr><tr><td><b>HAS</b></td><td>Net fees</td><td class='num'>890.40</td><td>GBPm</td><td>medium</td></tr><tr><td><b>HAS</b></td><td>Pre-exceptional basic EPS</td><td class='num'>0.75</td><td>GBp</td><td>medium</td></tr><tr><td><b>HAS</b></td><td>Pre-exceptional operating profit</td><td class='num'>40.20</td><td>GBPm</td><td>medium</td></tr><tr><td><b>HD</b></td><td>Net sales</td><td class='num'>47,457</td><td>USDm</td><td>medium</td></tr><tr><td><b>HD</b></td><td>Adjusted diluted EPS</td><td class='num'>4.38</td><td>USD / share</td><td>medium</td></tr><tr><td><b>HD</b></td><td>Comparable sales, total company</td><td class='num'>0.60</td><td>%</td><td>medium</td></tr></tbody></table>
 
   <h2>Checks and tests</h2>
-  <p>63 timestamped events were written during this run to the clear-run log
+  <p>81 timestamped events were written during this run to the clear-run log
     submitted with the entry. The test suite covers cutoff boundaries, thread-local guard isolation,
     leak auditing, credential redaction, unit parsing and the workbook contract.</p>
   <ul>
@@ -358,13 +358,13 @@ python scripts/build_architecture.py  # regenerates this page</code></pre>
     a rerun needs no network access and produces the same figures.</p>
 
   <div class="card">
-    <p>Final commit: <code>bce90cebe15dcf745f1344689ad68d9f5b7d5a2c</code></p>
+    <p>Final commit: <code>fd0ac54c95c39ad756159c53062036caf79cd183</code></p>
     <p>Final command: <code>python run.py --as-of 2026-08-16</code></p>
     <p>Expected output: four completed workbooks in <code>submission/</code>.</p>
   </div>
 
-  <footer>Generated from run <code>run-2026-08-16-20260816T130001Z</code> at
-    2026-08-16T13:00:35.739Z.</footer>
+  <footer>Generated from run <code>run-2026-08-16-20260816T135516Z</code> at
+    2026-08-16T13:57:41.315Z.</footer>
 </main>
 </body>
 </html>

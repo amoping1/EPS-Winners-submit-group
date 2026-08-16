@@ -15,12 +15,14 @@ import argparse
 import sys
 from datetime import date, datetime
 
+from src.agent import improve_company, weak_metrics
 from src.backtest import run_backtest
 from src.baseline import estimate_company
 from src.config import PATHS, Company, Settings, find_company, load_companies, load_dotenv
 from src.context import RunContext, create_run_context
 from src.corpus import get_index
 from src.errors import ForecastSystemError
+from src.llm import LLM
 from src.validate import validate_company
 from src.workbook import verify_workbook, write_company_workbook
 
@@ -57,6 +59,11 @@ def build_parser() -> argparse.ArgumentParser:
         "--quiet",
         action="store_true",
         help="Do not echo log events to the console.",
+    )
+    parser.add_argument(
+        "--no-agent",
+        action="store_true",
+        help="Skip the reasoning agent and submit the deterministic forecasts.",
     )
     parser.add_argument(
         "--no-backtest",
@@ -100,6 +107,7 @@ def main(argv: list[str] | None = None) -> int:
             context,
             backtest=not args.no_backtest,
             backtest_events=args.backtest_events,
+            use_agent=not args.no_agent,
         )
     except ForecastSystemError as exc:
         context.logger.error(str(exc), error_type=type(exc).__name__)
@@ -119,13 +127,31 @@ def main(argv: list[str] | None = None) -> int:
     return 0
 
 
-def forecast_company(context: RunContext, company: Company) -> dict:
+def forecast_company(
+    context: RunContext,
+    company: Company,
+    *,
+    llm: LLM | None = None,
+    targets: set[tuple[str, str]] | None = None,
+) -> dict:
     """Produce and write one company's three forecasts."""
     logger = context.logger
     with logger.stage("company", company=company.slug) as state:
         index = get_index()
 
         estimates = estimate_company(index, company)
+
+        # The model is asked only about metrics the backtest says the
+        # deterministic path handles badly. Replacing a measured method with an
+        # unmeasured one is a bad trade, however capable the model.
+        proposals: list = []
+        if llm is not None and targets:
+            with logger.stage("agent", company=company.slug) as agent_state:
+                proposals = improve_company(
+                    llm, index, company, estimates, targets, logger=logger
+                )
+                agent_state["proposed"] = len(proposals)
+                agent_state["accepted"] = sum(1 for p in proposals if p.accepted)
         for estimate in estimates.values():
             logger.event(
                 "forecast.metric",
@@ -169,6 +195,7 @@ def forecast_company(context: RunContext, company: Company) -> dict:
                 "estimates": [estimate.as_dict() for estimate in estimates.values()],
                 "written_cells": [cell.as_dict() for cell in written],
                 "validation": validation.as_dict(),
+                "agent": [proposal.as_dict() for proposal in proposals],
             },
         )
         return {
@@ -183,6 +210,7 @@ def run_pipeline(
     *,
     backtest: bool = True,
     backtest_events: int | None = None,
+    use_agent: bool = True,
 ) -> list[dict]:
     """Run every company and produce the four workbooks.
 
@@ -197,9 +225,52 @@ def run_pipeline(
             index = get_index()
             state.update(index.stats())
 
+        # The backtest runs first because it decides where model budget is spent.
+        # It costs a few seconds and needs no credentials.
+        report: dict = {}
+        targets: set[tuple[str, str]] = set()
+        if backtest:
+            try:
+                with logger.stage("backtest") as state:
+                    events = backtest_events or context.settings.backtest_events
+                    report = run_backtest(
+                        index, context.companies, events_per_company=events, logger=logger
+                    )
+                    context.write_artifact("backtest.json", report)
+                    targets = weak_metrics(report)
+                    state["events"] = report["leakage"]["events_replayed"]
+                    state["leakage"] = report["leakage"]["status"]
+                    state["median_percentage_error"] = report["overall"][
+                        "median_percentage_error"
+                    ]
+                    state["weak_metrics"] = len(targets)
+            except Exception as exc:  # noqa: BLE001
+                logger.error(f"backtest failed: {exc}", error_type=type(exc).__name__)
+
+        llm: LLM | None = None
+        if use_agent:
+            candidate = LLM(context.settings, logger=logger)
+            if candidate.enabled and targets:
+                llm = candidate
+                logger.event(
+                    "agent.enabled",
+                    providers=candidate.providers(),
+                    model_fast=context.settings.model_fast,
+                    model_reasoning=context.settings.model_reasoning,
+                    targets=sorted(f"{c}/{m}" for c, m in targets),
+                )
+            else:
+                logger.info(
+                    "reasoning agent not used",
+                    credentials=candidate.enabled,
+                    weak_metrics=len(targets),
+                )
+
         for company in context.companies:
             try:
-                results.append(forecast_company(context, company))
+                results.append(
+                    forecast_company(context, company, llm=llm, targets=targets)
+                )
             except Exception as exc:  # noqa: BLE001 - one company must not sink the rest
                 logger.error(
                     f"{company.slug} failed: {exc}",
@@ -207,26 +278,9 @@ def run_pipeline(
                     error_type=type(exc).__name__,
                 )
 
-        if backtest:
-            # Runs after the workbooks exist, so a backtest failure can never
-            # cost us a submission.
-            try:
-                with logger.stage("backtest") as state:
-                    events = backtest_events or context.settings.backtest_events
-                    report = run_backtest(
-                        index,
-                        context.companies,
-                        events_per_company=events,
-                        logger=logger,
-                    )
-                    context.write_artifact("backtest.json", report)
-                    state["events"] = report["leakage"]["events_replayed"]
-                    state["leakage"] = report["leakage"]["status"]
-                    state["median_percentage_error"] = report["overall"][
-                        "median_percentage_error"
-                    ]
-            except Exception as exc:  # noqa: BLE001
-                logger.error(f"backtest failed: {exc}", error_type=type(exc).__name__)
+        if llm is not None:
+            context.write_artifact("llm-usage.json", llm.usage.as_dict())
+            logger.event("agent.usage", **llm.usage.as_dict())
 
     return results
 

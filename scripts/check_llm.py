@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+﻿#!/usr/bin/env python3
 """Check which models the configured key can use, and make one test call.
 
 Model names change often enough that hardcoding one is a way to discover during
@@ -14,6 +14,7 @@ Prints no credential values.
 from __future__ import annotations
 
 import os
+import re
 import sys
 from pathlib import Path
 
@@ -23,23 +24,54 @@ sys.path.insert(0, str(ROOT))
 from src.config import Settings, load_dotenv  # noqa: E402
 from src.llm import LLM, LLMError, available_openai_models  # noqa: E402
 
-# Families worth routing to, most capable first within each tier. Matched as
-# prefixes so a dated snapshot such as "gpt-5-2026-04-01" still matches.
-REASONING_PREFERENCE = ("o4", "o3", "gpt-5", "gpt-4.1", "gpt-4o")
-FAST_PREFERENCE = ("gpt-5-mini", "gpt-4.1-mini", "gpt-4o-mini", "o4-mini", "gpt-4.1", "gpt-4o")
+# Model names are ranked by parsed version rather than matched against a fixed
+# list, for the same reason the model id is not hardcoded: this key already
+# offers versions newer than any list written today would know about.
+VERSION_RE = re.compile(r"^gpt-(\d+)(?:\.(\d+))?")
 
-EXCLUDE = ("audio", "realtime", "transcribe", "tts", "image", "embedding", "moderation", "search")
+# Non-chat and specialist endpoints, plus codex variants, which are tuned for
+# code rather than for reading filings.
+EXCLUDE = (
+    "audio", "realtime", "transcribe", "tts", "image", "embedding", "moderation",
+    "search", "codex", "instruct", "babbage", "davinci", "sora", "whisper",
+)
+
+SMALL_SUFFIXES = ("-mini", "-nano")
 
 
-def pick(models: list[str], preferences: tuple[str, ...]) -> str | None:
-    usable = [m for m in models if not any(word in m for word in EXCLUDE)]
-    for prefix in preferences:
-        matches = sorted(m for m in usable if m.startswith(prefix))
-        if matches:
-            # Prefer the plain family name over a dated snapshot.
-            exact = [m for m in matches if m == prefix]
-            return exact[0] if exact else matches[0]
-    return None
+def version_of(model: str) -> tuple[int, int]:
+    match = VERSION_RE.match(model)
+    if not match:
+        return (0, 0)
+    return (int(match.group(1)), int(match.group(2) or 0))
+
+
+def is_small(model: str) -> bool:
+    return any(suffix in model for suffix in SMALL_SUFFIXES)
+
+
+def pick(models: list[str], *, small: bool) -> str | None:
+    """Newest usable model, preferring a small variant for the fast tier.
+
+    Dated snapshots are skipped in favour of the rolling family name: the
+    snapshot is what the family points at today anyway, and the family keeps
+    working when the snapshot is retired.
+    """
+    usable = [
+        model
+        for model in models
+        if not any(word in model for word in EXCLUDE)
+        and "-202" not in model
+        and "chat-latest" not in model
+        and version_of(model) != (0, 0)
+        and is_small(model) == small
+    ]
+    if not usable:
+        return None
+    # Newest version first; among equals prefer the plain name over "-pro",
+    # which is slower and dearer than this workload needs.
+    usable.sort(key=lambda m: (version_of(m), "-pro" not in m), reverse=True)
+    return usable[0]
 
 
 def main() -> int:
@@ -69,16 +101,15 @@ def main() -> int:
     chat_models = [m for m in models if not any(word in m for word in EXCLUDE)]
     print(f"  {len(models)} models visible, {len(chat_models)} usable for chat")
 
-    fast = pick(models, FAST_PREFERENCE)
-    reasoning = pick(models, REASONING_PREFERENCE)
+    fast = pick(models, small=True)
+    reasoning = pick(models, small=False)
     print("\nSuggested routing")
     print(f"  MODEL_FAST={fast or '<none found>'}")
     print(f"  MODEL_REASONING={reasoning or '<none found>'}")
-    print("\nAvailable chat-capable models:")
-    for model in chat_models[:40]:
-        print(f"  {model}")
-    if len(chat_models) > 40:
-        print(f"  ... and {len(chat_models) - 40} more")
+    families = sorted({m.split("-202")[0] for m in chat_models})
+    print("\nModel families the key can use:")
+    for name in families:
+        print(f"  {name}")
 
     configured = settings.model_fast or fast
     if not configured:
@@ -86,7 +117,9 @@ def main() -> int:
         return 1
 
     print(f"\nTest call against {configured} ...")
-    os.environ.setdefault("MODEL_FAST", configured)
+    # Assignment, not setdefault: .env ships with MODEL_FAST= empty, which is
+    # already present in the environment and would block a default.
+    os.environ["MODEL_FAST"] = configured
     client = LLM(Settings.from_env())
     try:
         result = client.complete(
@@ -114,3 +147,4 @@ def main() -> int:
 
 if __name__ == "__main__":
     raise SystemExit(main())
+
