@@ -413,6 +413,27 @@ class CorpusIndex:
         asof.get_guard().assert_allowed(document.published_at, source=document.rel_path)
         return document
 
+    def document_chunks(self, doc_id: str) -> list[Chunk]:
+        """Passages of one document, cutoff-checked before anything is returned.
+
+        Used when building a historical series, where the question is "what does
+        *this* filing say" rather than "which filing best matches a query".
+        """
+        document = self.get_document(doc_id)
+        return [self.chunks[chunk_id] for chunk_id in self._doc_chunks.get(document.doc_id, [])]
+
+    def document_hits(self, doc_id: str, *, score: float = 1.0) -> list[SearchHit]:
+        """Every passage of one document, shaped like search results.
+
+        Lets the extraction code treat "all of this filing" and "the best matches
+        for a query" identically.
+        """
+        document = self.get_document(doc_id)
+        return [
+            SearchHit(document=document, chunk=chunk, score=score, numbers=())
+            for chunk in self.document_chunks(doc_id)
+        ]
+
     def read_document(self, doc_id: str) -> str:
         """Full text of a document, cutoff-checked before the file is opened."""
         document = self.get_document(doc_id)
