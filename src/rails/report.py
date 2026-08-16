@@ -100,13 +100,15 @@ color:var(--accent)}
 .ch p{font-size:12.5px}
 .src{font-family:var(--mono);font-size:11px;color:var(--faint);word-break:break-all}
 .diagram{background:var(--surface);border:1px solid var(--rule);padding:16px;overflow-x:auto}
-.diagram svg{display:block;min-width:900px;width:100%;height:auto}
+.diagram svg{display:block;min-width:700px;width:100%;height:auto}
 .b-src{fill:var(--surface);stroke:var(--rule2);stroke-width:1.4}
 .b-drv{fill:var(--warn-bg);stroke:var(--warn);stroke-width:1.4}
 .b-ag{fill:var(--accent-soft);stroke:var(--accent);stroke-width:1.4}
 .b-fx{fill:var(--sunk);stroke:var(--rule2);stroke-width:1.4}
 .b-out{fill:var(--pass-bg);stroke:var(--pass);stroke-width:1.4}
 .t-l{fill:var(--ink);font-family:var(--sans);font-size:12.5px;font-weight:600}
+.t-h{fill:var(--ink);font-family:var(--sans);font-size:15px;font-weight:700}
+.t-k{fill:var(--faint);font-family:var(--mono);font-size:10px;letter-spacing:.08em;text-transform:uppercase}
 .t-s{fill:var(--faint);font-family:var(--mono);font-size:10px}
 .t-p{fill:var(--accent);font-family:var(--mono);font-size:10px}
 .ln{stroke:var(--rule2);stroke-width:1.4;fill:none}
@@ -292,8 +294,41 @@ def _company(run: dict) -> str:
     </div>"""
 
 
+def _backtest_section(path: str | Path = "logs/backtest.json") -> str:
+    """Render measured backtest results. Absent file -> an honest placeholder, not silence."""
+    file = Path(path)
+    if not file.exists():
+        return ('<p>No backtest on file. The harness is at '
+                '<code>backtest/run_backtest.py</code>.</p>')
+    cases = json.loads(file.read_text(encoding="utf-8"))
+    rows = ""
+    for case in cases:
+        leak = case.get("leak_check", {})
+        badge = ('<span class="pill pass">no leak</span>' if leak.get("clean")
+                 else '<span class="pill fail">LEAKED</span>')
+        for label, m in case["metrics"].items():
+            if m.get("actual") is None:
+                continue
+            err = m.get("pct_error")
+            level = "pass" if err is not None and err < 3 else ("warn" if err is not None and err < 15 else "fail")
+            rows += (
+                f'<tr><td class="tick">{_e(case["ticker"])}</td>'
+                f'<td class="unit">{_e(case["period"])}</td>'
+                f'<td>{_e(label)}</td>'
+                f'<td class="num">{_fmt(m["forecast"])}</td>'
+                f'<td class="num">{_fmt(m["actual"])}</td>'
+                f'<td><span class="pill {level}">{err:.2f}%</span></td>'
+                f'<td class="unit">as_of {_e(case["as_of"])} {badge}</td></tr>'
+            )
+    return f"""<div class="tablewrap"><table>
+      <thead><tr><th>Co</th><th>Period</th><th>Metric</th>
+        <th style="text-align:right">Forecast</th><th style="text-align:right">Actual</th>
+        <th>Error</th><th>Conditions</th></tr></thead>
+      <tbody>{rows}</tbody></table></div>"""
+
+
 def build(run_path: str | Path = "logs/full-run.json",
-          out_path: str | Path = "architecture/dashboard.html",
+          out_path: str | Path = "architecture/index.html",
           as_of: str = "", model: str = "") -> Path:
     runs = json.loads(Path(run_path).read_text(encoding="utf-8"))
     runs.sort(key=lambda r: r["ticker"])
@@ -335,7 +370,8 @@ def build(run_path: str | Path = "logs/full-run.json",
                 f'<td class="unit">{_e(why)}</td></tr>'
             )
 
-    return _write(out_path, f"""<title>Quarterly Forecast Desk</title>
+    backtest = _backtest_section()
+    return _write(out_path, f"""<title>EPS-Winners Forecast Desk</title>
 <style>{CSS}</style>
 <div class="wrap">
   <header class="masthead">
@@ -363,70 +399,55 @@ def build(run_path: str | Path = "logs/full-run.json",
        be argued round.</p>
 
     <div class="diagram">
-      <svg viewBox="0 0 980 250" role="img" aria-label="Four evidence channels feed a research agent loop, then three independent forecasters, an adversarial critic, deterministic rails, and the workbook.">
-        <defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7"
-          markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z"
+      <svg viewBox="0 0 900 200" role="img" aria-label="Evidence from four channels feeds a research agent, then three independent forecasters, then deterministic rails, then the workbook.">
+        <defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8"
+          markerHeight="8" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z"
           fill="currentColor"/></marker></defs>
         <g color="var(--rule2)">
-          <rect class="b-src" x="6" y="16" width="120" height="34" rx="2"/>
-          <text class="t-s" x="66" y="37" text-anchor="middle">Filings</text>
-          <rect class="b-src" x="6" y="60" width="120" height="34" rx="2"/>
-          <text class="t-s" x="66" y="81" text-anchor="middle">Call transcripts</text>
-          <rect class="b-src" x="6" y="104" width="120" height="34" rx="2"/>
-          <text class="t-s" x="66" y="125" text-anchor="middle">Yahoo consensus</text>
-          <rect class="b-drv" x="6" y="148" width="120" height="34" rx="2"/>
-          <text class="t-s" x="66" y="169" text-anchor="middle">Cyclical (derived)</text>
+          <rect class="b-src" x="8" y="46" width="150" height="98" rx="3"/>
+          <text class="t-h" x="83" y="72" text-anchor="middle">1 &middot; Evidence</text>
+          <text class="t-s" x="83" y="94" text-anchor="middle">filings &middot; calls</text>
+          <text class="t-s" x="83" y="110" text-anchor="middle">consensus</text>
+          <text class="t-s" x="83" y="126" text-anchor="middle">seasonality</text>
 
-          <rect class="b-ag" x="164" y="60" width="122" height="66" rx="2"/>
-          <text class="t-l" x="225" y="86" text-anchor="middle">Research agent</text>
-          <text class="t-s" x="225" y="103" text-anchor="middle">picks its own</text>
-          <text class="t-s" x="225" y="117" text-anchor="middle">next tool call</text>
+          <rect class="b-ag" x="198" y="46" width="150" height="98" rx="3"/>
+          <text class="t-h" x="273" y="72" text-anchor="middle">2 &middot; Research</text>
+          <text class="t-s" x="273" y="94" text-anchor="middle">agent picks its</text>
+          <text class="t-s" x="273" y="110" text-anchor="middle">own next move</text>
+          <text class="t-s" x="273" y="126" text-anchor="middle">date-locked</text>
 
-          <rect class="b-fx" x="322" y="60" width="112" height="66" rx="2"/>
-          <text class="t-l" x="378" y="86" text-anchor="middle">Aggregator</text>
-          <text class="t-s" x="378" y="103" text-anchor="middle">4 channels,</text>
-          <text class="t-s" x="378" y="117" text-anchor="middle">depth checked</text>
+          <rect class="b-ag" x="388" y="46" width="150" height="98" rx="3"/>
+          <text class="t-h" x="463" y="72" text-anchor="middle">3 &middot; Three views</text>
+          <text class="t-s" x="463" y="94" text-anchor="middle">guidance &middot; trend</text>
+          <text class="t-s" x="463" y="110" text-anchor="middle">judgement</text>
+          <text class="t-s" x="463" y="126" text-anchor="middle">+ a critic</text>
 
-          <rect class="b-ag" x="470" y="14" width="120" height="40" rx="2"/>
-          <text class="t-l" x="530" y="39" text-anchor="middle">Guidance</text>
-          <rect class="b-ag" x="470" y="72" width="120" height="40" rx="2"/>
-          <text class="t-l" x="530" y="97" text-anchor="middle">Statistical</text>
-          <rect class="b-ag" x="470" y="130" width="120" height="40" rx="2"/>
-          <text class="t-l" x="530" y="155" text-anchor="middle">Qualitative</text>
+          <rect class="b-fx" x="578" y="46" width="150" height="98" rx="3"/>
+          <text class="t-h" x="653" y="72" text-anchor="middle">4 &middot; Rails</text>
+          <text class="t-s" x="653" y="94" text-anchor="middle">units &middot; period</text>
+          <text class="t-s" x="653" y="110" text-anchor="middle">bounds &middot; clamps</text>
+          <text class="t-s" x="653" y="126" text-anchor="middle">never blank</text>
 
-          <rect class="b-ag" x="470" y="190" width="120" height="40" rx="2"/>
-          <text class="t-l" x="530" y="215" text-anchor="middle">Critic</text>
+          <rect class="b-out" x="768" y="46" width="124" height="98" rx="3"/>
+          <text class="t-h" x="830" y="72" text-anchor="middle">5 &middot; Workbook</text>
+          <text class="t-s" x="830" y="94" text-anchor="middle">3 cells</text>
+          <text class="t-s" x="830" y="110" text-anchor="middle">per company</text>
 
-          <rect class="b-fx" x="626" y="66" width="118" height="54" rx="2"/>
-          <text class="t-l" x="685" y="89" text-anchor="middle">Reconcile</text>
-          <text class="t-s" x="685" y="106" text-anchor="middle">weighted</text>
+          <path class="ln" marker-end="url(#a)" d="M158 95 H192"/>
+          <path class="ln" marker-end="url(#a)" d="M348 95 H382"/>
+          <path class="ln" marker-end="url(#a)" d="M538 95 H572"/>
+          <path class="ln" marker-end="url(#a)" d="M728 95 H762"/>
 
-          <rect class="b-fx" x="780" y="66" width="112" height="54" rx="2"/>
-          <text class="t-l" x="836" y="89" text-anchor="middle">Rails</text>
-          <text class="t-s" x="836" y="106" text-anchor="middle">units, bounds</text>
-
-          <rect class="b-out" x="780" y="10" width="112" height="40" rx="2"/>
-          <text class="t-l" x="836" y="35" text-anchor="middle">Workbook</text>
-
-          <path class="ln" marker-end="url(#a)" d="M126 33 C 146 33, 146 84, 158 84"/>
-          <path class="ln" marker-end="url(#a)" d="M126 77 C 146 77, 146 90, 158 90"/>
-          <path class="ln" marker-end="url(#a)" d="M126 121 C 146 121, 146 96, 158 96"/>
-          <path class="ln" marker-end="url(#a)" d="M126 165 C 146 165, 146 102, 158 102"/>
-          <path class="ln" marker-end="url(#a)" d="M286 93 H316"/>
-          <path class="ln" marker-end="url(#a)" d="M434 90 C 452 90, 452 34, 464 34"/>
-          <path class="ln" marker-end="url(#a)" d="M434 93 H464"/>
-          <path class="ln" marker-end="url(#a)" d="M434 96 C 452 96, 452 150, 464 150"/>
-          <path class="ln" marker-end="url(#a)" d="M590 34 C 608 34, 608 86, 620 86"/>
-          <path class="ln" marker-end="url(#a)" d="M590 92 H620"/>
-          <path class="ln" marker-end="url(#a)" d="M590 150 C 608 150, 608 100, 620 100"/>
-          <path class="ln" marker-end="url(#a)" d="M744 93 H774"/>
-          <path class="ln" marker-end="url(#a)" d="M836 66 V54"/>
           <g color="var(--accent)">
-            <path class="lp" marker-end="url(#a)" d="M196 60 V40 H150 V78"/>
-            <text class="t-p" x="204" y="52">re-query</text>
-            <path class="lp" marker-end="url(#a)" d="M530 190 V174"/>
-            <path class="lp" marker-end="url(#a)" d="M626 210 H600"/>
+            <path class="lp" marker-end="url(#a)" d="M273 46 V26 H230 V40"/>
+            <text class="t-p" x="286" y="34">re-query if evidence is thin</text>
+            <path class="lp" marker-end="url(#a)" d="M463 144 V166 H420 V152"/>
+            <text class="t-p" x="476" y="170">critic sends it back</text>
           </g>
+
+          <text class="t-k" x="273" y="192" text-anchor="middle">agents decide</text>
+          <text class="t-k" x="463" y="192" text-anchor="middle">agents decide</text>
+          <text class="t-k" x="653" y="192" text-anchor="middle">code decides</text>
         </g>
       </svg>
     </div>
@@ -467,6 +488,80 @@ def build(run_path: str | Path = "logs/full-run.json",
   <section>
     <h2>Company reports</h2>
     {body}
+  </section>
+
+
+  <section>
+    <h2>Does the method work? Measured, not asserted</h2>
+    <p>The harness forecasts a period that has already been reported, using only evidence
+       published before the results came out, then scores against the actual. Retrieval
+       hard-excludes anything after the cutoff, so the system cannot read the answer.</p>
+    {backtest}
+    <p><b>The first version of this test was cheating and we caught it.</b> Deere&rsquo;s Q3
+       filing is published <em>on</em> 2025-08-14; our filter excluded only documents
+       published <em>after</em> the cutoff, so the results filing was readable and segment
+       profit came back as exactly 580.0 &mdash; the true figure. The cutoff moved to
+       2025-08-13 and same-day publication now counts as a leak. The numbers above are from
+       after that fix.</p>
+  </section>
+
+  <section>
+    <h2>Where this is weakest</h2>
+    <div class="cols">
+      <div class="panel"><h3>Known failures</h3><ul>
+        <li><b>Segment operating profit</b> is the weakest metric &mdash; 77% error in
+            backtest. It lives in segment notes with the thinnest history and no consensus
+            coverage.</li>
+        <li><b>The critic has no teeth.</b> It objects and nothing acts on the objection;
+            the refute-and-re-run loop was designed and never built.</li>
+        <li><b>Hays basic EPS</b> rests on two historical points, so no trend can be fitted
+            and the clamp cannot engage.</li>
+      </ul></div>
+      <div class="panel"><h3>Tried and abandoned</h3><ul>
+        <li>A deterministic <b>guidance scanner</b> to match the consensus scanner. Filings
+            spell quarters out, guidance spans sentences, magnitudes mix billions and
+            millions. It returned nothing twice and was cut rather than shipped
+            half-working.</li>
+        <li>A flat median across the three forecasters &mdash; discarded once it became
+            clear guidance quality varies enormously between these four companies.</li>
+      </ul></div>
+      <div class="panel"><h3>Honest limits</h3><ul>
+        <li>Consensus-anchoring targets a score near 1.0. Beating Wall Street needs a
+            reason to deviate; we have one only for Hays, where management guided to the
+            top of a published range.</li>
+        <li>Industry profiles are agnostic <em>by construction</em> and demonstrated on
+            four sectors. Never run on a fifth; the fallback profile has no coverage.</li>
+        <li>Three of four fiscal period ends are derived arithmetically, not read from a
+            document stating them.</li>
+        <li>Runs vary. Rails hold a number steady where they engage; where no anchor
+            surfaces, it wanders.</li>
+      </ul></div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Reproducing this run</h2>
+    <div class="cols">
+      <div class="panel"><h3>Final command</h3><ul>
+        <li><code>python3 run.py</code></li>
+        <li>Writes four .xlsx to <code>submission/</code></li>
+        <li>Then <code>npm run check:submission</code></li>
+        <li>Human input during the run: <b>none</b></li>
+      </ul></div>
+      <div class="panel"><h3>Setup</h3><ul>
+        <li><code>OPENAI_API_KEY</code> in <code>.env</code> (gitignored)</li>
+        <li><code>pip install openpyxl httpx yfinance</code></li>
+        <li><code>npm install</code> for the organizer validator</li>
+        <li>Corpus path set in <code>config/settings.json</code></li>
+      </ul></div>
+      <div class="panel"><h3>Where things live</h3><ul>
+        <li><code>src/tools/</code> &mdash; retrieval, tables, consensus, market</li>
+        <li><code>src/agents/</code> &mdash; research loop, forecasters, critic</li>
+        <li><code>src/rails/</code> &mdash; reconcile, workbook, this report</li>
+        <li><code>backtest/</code> &mdash; the harness above</li>
+        <li><code>logs/clear-run.log</code> &mdash; timestamped run record</li>
+      </ul></div>
+    </div>
   </section>
 
   <footer><span>generated &mdash; not hand-maintained</span>
