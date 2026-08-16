@@ -11,8 +11,46 @@ from __future__ import annotations
 
 import json
 import os
+import random
+import time
 from dataclasses import dataclass, field
 from typing import Protocol
+
+# Rate limits are the single most likely cause of a failed final run: a fresh API account
+# has low limits, and four companies running concurrently will hit them. Retry rather than
+# die, and honour Retry-After when the server sends it.
+RETRY_STATUS = {408, 409, 429, 500, 502, 503, 504, 529}
+MAX_RETRIES = 6
+
+
+def _request_with_retry(post, describe: str = "request"):
+    """Call `post()`, retrying transient failures with exponential backoff and jitter."""
+    import httpx
+
+    last = None
+    for attempt in range(MAX_RETRIES):
+        try:
+            response = post()
+            if response.status_code in RETRY_STATUS:
+                retry_after = response.headers.get("retry-after")
+                delay = (
+                    float(retry_after)
+                    if retry_after and retry_after.replace(".", "", 1).isdigit()
+                    else min(2**attempt, 30) + random.random()
+                )
+                last = f"HTTP {response.status_code}"
+                if attempt < MAX_RETRIES - 1:
+                    time.sleep(delay)
+                    continue
+            response.raise_for_status()
+            return response
+        except httpx.TransportError as exc:
+            last = f"{type(exc).__name__}: {exc}"
+            if attempt < MAX_RETRIES - 1:
+                time.sleep(min(2**attempt, 30) + random.random())
+                continue
+            raise
+    raise RuntimeError(f"{describe} failed after {MAX_RETRIES} attempts: {last}")
 
 
 @dataclass
@@ -51,19 +89,19 @@ class OpenAIClient:
     def complete(self, messages: list[dict], tools: list[dict]) -> Completion:
         import httpx
 
-        response = httpx.post(
-            f"{self.base_url}/chat/completions",
-            headers={"Authorization": f"Bearer {self.api_key}"},
-            json={
-                "model": self.model,
-                "messages": messages,
-                "tools": tools,
-                "tool_choice": "auto",
-                "temperature": 0,
-            },
-            timeout=120,
+        payload = {"model": self.model, "messages": messages, "temperature": 0}
+        if tools:
+            payload["tools"] = tools
+            payload["tool_choice"] = "auto"
+        response = _request_with_retry(
+            lambda: httpx.post(
+                f"{self.base_url}/chat/completions",
+                headers={"Authorization": f"Bearer {self.api_key}"},
+                json=payload,
+                timeout=180,
+            ),
+            describe=f"openai {self.model}",
         )
-        response.raise_for_status()
         message = response.json()["choices"][0]["message"]
         calls = [
             ToolCall(
@@ -91,7 +129,7 @@ class AnthropicClient:
 
         system = "\n".join(m["content"] for m in messages if m["role"] == "system")
         converted = [m for m in messages if m["role"] != "system"]
-        response = httpx.post(
+        response = _request_with_retry(lambda: httpx.post(
             "https://api.anthropic.com/v1/messages",
             headers={
                 "x-api-key": self.api_key,
@@ -112,9 +150,8 @@ class AnthropicClient:
                     for t in tools
                 ],
             },
-            timeout=120,
-        )
-        response.raise_for_status()
+            timeout=180,
+        ), describe=f"anthropic {self.model}")
         body = response.json()
         text, calls = None, []
         for block in body.get("content", []):

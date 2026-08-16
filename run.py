@@ -11,6 +11,7 @@ rest of this file does not change.
 from __future__ import annotations
 
 import json
+import os
 import sys
 from datetime import datetime, timezone
 from pathlib import Path
@@ -53,6 +54,44 @@ def placeholder_forecasts() -> dict[str, dict[str, float]]:
     return PLACEHOLDERS
 
 
+def agent_forecasts(log) -> dict:
+    """Run the real agent pipeline. Falls back to placeholders only if it produces nothing."""
+    from src.agents.llm import build_client
+    from src.pipeline import run_all
+
+    client = build_client(os.environ.get("AGENT_MODEL", "openai:gpt-4.1"))
+    log(f"model: {client.name}")
+    companies = json.loads(Path("config/metrics.json").read_text(encoding="utf-8"))["companies"]
+    runs = run_all(client, SETTINGS["corpus"]["root"], companies,
+                   as_of=SETTINGS["run"]["asOf"], max_steps=20, workers=2)
+
+    Path(SETTINGS["output"]["logDir"]).mkdir(parents=True, exist_ok=True)
+    Path(SETTINGS["output"]["logDir"], "full-run.json").write_text(
+        json.dumps(runs, indent=2, default=str), encoding="utf-8")
+
+    forecasts: dict[str, dict[str, float]] = {}
+    for run in runs:
+        log(f"{run['ticker']:8} profile={run['profile']:15} "
+            f"{run['elapsed_s']}s {run['tool_calls']} tool calls")
+        values = {}
+        for label, res in run["results"].items():
+            value = res.get("value")
+            if value is None:
+                value = PLACEHOLDERS.get(run["ticker"], {}).get(label)
+                log(f"  FALLBACK {label}: agent produced nothing, using anchor {value}")
+            values[label] = value
+            notes = []
+            if res.get("anchor_rejected"): notes.append("anchor rejected")
+            if res.get("clamped"): notes.append("clamped")
+            if res.get("outliers"): notes.append(f"{len(res['outliers'])} outlier(s)")
+            verdict = res.get("verdict") or {}
+            if verdict.get("plausible") is False: notes.append("critic flagged")
+            log(f"  {label[:44]:44} {value!s:>12} {res['units']}"
+                + (f"   [{', '.join(notes)}]" if notes else ""))
+        forecasts[run["ticker"]] = values
+    return forecasts
+
+
 def main() -> int:
     started = datetime.now(timezone.utc)
     log_dir = Path(SETTINGS["output"]["logDir"])
@@ -61,7 +100,10 @@ def main() -> int:
     lines = [f"run start (utc): {started.isoformat()}", f"as_of: {SETTINGS['run']['asOf']}"]
     print("\n".join(lines))
 
-    forecasts = placeholder_forecasts()
+    use_agent = "--placeholder" not in sys.argv
+    def log(msg):
+        print(msg); lines.append(msg)
+    forecasts = agent_forecasts(log) if use_agent else placeholder_forecasts()
 
     written = write_all(forecasts, out_dir=SETTINGS["output"]["submissionDir"])
     for path in written:

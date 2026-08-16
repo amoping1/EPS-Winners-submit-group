@@ -31,10 +31,38 @@ def _relative_spread(value: float, ref: float) -> float:
     return abs(value - ref) / abs(ref)
 
 
+def _period_matches(anchor_period, target_period) -> bool:
+    """True only when an anchor describes the SAME period we are forecasting.
+
+    Full-year guidance is not a quarterly anchor. Deere guides FY2026 net income, which
+    implies ~$16.67 of annual EPS; applying that to a Q3 forecast dragged a sensible $5.25
+    up to $10.21. Periods must match before an anchor is allowed to pull.
+    """
+    import re
+
+    if not anchor_period or not target_period:
+        return False
+
+    def parse(value: str):
+        text = str(value).upper()
+        year = re.search(r"(20\d{2})", text)
+        quarter = re.search(r"Q([1-4])", text)
+        return (year.group(1) if year else None, quarter.group(1) if quarter else None)
+
+    a_year, a_q = parse(anchor_period)
+    t_year, t_q = parse(target_period)
+
+    if a_year != t_year:
+        return False
+    # A quarterly target needs the same quarter; an annual target needs no quarter at all.
+    return a_q == t_q
+
+
 def reconcile_metric(
     proposals: dict[str, dict],
     anchor: dict | None = None,
     history: list[float] | None = None,
+    target_period: str | None = None,
 ) -> dict:
     """Combine method proposals for one metric into a single number.
 
@@ -62,6 +90,16 @@ def reconcile_metric(
     # A high-confidence company guidance anchor outranks any model. Management sees the
     # quarter from the inside; our trend fit does not.
     anchor_pull = None
+    anchor_rejected = None
+    if anchor and anchor.get("kind") in ("guidance", "consensus"):
+        if target_period and not _period_matches(anchor.get("period"), target_period):
+            anchor_rejected = {
+                "reason": "period mismatch",
+                "anchor_period": anchor.get("period"),
+                "target_period": target_period,
+                "value": anchor.get("value"),
+            }
+            anchor = None
     if anchor and anchor.get("kind") in ("guidance", "consensus"):
         if isinstance(anchor.get("value"), (int, float)):
             anchor_weight = 1.2 if anchor["kind"] == "guidance" else 0.9
@@ -94,6 +132,7 @@ def reconcile_metric(
         "median_of_methods": round(ref, 4),
         "outliers": outliers,
         "anchor": anchor_pull,
+        "anchor_rejected": anchor_rejected,
         "clamped": clamp,
         "agreement": round(1.0 - min(
             _relative_spread(max(values.values()), ref),
