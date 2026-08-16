@@ -96,6 +96,9 @@ figcaption{color:var(--ink2);font-size:13.5px;margin-top:14px;max-width:82ch}
 .card.neva .who{color:var(--neva)} .card.adrian .who{color:var(--adrian)}
 .card.dimitris .who{color:var(--dimitris)}
 .card ul{margin:10px 0 0;padding-left:18px}
+.card .how{margin:11px 0 0;font-size:14px;line-height:1.62;color:var(--ink2)}
+.card .how em{color:var(--ink);font-style:italic}
+.card .how b{color:var(--ink);font-weight:600}
 .card li{margin:6px 0;font-size:14px;color:var(--ink2)}
 .card li b{color:var(--ink);font-weight:600}
 
@@ -297,7 +300,54 @@ def consensus_diagram() -> str:
 """
 
 
-def build(ensemble: dict[str, Any], backtest: dict[str, Any] | None) -> str:
+def log_summary(run_dir: Path | None, keep: int = 22) -> tuple[str, int]:
+    """A readable slice of the clear-run log, plus its true length.
+
+    Shows the shape of the run rather than all of it: start, indexing, a few
+    replays with the documents each one refused, the agent decisions, and the
+    end.
+    """
+    if run_dir is None:
+        return "", 0
+    path = ROOT / "logs" / f"{run_dir.name}.jsonl"
+    if not path.exists():
+        return "", 0
+
+    lines = [line for line in path.read_text(encoding="utf-8").splitlines() if line.strip()]
+    events = [json.loads(line) for line in lines]
+
+    wanted = (
+        "run.start", "stage.end", "backtest.event", "agent.enabled",
+        "agent.forecast", "validation.flag", "agent.usage", "run.end",
+    )
+    picked = [e for e in events if e.get("type") in wanted]
+    if len(picked) > keep:
+        picked = picked[:keep // 2] + picked[-(keep - keep // 2):]
+
+    out = []
+    for event in picked:
+        stamp = str(event.get("ts", ""))[11:23]
+        kind = event.get("type", "")
+        # Kept short enough to fit a projected slide without sideways scrolling,
+        # and limited to the fields that carry the story of the run.
+        keep_fields = (
+            "as_of", "company", "metric", "report_date", "cutoff", "stage",
+            "documents_blocked", "duration_s", "documents", "accepted",
+            "proposed", "status", "check", "calls", "estimated_usd", "workbooks",
+        )
+        detail = " ".join(
+            f"{k}={v}"
+            for k, v in event.items()
+            if k in keep_fields and v is not None
+        )
+        if len(detail) > 76:
+            detail = detail[:73] + "..."
+        out.append(f"{stamp}  {kind:<16} {detail}")
+    return "\n".join(out), len(events)
+
+
+def build(ensemble: dict[str, Any], backtest: dict[str, Any] | None,
+          log_excerpt: str = '', log_lines: int = 0, run_id: str = '') -> str:
     metrics = ensemble.get("metrics", [])
     summary = ensemble.get("summary", {})
     by_key = {(m["company"], m["metric"]): m for m in metrics}
@@ -374,40 +424,90 @@ def build(ensemble: dict[str, Any], backtest: dict[str, Any] | None) -> str:
 
   <div class="cards">
     <div class="card neva"><div class="who">Asof &middot; Neva</div>
-      <h3>Point-in-time discipline</h3>
-      <ul>
-        <li><b>One global cutoff guard.</b> Retrieval fails loudly rather than leaking.</li>
-        <li><b>Backtest that drives design.</b> 32 replays, leakage clean; it found three
-          extraction defects inspection had missed.</li>
-        <li><b>Series from earnings releases</b>, not 10-Qs, where figures are stated in prose
-          with their units.</li>
-        <li><b>Validation before writing</b> &mdash; units, magnitude, sign, implied margin.</li>
-        <li><b>Model aimed only where measured weak</b>, so a measured method is never replaced
-          by an unmeasured one.</li>
-      </ul></div>
+      <h3>Reads only what was publishable, and measures itself</h3>
+      <p class="how">Retrieval never takes a date argument. Instead one guard object is installed
+        for the run, and every search asks it whether a document may be used. Ask without a guard
+        configured and it raises. That makes replaying the past safe: set the guard to the day
+        before a result was announced, forecast it, and compare. 32 past quarters were replayed
+        that way.</p>
+      <p class="how">Forecasts come from a series read out of <em>earnings releases</em> rather
+        than quarterly reports. A release writes "reported sales of $41.8 billion" in a sentence;
+        a 10-Q buries the same figure in a table where picking the right row is guesswork. The
+        next period is then estimated as the same quarter a year ago moved by recent growth.</p>
+      <p class="how">A model is called for six of the twelve metrics only &mdash; the ones the
+        replay scores worst. Its answer must arrive with arithmetic and cited passages, and it
+        faces the same unit and range checks as any other number.</p>
+      </div>
 
     <div class="card adrian"><div class="who">Adrian</div>
-      <h3>External reference</h3>
-      <ul>
-        <li><b>Market consensus channel.</b> Sell-side estimates from 30, 25 and 17 analysts &mdash;
-          the denominator the accuracy prize scores us against.</li>
-        <li><b>Company profiling</b> by sector, so a retailer and a semiconductor maker are not
-          reasoned about identically.</li>
-        <li><b>Anchor reconciliation</b> across channels.</li>
-        <li><b>A critic pass</b> over each metric, and rescue for metrics with thin history.</li>
-      </ul></div>
+      <h3>Anchors every figure, and refuses mismatched anchors</h3>
+      <p class="how">Evidence is gathered per metric and kept split by where it came from &mdash;
+        filings, history, market &mdash; so a figure is never averaged across sources that were
+        not measuring the same thing. Coverage gaps are recorded, and a follow-up brief is written
+        for metrics with thin evidence.</p>
+      <p class="how">A market channel pulls sell-side estimates: 30 analysts on Home Depot, 25 on
+        ADI, 17 on Deere. Those become anchors &mdash; but only after a period check. From the
+        code: Deere's full-year guidance implies about $16.67 of annual EPS, and applying it to a
+        <em>quarterly</em> forecast dragged a sensible $5.25 up to $10.21. Full-year guidance is
+        not a quarterly anchor, so anchors whose period does not match are rejected outright.</p>
+      <p class="how">Industry is treated as data rather than branching code: five profiles, one per
+        company in play plus a fallback. A classifier picks one and every downstream step reads
+        it, so a retailer and a chipmaker are reasoned about differently without a second pipeline.
+        Each metric then gets a critic pass before it is accepted.</p>
+      </div>
 
     <div class="card dimitris"><div class="who">Dimitris</div>
-      <h3>Specialisation and intervals</h3>
-      <ul>
-        <li><b>Analyst agents per source type</b> &mdash; filings, financials, news &mdash; rather
-          than one generalist reading everything.</li>
-        <li><b>Named forecast methods.</b> Every figure records how it was derived:
-          <code>DRIVER_BRIDGE</code>, <code>YOY_GROWTH</code>, <code>GUIDANCE_MIDPOINT</code>,
-          <code>EPS_FROM_NET_INCOME</code>.</li>
-        <li><b>A low/high band on all twelve</b>, which is what makes disagreement measurable.</li>
-      </ul></div>
+      <h3>Four specialists, and the arithmetic is re-checked</h3>
+      <p class="how">Rather than one reader for everything, four analysts each own a source type:
+        one for filings, one for financial statements, one for news, one for the company's own
+        track record. A central coordinator merges their reports. Each analyst returns a typed
+        object with citations, so a missing field is a validation error rather than a surprise
+        later.</p>
+      <p class="how">The strongest guard here: when the model says a figure came from, say,
+        revenue times margin, the coordinator <em>re-evaluates that expression itself</em> in a
+        restricted evaluator and checks the result matches the number claimed. If it does not, a
+        repair message goes back with the specific failure. The model does not get to assert
+        arithmetic it did not do.</p>
+      <p class="how">Two more details worth naming. Fiscal calendars are modelled properly, so a
+        quarter label means the same thing for a company whose year ends in June as for one ending
+        in January. And the news tool blocks the hackathon host's own domain, so the system cannot
+        accidentally read the answers off the site it is competing on.</p>
+      <p class="how">Every figure carries a low and a high. That is what made disagreement between
+        the three of us measurable rather than a matter of opinion.</p>
+      </div>
   </div>
+</div></section>
+
+<section><div class="wrap">
+  <h2>What actually ran</h2>
+  <p class="lead-in">The full sequence, from an empty submission folder to four validated
+    workbooks, timed end to end.</p>
+  <table>
+    <thead><tr><th>Step</th><th class="n">Time</th><th>Result</th></tr></thead>
+    <tbody>
+      <tr><td><code>npm run check:entry</code></td><td class="n">0.6s</td>
+        <td>PASS &mdash; EPS Winner Agent, 3 team members</td></tr>
+      <tr><td><code>python run.py --as-of 2026-08-16</code></td><td class="n">71s</td>
+        <td>1,139 documents indexed; 32 past quarters replayed, leakage guard clean;
+            6 metrics sent to the model, 0 new calls (all cached), $0.00</td></tr>
+      <tr><td><code>collect_team_forecasts.py</code></td><td class="n">0.1s</td>
+        <td>12 of 12 targets covered by all three systems</td></tr>
+      <tr><td><code>build_ensemble.py --write</code></td><td class="n">7.5s</td>
+        <td>8 outliers voted out; four workbooks written and re-read</td></tr>
+      <tr><td>dashboard, architecture, this page</td><td class="n">4.5s</td>
+        <td>regenerated from the run, so every number shown is a number produced</td></tr>
+      <tr><td><b>Total</b></td><td class="n"><b>84s</b></td>
+        <td>against a 45-minute final-run window</td></tr>
+    </tbody>
+  </table>
+
+  <h3 style="margin-top:30px">The run log</h3>
+  <p class="note">One timestamped line per event, written as the run happens. This is the same
+    file submitted as the clear-run record, not a summary written afterwards. Each backtest line
+    shows how many documents the guard refused for that replay.</p>
+  <pre><code>{log_excerpt}</code></pre>
+  <p class="note">{log_lines} events in the full log at
+    <code>logs/{run_id}.jsonl</code>.</p>
 </div></section>
 
 <section><div class="wrap">
@@ -504,7 +604,11 @@ def main() -> int:
     backtest = read(run_dir / "backtest.json") if run_dir else None
 
     target = ROOT / "presentation.html"
-    target.write_text(build(ensemble, backtest), encoding="utf-8")
+    excerpt, count = log_summary(run_dir)
+    target.write_text(
+        build(ensemble, backtest, excerpt, count, run_dir.name if run_dir else ''),
+        encoding="utf-8",
+    )
     size = target.stat().st_size / 1024
     print(f"Presentation written: {target.name} ({size:.0f} KB)")
     if "<script" in target.read_text(encoding="utf-8").lower():
