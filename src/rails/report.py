@@ -140,11 +140,23 @@ def confidence_for(res: dict) -> tuple[str, str]:
     agree = res.get("agreement")
     reasons = []
 
+    anchor = res.get("anchor") or {}
+    a_low, a_high = anchor.get("low"), anchor.get("high")
+    value = res.get("value")
+    inside_published = (
+        isinstance(a_low, (int, float)) and isinstance(a_high, (int, float))
+        and isinstance(value, (int, float)) and a_low <= value <= a_high
+    )
+
     if verdict.get("plausible") is False:
-        if res.get("critic_bound"):
-            return "medium", "critic objected and corrected the value"
-        return "low", "critic objected, not resolved"
-    if res.get("guidance_bound") or (res.get("anchor") or {}).get("kind") in ("guidance", "consensus"):
+        if not res.get("critic_bound"):
+            return "low", "critic objected, not resolved"
+        # A correction that lands the value inside a range someone published is a move
+        # onto evidence, not away from it. Only corrections into open space stay medium.
+        if inside_published:
+            return "high", "corrected onto published guidance or consensus"
+        return "medium", "critic corrected the value; no published range to land on"
+    if res.get("guidance_bound") or anchor.get("kind") in ("guidance", "consensus"):
         reasons.append("published anchor")
         level = "high"
     elif isinstance(agree, (int, float)) and agree >= 0.9:
@@ -158,11 +170,13 @@ def confidence_for(res: dict) -> tuple[str, str]:
         level = "low"
 
     if res.get("outliers"):
-        reasons.append("outlier cut")
-        level = "medium" if level == "high" else level
+        reasons.append("outlier down-weighted")
+        if not inside_published:
+            level = "medium" if level == "high" else level
     if res.get("clamped"):
-        reasons.append("clamped")
-        level = "medium" if level == "high" else level
+        reasons.append("clamped to history")
+        if not inside_published:
+            level = "medium" if level == "high" else level
     if not res.get("method_values"):
         return "low", "no method proposals"
     return level, ", ".join(reasons)
@@ -390,8 +404,17 @@ def build(run_path: str | Path = "logs/full-run.json",
             )
 
     backtest = _backtest_section()
-    return _write(out_path, f"""<title>EPS-Winners Forecast Desk</title>
+    # A full document, not a fragment: the organizer validator requires a <html> element
+    # ("must be a complete HTML document") and the judging preview renders the raw file.
+    return _write(out_path, f"""<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>EPS-Winners Forecast Desk</title>
 <style>{CSS}</style>
+</head>
+<body>
 <div class="wrap">
   <header class="masthead">
     <div class="eyebrow">EPS-Winners &middot; generated from the last run</div>
@@ -585,7 +608,9 @@ def build(run_path: str | Path = "logs/full-run.json",
 
   <footer><span>generated &mdash; not hand-maintained</span>
     <span>uploads are manual</span><span>no secrets in this page</span></footer>
-</div>""")
+</div>
+</body>
+</html>""")
 
 
 def _write(out_path, content: str) -> Path:

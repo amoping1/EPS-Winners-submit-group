@@ -221,6 +221,25 @@ def is_quarterly(period) -> bool:
     return bool(re.search(r"Q[1-4]", str(period).upper()))
 
 
+def quarter_of(period):
+    """Which quarter a label denotes, or None for an annual period."""
+    import re
+
+    match = re.search(r"Q([1-4])", str(period).upper())
+    return match.group(1) if match else None
+
+
+def same_period_shape(candidate, target) -> bool:
+    """Same KIND of period: same quarter number, or both annual.
+
+    Filtering only on quarter-vs-annual is not enough for a seasonal business. Deere's Q2
+    is its spring peak and Q3 is materially smaller; trending Q3 against Q2 actuals put
+    worldwide net sales at 12,055 against a consensus of 10,732. The comparable period for
+    a Q3 forecast is prior Q3s, nothing else.
+    """
+    return quarter_of(candidate) == quarter_of(target)
+
+
 def history_for(history: list[dict], metric_label: str,
                 target_period: str | None = None) -> list[float]:
     """Historical values for a metric, restricted to the target's period TYPE.
@@ -237,6 +256,5 @@ def history_for(history: list[dict], metric_label: str,
         and isinstance(h.get("value"), (int, float))
     ]
     if target_period:
-        want_quarter = is_quarterly(target_period)
-        rows = [h for h in rows if is_quarterly(h.get("period")) == want_quarter]
+        rows = [h for h in rows if same_period_shape(h.get("period"), target_period)]
     return [float(h["value"]) for h in rows]

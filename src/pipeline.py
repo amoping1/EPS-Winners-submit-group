@@ -66,10 +66,11 @@ def run_company(client, corpus_root: str, company: dict, as_of, max_steps: int =
     # Drop history whose period type does not match the target before anything reasons
     # over it. A quarterly target trended against full-year actuals is an order-of-
     # magnitude error, not a rounding one.
-    from .rails.reconcile import is_quarterly
-    want_quarter = is_quarterly(company["period"])
-    dropped = [h for h in pack.history if is_quarterly(h.get("period")) != want_quarter]
-    pack.history = [h for h in pack.history if is_quarterly(h.get("period")) == want_quarter]
+    from .rails.reconcile import same_period_shape
+    dropped = [h for h in pack.history
+               if not same_period_shape(h.get("period"), company["period"])]
+    pack.history = [h for h in pack.history
+                    if same_period_shape(h.get("period"), company["period"])]
 
     # Last-resort anchor for metrics the research pass returned NO history for. With an
     # empty series the three forecasters have nothing to reason over, agree on a guess,
