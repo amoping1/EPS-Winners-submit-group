@@ -150,6 +150,79 @@ _LABEL_SYNONYMS: tuple[tuple[str, tuple[str, ...]], ...] = (
 
 _ADJUSTMENT_WORDS = ("adjusted", "pre-exceptional", "gaap", "non-gaap", "underlying")
 
+# Phrases that reveal which period a figure belongs to. Earnings releases state
+# quarterly and full-year figures side by side, so without this a Q4 release
+# yields the annual number: Home Depot's Q4 net sales came out as 164,700 USDm,
+# the full fiscal year, against a quarter near 40,000.
+_ANNUAL_MARKERS = (
+    "fiscal year",
+    "full year",
+    "full-year",
+    "twelve months",
+    "twelve-month",
+    "year ended",
+    "year-to-date",
+    "annual",
+    "for the year",
+)
+_QUARTERLY_MARKERS = (
+    "quarter",
+    "quarterly",
+    "three months",
+    "three-month",
+    "q1",
+    "q2",
+    "q3",
+    "q4",
+)
+
+# A per-share figure is always described as such. Without this check, store
+# counts and basis-point moves are read as earnings per share.
+_PER_SHARE_MARKERS = (
+    "per share",
+    "per diluted share",
+    "per basic share",
+    "eps",
+    "earnings per",
+    "pence per",
+)
+
+# Other per-share quantities that sit in the same sentences as earnings and are
+# quoted the same way. Deere's quarterly dividend is $1.62 and was being read as
+# its EPS at every single backtested event.
+_PER_SHARE_DECOYS = (
+    "dividend",
+    "book value per share",
+    "share price",
+    "repurchase",
+    "buyback",
+    "par value",
+)
+
+
+def wants_annual(company: Company) -> bool:
+    """Whether this company's forecast period is a full year rather than a quarter."""
+    return "q" not in company.period.lower().replace("fy", "", 1)
+
+
+def _period_fit(context: str, annual: bool) -> float | None:
+    """Score how well a passage's period matches the one being forecast.
+
+    Returns ``None`` when the passage clearly describes the other period, so the
+    candidate is dropped rather than merely demoted.
+    """
+    lowered = context.lower()
+    annual_hits = sum(1 for marker in _ANNUAL_MARKERS if marker in lowered)
+    quarterly_hits = sum(1 for marker in _QUARTERLY_MARKERS if marker in lowered)
+
+    if annual:
+        if quarterly_hits and not annual_hits:
+            return None
+        return 1.4 if annual_hits else 1.0
+    if annual_hits and not quarterly_hits:
+        return None
+    return 1.4 if quarterly_hits else 1.0
+
 
 def metric_search_terms(metric: Metric) -> list[str]:
     """Phrases likely to appear near this metric in a filing."""
@@ -253,11 +326,21 @@ def candidates_from_hits(
 ) -> list[ValueCandidate]:
     """Pull plausible values for ``metric`` out of ranked search hits."""
     terms = metric_search_terms(metric)
+    annual = wants_annual(company)
     found: list[ValueCandidate] = []
 
     for hit in hits:
         for anchor in terms:
             for window in _windows(hit.chunk.text, anchor):
+                period_weight = _period_fit(window, annual)
+                if period_weight is None:
+                    continue
+                if metric.kind == "per_share":
+                    lowered_window = window.lower()
+                    if not any(marker in lowered_window for marker in _PER_SHARE_MARKERS):
+                        continue
+                    if any(decoy in lowered_window for decoy in _PER_SHARE_DECOYS):
+                        continue
                 for parsed in iter_numbers(window):
                     if metric.kind == "percent":
                         value = parsed.as_percentage_points()
@@ -283,7 +366,9 @@ def candidates_from_hits(
                         continue
 
                     notes: list[str] = []
-                    score = hit.score
+                    score = hit.score * period_weight
+                    if period_weight > 1.0:
+                        notes.append("period-match")
                     if metric.kind == "money" and parsed.scale in ("billion", "bn", "million", "mn"):
                         # An explicit scale word removes all unit ambiguity.
                         score *= 1.6

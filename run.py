@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+﻿#!/usr/bin/env python3
 """Agents vs Wall Street - single entry point.
 
     python run.py --as-of 2025-11-18   backtest replay of a quarter we can score
@@ -15,6 +15,7 @@ import argparse
 import sys
 from datetime import date, datetime
 
+from src.backtest import run_backtest
 from src.baseline import estimate_company
 from src.config import PATHS, Company, Settings, find_company, load_companies, load_dotenv
 from src.context import RunContext, create_run_context
@@ -56,6 +57,18 @@ def build_parser() -> argparse.ArgumentParser:
         action="store_true",
         help="Do not echo log events to the console.",
     )
+    parser.add_argument(
+        "--no-backtest",
+        action="store_true",
+        help="Skip the historical replay that calibrates and scores the system.",
+    )
+    parser.add_argument(
+        "--backtest-events",
+        type=int,
+        default=None,
+        metavar="N",
+        help="Reporting events to replay per company. Defaults to BACKTEST_EVENTS or 8.",
+    )
     return parser
 
 
@@ -82,7 +95,11 @@ def main(argv: list[str] | None = None) -> int:
     )
 
     try:
-        results = run_pipeline(context)
+        results = run_pipeline(
+            context,
+            backtest=not args.no_backtest,
+            backtest_events=args.backtest_events,
+        )
     except ForecastSystemError as exc:
         context.logger.error(str(exc), error_type=type(exc).__name__)
         context.write_manifest(status="failed", error=str(exc))
@@ -143,7 +160,12 @@ def forecast_company(context: RunContext, company: Company) -> dict:
         }
 
 
-def run_pipeline(context: RunContext) -> list[dict]:
+def run_pipeline(
+    context: RunContext,
+    *,
+    backtest: bool = True,
+    backtest_events: int | None = None,
+) -> list[dict]:
     """Run every company and produce the four workbooks.
 
     Companies are independent, so a failure in one must not cost the other three
@@ -167,8 +189,30 @@ def run_pipeline(context: RunContext) -> list[dict]:
                     error_type=type(exc).__name__,
                 )
 
+        if backtest:
+            # Runs after the workbooks exist, so a backtest failure can never
+            # cost us a submission.
+            try:
+                with logger.stage("backtest") as state:
+                    events = backtest_events or context.settings.backtest_events
+                    report = run_backtest(
+                        index,
+                        context.companies,
+                        events_per_company=events,
+                        logger=logger,
+                    )
+                    context.write_artifact("backtest.json", report)
+                    state["events"] = report["leakage"]["events_replayed"]
+                    state["leakage"] = report["leakage"]["status"]
+                    state["median_percentage_error"] = report["overall"][
+                        "median_percentage_error"
+                    ]
+            except Exception as exc:  # noqa: BLE001
+                logger.error(f"backtest failed: {exc}", error_type=type(exc).__name__)
+
     return results
 
 
 if __name__ == "__main__":
     sys.exit(main())
+
