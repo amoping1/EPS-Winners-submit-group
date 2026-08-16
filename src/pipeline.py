@@ -17,6 +17,7 @@ from .agents.profiles import PROFILES, classify
 from .agents.research import run_research
 from .rails.reconcile import align_all, history_for, pick_anchor, reconcile_metric
 from .tools.consensus import scan_consensus
+from .tools.market import consensus_anchors, fetch_snapshot
 from .tools.documents import DocumentTools
 
 METHODS = ("guidance", "statistical", "qualitative")
@@ -51,6 +52,15 @@ def run_company(client, corpus_root: str, company: dict, as_of, max_steps: int =
     scanned = scan_consensus(consensus_tools, labels)
     for anchor in scanned:
         anchor.setdefault("period", company["period"])
+        pack.anchors.append(anchor)
+
+    # Market channel: public analyst consensus. This is literally the denominator of the
+    # accuracy score, so forecasting without reading it is forecasting blind against a
+    # benchmark we could simply look up. Yahoo covers the US filers; the UK filer is
+    # covered by its own published consensus in the corpus scan above.
+    snapshot = fetch_snapshot(company["ticker"])
+    market = consensus_anchors(snapshot, labels, company["period"])
+    for anchor in market:
         pack.anchors.append(anchor)
 
     # Drop history whose period type does not match the target before anything reasons
@@ -123,6 +133,8 @@ def run_company(client, corpus_root: str, company: dict, as_of, max_steps: int =
         "evidence_gaps": aggregated["gaps"],
         "thin_metrics": aggregated["thin_metrics"],
         "consensus_found": scanned,
+        "market": snapshot.to_dict(),
+        "market_anchors": market,
         "history_dropped_wrong_period": len(dropped),
         "aggregated": aggregated["metrics"],
         "anchors": pack.anchors,

@@ -8,8 +8,9 @@ one undifferentiated pile is how Hays ended up with two rows of history and a fo
              The only channel that carries audited actuals.
   CALLS      earnings-call transcripts. Where guidance, tone and forward statements live.
              Management says things here that never appear in a table.
-  NEWS       external, public, found during the event. NOT in the frozen corpus, so this
-             channel is empty unless a web search tool is supplied. Labelled, not faked.
+  MARKET     external, public, fetched live during the event: analyst consensus for the
+             target quarter. This is the denominator of the accuracy score. Yahoo covers
+             the US filers; the UK filer publishes its own compiled consensus instead.
   CYCLICAL   seasonality and trend. DERIVED, not ingested - computed from the finance
              channel's history. Kept as its own channel because it answers a different
              question: not "what happened" but "what shape does this business repeat".
@@ -23,7 +24,7 @@ from __future__ import annotations
 import statistics
 from dataclasses import dataclass, field
 
-CHANNELS = ("finance", "calls", "news", "cyclical")
+CHANNELS = ("finance", "calls", "market", "cyclical")
 
 # Below this many historical points, a metric cannot be trended or clamped and the
 # statistical forecaster is guessing. Two is what Hays returned.
@@ -141,7 +142,9 @@ class EvidenceAggregator:
             if not label:
                 continue
             # Guidance and consensus originate in calls/statements, not the accounts.
-            if anchor.get("kind") in ("guidance", "consensus"):
+            if anchor.get("source") == "market_data":
+                by_metric[label].news.append(anchor)   # external market channel
+            elif anchor.get("kind") in ("guidance", "consensus"):
                 by_metric[label].calls.append(anchor)
             else:
                 by_metric[label].finance.append(anchor)
@@ -156,8 +159,9 @@ class EvidenceAggregator:
             ChannelCoverage("calls", True,
                             sum(len(e.calls) for e in by_metric.values()),
                             "guidance and consensus from transcripts and statements"),
-            ChannelCoverage("news", False, 0,
-                            "not in the frozen corpus - requires a public search tool"),
+            ChannelCoverage("market", True,
+                            sum(len(e.news) for e in by_metric.values()),
+                            "public analyst consensus (Yahoo Finance), fetched live"),
             ChannelCoverage("cyclical", True,
                             sum(1 for e in by_metric.values() if e.cyclical.get("available")),
                             "derived from the finance channel, not ingested"),

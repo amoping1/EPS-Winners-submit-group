@@ -99,6 +99,18 @@ color:var(--accent)}
 .ch-c{font-family:var(--mono);font-size:22px;font-variant-numeric:tabular-nums}
 .ch p{font-size:12.5px}
 .src{font-family:var(--mono);font-size:11px;color:var(--faint);word-break:break-all}
+.diagram{background:var(--surface);border:1px solid var(--rule);padding:16px;overflow-x:auto}
+.diagram svg{display:block;min-width:900px;width:100%;height:auto}
+.b-src{fill:var(--surface);stroke:var(--rule2);stroke-width:1.4}
+.b-drv{fill:var(--warn-bg);stroke:var(--warn);stroke-width:1.4}
+.b-ag{fill:var(--accent-soft);stroke:var(--accent);stroke-width:1.4}
+.b-fx{fill:var(--sunk);stroke:var(--rule2);stroke-width:1.4}
+.b-out{fill:var(--pass-bg);stroke:var(--pass);stroke-width:1.4}
+.t-l{fill:var(--ink);font-family:var(--sans);font-size:12.5px;font-weight:600}
+.t-s{fill:var(--faint);font-family:var(--mono);font-size:10px}
+.t-p{fill:var(--accent);font-family:var(--mono);font-size:10px}
+.ln{stroke:var(--rule2);stroke-width:1.4;fill:none}
+.lp{stroke:var(--accent);stroke-width:1.4;fill:none;stroke-dasharray:4 3}
 .tablewrap{overflow-x:auto;border:1px solid var(--rule);background:var(--surface)}
 table{border-collapse:collapse;width:100%;min-width:680px}
 th{font-family:var(--mono);font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;
@@ -286,7 +298,7 @@ def build(run_path: str | Path = "logs/full-run.json",
     runs = json.loads(Path(run_path).read_text(encoding="utf-8"))
     runs.sort(key=lambda r: r["ticker"])
 
-    totals = {"finance": 0, "calls": 0, "news": 0, "cyclical": 0}
+    totals = {"finance": 0, "calls": 0, "market": 0, "cyclical": 0}
     for run in runs:
         for channel in run.get("channels", []):
             totals[channel["channel"]] = totals.get(channel["channel"], 0) + channel["rows"]
@@ -302,8 +314,10 @@ def build(run_path: str | Path = "logs/full-run.json",
       <div class="ch derived"><div class="ch-n">Cyclical &mdash; derived</div>
         <div class="ch-c">{totals['cyclical']}</div>
         <p>Seasonality and trend computed from the finance channel, not read anywhere.</p></div>
-      <div class="ch absent"><div class="ch-n">News &mdash; unavailable</div><div class="ch-c">0</div>
-        <p>Not in the frozen corpus. Reported missing rather than invented.</p></div>"""
+      <div class="ch"><div class="ch-n">Market &mdash; live</div>
+        <div class="ch-c">{totals.get('market', 0)}</div>
+        <p>Analyst consensus for the target quarter, fetched from Yahoo Finance. This is the
+           denominator of the accuracy score.</p></div>"""
 
     body = "".join(_company(r) for r in runs)
 
@@ -339,6 +353,103 @@ def build(run_path: str | Path = "logs/full-run.json",
   <section>
     <h2>Evidence channels</h2>
     <div class="chan">{channels}</div>
+  </section>
+
+
+  <section>
+    <h2>How a forecast is produced</h2>
+    <p>Two of the six steps are agents that decide their own next move. The other four are
+       fixed code, deliberately: the last word on a number belongs to something that cannot
+       be argued round.</p>
+
+    <div class="diagram">
+      <svg viewBox="0 0 980 250" role="img" aria-label="Four evidence channels feed a research agent loop, then three independent forecasters, an adversarial critic, deterministic rails, and the workbook.">
+        <defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7"
+          markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z"
+          fill="currentColor"/></marker></defs>
+        <g color="var(--rule2)">
+          <rect class="b-src" x="6" y="16" width="120" height="34" rx="2"/>
+          <text class="t-s" x="66" y="37" text-anchor="middle">Filings</text>
+          <rect class="b-src" x="6" y="60" width="120" height="34" rx="2"/>
+          <text class="t-s" x="66" y="81" text-anchor="middle">Call transcripts</text>
+          <rect class="b-src" x="6" y="104" width="120" height="34" rx="2"/>
+          <text class="t-s" x="66" y="125" text-anchor="middle">Yahoo consensus</text>
+          <rect class="b-drv" x="6" y="148" width="120" height="34" rx="2"/>
+          <text class="t-s" x="66" y="169" text-anchor="middle">Cyclical (derived)</text>
+
+          <rect class="b-ag" x="164" y="60" width="122" height="66" rx="2"/>
+          <text class="t-l" x="225" y="86" text-anchor="middle">Research agent</text>
+          <text class="t-s" x="225" y="103" text-anchor="middle">picks its own</text>
+          <text class="t-s" x="225" y="117" text-anchor="middle">next tool call</text>
+
+          <rect class="b-fx" x="322" y="60" width="112" height="66" rx="2"/>
+          <text class="t-l" x="378" y="86" text-anchor="middle">Aggregator</text>
+          <text class="t-s" x="378" y="103" text-anchor="middle">4 channels,</text>
+          <text class="t-s" x="378" y="117" text-anchor="middle">depth checked</text>
+
+          <rect class="b-ag" x="470" y="14" width="120" height="40" rx="2"/>
+          <text class="t-l" x="530" y="39" text-anchor="middle">Guidance</text>
+          <rect class="b-ag" x="470" y="72" width="120" height="40" rx="2"/>
+          <text class="t-l" x="530" y="97" text-anchor="middle">Statistical</text>
+          <rect class="b-ag" x="470" y="130" width="120" height="40" rx="2"/>
+          <text class="t-l" x="530" y="155" text-anchor="middle">Qualitative</text>
+
+          <rect class="b-ag" x="470" y="190" width="120" height="40" rx="2"/>
+          <text class="t-l" x="530" y="215" text-anchor="middle">Critic</text>
+
+          <rect class="b-fx" x="626" y="66" width="118" height="54" rx="2"/>
+          <text class="t-l" x="685" y="89" text-anchor="middle">Reconcile</text>
+          <text class="t-s" x="685" y="106" text-anchor="middle">weighted</text>
+
+          <rect class="b-fx" x="780" y="66" width="112" height="54" rx="2"/>
+          <text class="t-l" x="836" y="89" text-anchor="middle">Rails</text>
+          <text class="t-s" x="836" y="106" text-anchor="middle">units, bounds</text>
+
+          <rect class="b-out" x="780" y="10" width="112" height="40" rx="2"/>
+          <text class="t-l" x="836" y="35" text-anchor="middle">Workbook</text>
+
+          <path class="ln" marker-end="url(#a)" d="M126 33 C 146 33, 146 84, 158 84"/>
+          <path class="ln" marker-end="url(#a)" d="M126 77 C 146 77, 146 90, 158 90"/>
+          <path class="ln" marker-end="url(#a)" d="M126 121 C 146 121, 146 96, 158 96"/>
+          <path class="ln" marker-end="url(#a)" d="M126 165 C 146 165, 146 102, 158 102"/>
+          <path class="ln" marker-end="url(#a)" d="M286 93 H316"/>
+          <path class="ln" marker-end="url(#a)" d="M434 90 C 452 90, 452 34, 464 34"/>
+          <path class="ln" marker-end="url(#a)" d="M434 93 H464"/>
+          <path class="ln" marker-end="url(#a)" d="M434 96 C 452 96, 452 150, 464 150"/>
+          <path class="ln" marker-end="url(#a)" d="M590 34 C 608 34, 608 86, 620 86"/>
+          <path class="ln" marker-end="url(#a)" d="M590 92 H620"/>
+          <path class="ln" marker-end="url(#a)" d="M590 150 C 608 150, 608 100, 620 100"/>
+          <path class="ln" marker-end="url(#a)" d="M744 93 H774"/>
+          <path class="ln" marker-end="url(#a)" d="M836 66 V54"/>
+          <g color="var(--accent)">
+            <path class="lp" marker-end="url(#a)" d="M196 60 V40 H150 V78"/>
+            <text class="t-p" x="204" y="52">re-query</text>
+            <path class="lp" marker-end="url(#a)" d="M530 190 V174"/>
+            <path class="lp" marker-end="url(#a)" d="M626 210 H600"/>
+          </g>
+        </g>
+      </svg>
+    </div>
+
+    <div class="cols">
+      <div class="panel"><h3>Agents (decide for themselves)</h3><ul>
+        <li><b>Research agent</b> &mdash; writes its own queries, reads, re-queries when evidence is thin</li>
+        <li><b>Three forecasters</b> &mdash; guidance, statistical, qualitative; separate contexts</li>
+        <li><b>Critic</b> &mdash; sees the numbers but not the reasoning, tries to refute</li>
+      </ul></div>
+      <div class="panel"><h3>Fixed code (cannot be argued round)</h3><ul>
+        <li><b>Retrieval</b> &mdash; BM25 with a hard as_of date cutoff</li>
+        <li><b>Aggregator</b> &mdash; sorts evidence into channels, flags thin metrics</li>
+        <li><b>Reconcile</b> &mdash; confidence weighting, outliers cut</li>
+        <li><b>Rails</b> &mdash; units, basis, period, guidance bound, history clamp</li>
+      </ul></div>
+      <div class="panel"><h3>Why consensus matters</h3><ul>
+        <li>Score is our error &divide; Wall Street&rsquo;s error</li>
+        <li>Consensus is therefore the benchmark, not a hint</li>
+        <li>Matching it scores ~1.0; beating it needs a reason</li>
+        <li>Hays is the one place we deviate deliberately</li>
+      </ul></div>
+    </div>
   </section>
 
   <section>
