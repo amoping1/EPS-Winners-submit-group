@@ -88,6 +88,17 @@ section{padding:44px 0;border-top:1px solid var(--rule)}
 svg.arch{width:100%;height:auto;display:block}
 figcaption{color:var(--ink2);font-size:13.5px;margin-top:14px;max-width:82ch}
 
+.oneliners{margin-top:20px}
+.ol{background:var(--card);border:1px solid var(--rule);border-left:4px solid;padding:16px 20px;
+  margin-bottom:10px}
+.ol.neva{border-left-color:var(--neva)} .ol.adrian{border-left-color:var(--adrian)}
+.ol.dimitris{border-left-color:var(--dimitris)}
+.ol-head{display:flex;align-items:baseline;gap:12px;margin-bottom:7px}
+.ol-who{font:700 11px/1 var(--mono);letter-spacing:.15em;text-transform:uppercase}
+.ol.neva .ol-who{color:var(--neva)} .ol.adrian .ol-who{color:var(--adrian)}
+.ol.dimitris .ol-who{color:var(--dimitris)}
+.ol-verb{font-size:17px;font-weight:650;letter-spacing:-.01em}
+.ol p{margin:0;font-size:14.5px;line-height:1.6;color:var(--ink2);max-width:86ch}
 .cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px;margin-top:24px}
 .card{background:var(--card);border:1px solid var(--rule);padding:20px 22px;border-top:3px solid}
 .card.neva{border-top-color:var(--neva)} .card.adrian{border-top-color:var(--adrian)}
@@ -421,6 +432,45 @@ def build(ensemble: dict[str, Any], backtest: dict[str, Any] | None,
       backtest honest, it makes the competition run reproduce exactly after the event, and dropping
       it turns the system into a live forecaster for the next earnings season.</figcaption>
   </figure>
+
+  <h3 style="margin:38px 0 4px">Three different approaches, in a sentence each</h3>
+  <p class="note">They were not divided up by company or by task. Each of us built a whole
+    forecaster, and each answered the same question differently.</p>
+
+  <div class="oneliners">
+    <div class="ol neva">
+      <div class="ol-head"><span class="ol-who">Neva</span>
+        <span class="ol-verb">Measure it</span></div>
+      <p>Builds a history for each metric out of earnings releases, forecasts the next period as
+        the same quarter a year earlier moved by recent growth, and calls a model only on the six
+        metrics that a 32-quarter historical replay measures the deterministic path as handling
+        badly.</p>
+    </div>
+    <div class="ol adrian">
+      <div class="ol-head"><span class="ol-who">Adrian</span>
+        <span class="ol-verb">Anchor it</span></div>
+      <p>Gathers evidence per metric kept separate by channel &mdash; filings, history, market
+        &mdash; anchors each figure to published guidance and sell-side analyst consensus but
+        rejects any anchor whose reporting period does not match the one being forecast, then runs
+        a critic pass over every metric before accepting it.</p>
+    </div>
+    <div class="ol dimitris">
+      <div class="ol-head"><span class="ol-who">Dimitris</span>
+        <span class="ol-verb">Verify it</span></div>
+      <p>Splits the work across four agents that each own one source type &mdash; filings,
+        financial statements, news, the company's own guidance track record &mdash; returning typed
+        reports with citations, then has a coordinator re-evaluate the arithmetic the model claims:
+        if the stated calculation does not reproduce the stated number, it sends back a repair
+        request rather than accepting the figure.</p>
+    </div>
+  </div>
+
+  <div class="callout"><p>These complement each other rather than overlap. Neva's tells you
+    <b>which metrics to trust</b>, Adrian's <b>ties every figure to something external</b>, and
+    Dimitris' <b>checks that the stated calculation is real</b>. Three systems that do not make the
+    same mistake is the entire reason the vote works.</p></div>
+
+  <h3 style="margin:38px 0 0">The same three, in detail</h3>
 
   <div class="cards">
     <div class="card neva"><div class="who">Asof &middot; Neva</div>
