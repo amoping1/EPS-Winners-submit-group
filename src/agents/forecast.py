@@ -109,7 +109,9 @@ HISTORY:
 ANCHORS:
 {anchors}
 
-Proposed forecasts:
+Proposed forecasts. Each metric shows the FINAL reconciled value that will be submitted,
+plus the individual method proposals for context. Judge the FINAL value - a single method
+being off does not matter if reconciliation already corrected it.
 {proposals}
 
 For each metric, check specifically:
@@ -211,13 +213,22 @@ def run_forecaster(client: LLMClient, company: dict, pack, method: str, profile=
     return out
 
 
-def run_critic(client: LLMClient, company: dict, pack, proposals: dict, profile=None) -> dict:
-    """Adversarial pass. Returns {metric label: verdict}. Sees numbers, not reasoning."""
+def run_critic(client: LLMClient, company: dict, pack, proposals: dict, profile=None,
+               reconciled: dict | None = None) -> dict:
+    """Adversarial pass on the FINAL numbers.
+
+    Runs after reconciliation, not before. Reviewing raw method proposals produced false
+    alarms: Home Depot's statistical method proposed comparable sales of 2.3% against a
+    guided ceiling of 2.0%, the critic objected, and the reconciled value was 1.59% - well
+    inside guidance. The critic was right about the proposal and wrong about the entry.
+    """
     ctx = _context(company, pack, profile)
-    stripped = {
-        label: {m: round(v["value"], 4) for m, v in by_method.items()}
-        for label, by_method in proposals.items()
-    }
+    stripped = {}
+    for label, by_method in proposals.items():
+        entry = {"METHODS": {m: round(v["value"], 4) for m, v in by_method.items()}}
+        if reconciled and label in reconciled:
+            entry["FINAL_SUBMITTED_VALUE"] = reconciled[label].get("value")
+        stripped[label] = entry
     system = CRITIC.format(
         company=ctx["company"], ticker=ctx["ticker"], period=ctx["period"],
         history=ctx["history"], anchors=ctx["anchors"],

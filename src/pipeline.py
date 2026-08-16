@@ -16,7 +16,7 @@ from .agents.forecast import run_critic, run_forecaster
 from .agents.profiles import PROFILES, classify
 from .agents.research import run_research
 from .rails.reconcile import align_all, history_for, pick_anchor, reconcile_metric
-from .tools.consensus import scan_consensus
+from .tools.consensus import scan_consensus, scan_last_actual
 from .tools.market import consensus_anchors, fetch_snapshot
 from .tools.documents import DocumentTools
 
@@ -71,8 +71,28 @@ def run_company(client, corpus_root: str, company: dict, as_of, max_steps: int =
     dropped = [h for h in pack.history if is_quarterly(h.get("period")) != want_quarter]
     pack.history = [h for h in pack.history if is_quarterly(h.get("period")) == want_quarter]
 
+    # Last-resort anchor for metrics the research pass returned NO history for. With an
+    # empty series the three forecasters have nothing to reason over, agree on a guess,
+    # and every rail passes it - ADI adjusted gross margin came back 65.0 that way against
+    # a true 73.0. Deliberately narrow: percentage metrics only, where the table-based
+    # read is reliable. The money path misreads prose (Home Depot net sales came back as
+    # 7.0) and is left switched off rather than shipped half-working.
     aggregator = EvidenceAggregator(labels)
     aggregated = aggregator.aggregate(pack)
+    rescued = []
+    for metric in company["metrics"]:
+        label = metric["label"]
+        if aggregated["metrics"][label]["finance"]:
+            continue
+        if "%" not in metric["units"]:
+            continue
+        found = scan_last_actual(consensus_tools, label, metric["units"])
+        if found:
+            found["period"] = company["period"]
+            pack.anchors.append(found)
+            rescued.append(found)
+    if rescued:
+        aggregated = aggregator.aggregate(pack)
     followups = 0
     if aggregated["thin_metrics"]:
         followups = 1
@@ -99,8 +119,7 @@ def run_company(client, corpus_root: str, company: dict, as_of, max_steps: int =
         for label, forecast in aligned.items():
             proposals.setdefault(label, {})[method] = forecast
 
-    verdicts = align_all(run_critic(client, company, pack, proposals, profile), labels)
-
+    # Reconcile FIRST, then critique the value that will actually be submitted.
     results = {}
     for metric in company["metrics"]:
         label = metric["label"]
@@ -110,9 +129,30 @@ def run_company(client, corpus_root: str, company: dict, as_of, max_steps: int =
             history_for(pack.history, label, company["period"]),
             target_period=company["period"],
         )
-        results[label]["verdict"] = verdicts.get(label)
         results[label]["units"] = metric["units"]
         results[label]["basis"] = metric.get("basis")
+
+    verdicts = align_all(
+        run_critic(client, company, pack, proposals, profile, reconciled=results), labels
+    )
+
+    # Give the critic teeth. A refusal with a concrete range now binds the value instead
+    # of being recorded and ignored - that gap was the standing weakness in this design.
+    for metric in company["metrics"]:
+        label = metric["label"]
+        res = results[label]
+        verdict = verdicts.get(label)
+        res["verdict"] = verdict
+        if not verdict or verdict.get("plausible") is not False:
+            continue
+        low, high = verdict.get("suggested_low"), verdict.get("suggested_high")
+        value = res.get("value")
+        if (isinstance(low, (int, float)) and isinstance(high, (int, float))
+                and isinstance(value, (int, float)) and low <= high):
+            if not low <= value <= high:
+                res["critic_bound"] = {"from": round(value, 4), "low": low, "high": high,
+                                       "concern": verdict.get("concern")}
+                res["value"] = round(min(max(value, low), high), 4)
 
     return {
         "ticker": company["ticker"],
@@ -133,6 +173,7 @@ def run_company(client, corpus_root: str, company: dict, as_of, max_steps: int =
         "evidence_gaps": aggregated["gaps"],
         "thin_metrics": aggregated["thin_metrics"],
         "consensus_found": scanned,
+        "rescued_metrics": rescued,
         "market": snapshot.to_dict(),
         "market_anchors": market,
         "history_dropped_wrong_period": len(dropped),

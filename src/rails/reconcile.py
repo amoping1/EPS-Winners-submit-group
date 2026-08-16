@@ -94,8 +94,9 @@ def reconcile_metric(
     # quarter from the inside; our trend fit does not.
     anchor_pull = None
     anchor_rejected = None
-    if anchor and anchor.get("kind") in ("guidance", "consensus"):
-        if target_period and not _period_matches(anchor.get("period"), target_period):
+    if anchor and anchor.get("kind") in ("guidance", "consensus", "last_actual"):
+        if (anchor.get("kind") != "last_actual" and target_period
+                and not _period_matches(anchor.get("period"), target_period)):
             anchor_rejected = {
                 "reason": "period mismatch",
                 "anchor_period": anchor.get("period"),
@@ -103,9 +104,9 @@ def reconcile_metric(
                 "value": anchor.get("value"),
             }
             anchor = None
-    if anchor and anchor.get("kind") in ("guidance", "consensus"):
+    if anchor and anchor.get("kind") in ("guidance", "consensus", "last_actual"):
         if isinstance(anchor.get("value"), (int, float)):
-            anchor_weight = 1.2 if anchor["kind"] == "guidance" else 0.9
+            anchor_weight = {"guidance": 1.2, "consensus": 0.9, "last_actual": 0.7}[anchor["kind"]]
             if anchor.get("confidence") == "low":
                 anchor_weight *= 0.5
             weights["_anchor"] = anchor_weight

@@ -34,21 +34,21 @@
       "transactions",
       "e-commerce mix"
     ],
-    "elapsed_s": 30.4,
-    "tool_calls": 29,
-    "history_rows": 9,
+    "elapsed_s": 50.9,
+    "tool_calls": 36,
+    "history_rows": 12,
     "followup_passes": 0,
     "channels": [
       {
         "channel": "finance",
         "available": true,
-        "rows": 12,
+        "rows": 15,
         "note": "reported actuals from filings"
       },
       {
         "channel": "calls",
         "available": true,
-        "rows": 3,
+        "rows": 0,
         "note": "guidance and consensus from transcripts and statements"
       },
       {
@@ -64,9 +64,14 @@
         "note": "derived from the finance channel, not ingested"
       }
     ],
-    "evidence_gaps": [],
+    "evidence_gaps": [
+      "Net sales: no guidance or management commentary found",
+      "Adjusted diluted EPS: no guidance or management commentary found",
+      "Comparable sales, total company: no guidance or management commentary found"
+    ],
     "thin_metrics": [],
     "consensus_found": [],
+    "rescued_metrics": [],
     "market": {
       "ticker": "HD",
       "symbol": "HD",
@@ -130,15 +135,23 @@
             "value": 43175,
             "units": "USDm",
             "basis": "reported",
-            "doc_id": "2024-08-13__hd-us-20240813-q2-10q__101825"
+            "doc_id": "2025-08-25__hd-us-20250825-q2-10q__144029"
           },
           {
             "metric": "Net sales",
-            "period": "FY2023Q2",
-            "value": 42916,
+            "period": "FY2023Q3",
+            "value": 37710,
             "units": "USDm",
             "basis": "reported",
-            "doc_id": "2023-08-15__hd-us-20230815-q2-10q__101816"
+            "doc_id": "2024-11-12__hd-us-20241112-q3-10q__101846"
+          },
+          {
+            "metric": "Net sales",
+            "period": "FY2025Q3",
+            "value": 41352,
+            "units": "USDm",
+            "basis": "reported",
+            "doc_id": "2025-11-18__hd-us-20251118-q3-10q__437649"
           },
           {
             "metric": "Net sales",
@@ -151,20 +164,7 @@
             "confidence": "high"
           }
         ],
-        "calls": [
-          {
-            "metric": "Net sales",
-            "kind": "guidance",
-            "value": 168800,
-            "low": 168000,
-            "high": 171100,
-            "units": "USDm",
-            "period": "FY2026",
-            "note": "Company guided total sales growth of 2.5% to 4.5% for FY2026 vs FY2025 ($164,683m), so range is $168,800m to $171,100m for the full year.",
-            "doc_id": "2026-05-19__hd-us-20260519-q1-8k-2__1038586",
-            "confidence": "high"
-          }
-        ],
+        "calls": [],
         "news": [
           {
             "metric": "Net sales",
@@ -182,18 +182,19 @@
         ],
         "cyclical": {
           "available": true,
-          "points": 4,
-          "min": 41765.0,
+          "points": 5,
+          "min": 37710.0,
           "max": 45277.0,
           "latest": 45277.0,
           "growth_rates": [
-            0.0276,
-            0.006,
+            -0.0099,
+            -0.0881,
+            0.1449,
             0.0487
           ],
           "recent_growth": 0.0487,
-          "mean_growth": 0.0274,
-          "direction": "growth accelerating",
+          "mean_growth": 0.0239,
+          "direction": "growth slowing",
           "naive_projection": 47481.3371
         },
         "sufficient": true
@@ -206,7 +207,7 @@
             "period": "FY2025Q2",
             "value": 4.58,
             "units": "USD / share",
-            "basis": "adjusted",
+            "basis": "reported",
             "doc_id": "2025-08-25__hd-us-20250825-q2-10q__144029"
           },
           {
@@ -214,42 +215,37 @@
             "period": "FY2024Q2",
             "value": 4.6,
             "units": "USD / share",
-            "basis": "adjusted",
-            "doc_id": "2024-08-13__hd-us-20240813-q2-10q__101825"
+            "basis": "reported",
+            "doc_id": "2025-08-25__hd-us-20250825-q2-10q__144029"
           },
           {
             "metric": "Adjusted diluted EPS",
-            "period": "FY2023Q2",
-            "value": 4.65,
+            "period": "FY2025Q3",
+            "value": 3.62,
             "units": "USD / share",
-            "basis": "adjusted",
-            "doc_id": "2023-08-15__hd-us-20230815-q2-10q__101816"
+            "basis": "reported",
+            "doc_id": "2025-11-18__hd-us-20251118-q3-10q__437649"
+          },
+          {
+            "metric": "Adjusted diluted EPS",
+            "period": "FY2024Q3",
+            "value": 3.67,
+            "units": "USD / share",
+            "basis": "reported",
+            "doc_id": "2024-11-12__hd-us-20241112-q3-10q__101846"
           },
           {
             "metric": "Adjusted diluted EPS",
             "kind": "last_actual",
-            "value": 3.43,
+            "value": 3.3,
             "units": "USD / share",
             "period": "FY2026Q1",
-            "note": "Most recent reported quarter, adjusted basis",
-            "doc_id": "2026-05-19__hd-us-20260519-q1-8k-2__1038586",
-            "confidence": "high"
+            "note": "Most recent reported quarter, GAAP diluted EPS (no explicit adjusted, but historically similar)",
+            "doc_id": "2026-05-19__hd-us-20260519-q1-10q__1053121",
+            "confidence": "medium"
           }
         ],
-        "calls": [
-          {
-            "metric": "Adjusted diluted EPS",
-            "kind": "guidance",
-            "value": 14.23,
-            "low": 14.23,
-            "high": 14.8,
-            "units": "USD / share",
-            "period": "FY2026",
-            "note": "Company guided diluted EPS to grow flat to 4% from $14.23 in FY2025; range is $14.23 to $14.80 for the full year.",
-            "doc_id": "2026-05-19__hd-us-20260519-q1-8k-2__1038586",
-            "confidence": "high"
-          }
-        ],
+        "calls": [],
         "news": [
           {
             "metric": "Adjusted diluted EPS",
@@ -267,18 +263,19 @@
         ],
         "cyclical": {
           "available": true,
-          "points": 4,
-          "min": 3.43,
-          "max": 4.65,
+          "points": 5,
+          "min": 3.3,
+          "max": 4.6,
           "latest": 4.58,
           "growth_rates": [
-            0.3557,
-            -0.0108,
+            0.1121,
+            -0.0136,
+            0.2707,
             -0.0043
           ],
           "recent_growth": -0.0043,
-          "mean_growth": 0.1135,
-          "direction": "decline easing",
+          "mean_growth": 0.0912,
+          "direction": "inflected negative",
           "naive_projection": 4.5601
         },
         "sufficient": true
@@ -300,15 +297,23 @@
             "value": -3.3,
             "units": "%",
             "basis": "reported",
-            "doc_id": "2024-08-13__hd-us-20240813-q2-10q__101825"
+            "doc_id": "2025-08-25__hd-us-20250825-q2-10q__144029"
           },
           {
             "metric": "Comparable sales, total company",
-            "period": "FY2023Q2",
-            "value": -2.0,
+            "period": "FY2025Q3",
+            "value": 0.2,
             "units": "%",
             "basis": "reported",
-            "doc_id": "2023-08-15__hd-us-20230815-q2-10q__101816"
+            "doc_id": "2025-11-18__hd-us-20251118-q3-10q__437649"
+          },
+          {
+            "metric": "Comparable sales, total company",
+            "period": "FY2024Q3",
+            "value": -1.3,
+            "units": "%",
+            "basis": "reported",
+            "doc_id": "2024-11-12__hd-us-20241112-q3-10q__101846"
           },
           {
             "metric": "Comparable sales, total company",
@@ -321,34 +326,22 @@
             "confidence": "high"
           }
         ],
-        "calls": [
-          {
-            "metric": "Comparable sales, total company",
-            "kind": "guidance",
-            "value": 1.0,
-            "low": 0.0,
-            "high": 2.0,
-            "units": "%",
-            "period": "FY2026",
-            "note": "Company guided comparable sales growth of flat to 2.0% for FY2026.",
-            "doc_id": "2026-05-19__hd-us-20260519-q1-8k-2__1038586",
-            "confidence": "high"
-          }
-        ],
+        "calls": [],
         "news": [],
         "cyclical": {
           "available": true,
-          "points": 4,
+          "points": 5,
           "min": -3.3,
           "max": 1.0,
           "latest": 1.0,
           "growth_rates": [
-            -4.3333,
-            -0.65,
+            -3.1667,
+            1.1538,
+            -17.5,
             1.303
           ],
           "recent_growth": 1.303,
-          "mean_growth": -1.2268,
+          "mean_growth": -4.5524,
           "direction": "inflected positive",
           "naive_projection": 2.303
         },
@@ -369,12 +362,12 @@
       {
         "metric": "Adjusted diluted EPS",
         "kind": "last_actual",
-        "value": 3.43,
+        "value": 3.3,
         "units": "USD / share",
         "period": "FY2026Q1",
-        "note": "Most recent reported quarter, adjusted basis",
-        "doc_id": "2026-05-19__hd-us-20260519-q1-8k-2__1038586",
-        "confidence": "high"
+        "note": "Most recent reported quarter, GAAP diluted EPS (no explicit adjusted, but historically similar)",
+        "doc_id": "2026-05-19__hd-us-20260519-q1-10q__1053121",
+        "confidence": "medium"
       },
       {
         "metric": "Comparable sales, total company",
@@ -384,42 +377,6 @@
         "period": "FY2026Q1",
         "note": "Most recent reported quarter",
         "doc_id": "2026-05-19__hd-us-20260519-q1-10q__1053121",
-        "confidence": "high"
-      },
-      {
-        "metric": "Net sales",
-        "kind": "guidance",
-        "value": 168800,
-        "low": 168000,
-        "high": 171100,
-        "units": "USDm",
-        "period": "FY2026",
-        "note": "Company guided total sales growth of 2.5% to 4.5% for FY2026 vs FY2025 ($164,683m), so range is $168,800m to $171,100m for the full year.",
-        "doc_id": "2026-05-19__hd-us-20260519-q1-8k-2__1038586",
-        "confidence": "high"
-      },
-      {
-        "metric": "Adjusted diluted EPS",
-        "kind": "guidance",
-        "value": 14.23,
-        "low": 14.23,
-        "high": 14.8,
-        "units": "USD / share",
-        "period": "FY2026",
-        "note": "Company guided diluted EPS to grow flat to 4% from $14.23 in FY2025; range is $14.23 to $14.80 for the full year.",
-        "doc_id": "2026-05-19__hd-us-20260519-q1-8k-2__1038586",
-        "confidence": "high"
-      },
-      {
-        "metric": "Comparable sales, total company",
-        "kind": "guidance",
-        "value": 1.0,
-        "low": 0.0,
-        "high": 2.0,
-        "units": "%",
-        "period": "FY2026",
-        "note": "Company guided comparable sales growth of flat to 2.0% for FY2026.",
-        "doc_id": "2026-05-19__hd-us-20260519-q1-8k-2__1038586",
         "confidence": "high"
       },
       {
@@ -450,119 +407,123 @@
       }
     ],
     "gaps": [
-      "No explicit quarterly guidance for FY2026Q2; only full-year guidance is available.",
-      "No analyst consensus found for FY2026Q2 in reviewed documents.",
-      "Adjusted diluted EPS for Q2 is not always separately disclosed from GAAP in filings; assumed to match reported diluted EPS in absence of exceptions."
+      "No explicit company guidance or analyst consensus for FY2026Q2 found in available filings.",
+      "No explicit 'adjusted' EPS for Q2 in recent filings; only GAAP diluted EPS is reported, but historically these are similar for HD.",
+      "No FY2026Q2 actuals or guidance; only Q1 2026 actuals and prior Q2 history available.",
+      "No explicit FX or inorganic revenue contribution breakdowns for comps."
     ],
     "consensus": null,
     "results": {
       "Net sales": {
-        "value": 47426.6667,
+        "value": 47324.7588,
         "method_values": {
-          "guidance": 47400.0,
-          "statistical": 47480.0,
-          "qualitative": 47400.0
+          "guidance": 47235.0,
+          "statistical": 47481.0,
+          "qualitative": 47400.0,
+          "_anchor": 47235.4491
         },
         "weights": {
           "guidance": 1.0,
           "statistical": 0.8,
-          "qualitative": 0.6
+          "qualitative": 0.6,
+          "_anchor": 0.9
         },
         "median_of_methods": 47400.0,
         "outliers": [],
-        "anchor": null,
-        "anchor_rejected": {
-          "reason": "period mismatch",
-          "anchor_period": "FY2026",
-          "target_period": "FY2026Q2",
-          "value": 168800
+        "anchor": {
+          "kind": "consensus",
+          "value": 47235.4491,
+          "weight": 0.9
         },
+        "anchor_rejected": null,
         "guidance_bound": null,
         "clamped": null,
         "agreement": 0.998,
+        "units": "USDm",
+        "basis": "reported",
         "verdict": {
           "metric": "Net sales",
           "plausible": true,
           "concern": "none",
           "suggested_low": 46616.0,
           "suggested_high": 47791.0
-        },
-        "units": "USDm",
-        "basis": "reported"
+        }
       },
       "Adjusted diluted EPS": {
-        "value": 4.6859,
+        "value": 4.6997,
         "method_values": {
           "guidance": 4.73,
           "statistical": 4.56,
-          "qualitative": 4.73
+          "qualitative": 4.73,
+          "_anchor": 4.7326
         },
         "weights": {
           "guidance": 1.0,
           "statistical": 0.56,
-          "qualitative": 0.6
+          "qualitative": 0.6,
+          "_anchor": 0.9
         },
         "median_of_methods": 4.73,
         "outliers": [],
-        "anchor": null,
-        "anchor_rejected": {
-          "reason": "period mismatch",
-          "anchor_period": "FY2026",
-          "target_period": "FY2026Q2",
-          "value": 14.23
+        "anchor": {
+          "kind": "consensus",
+          "value": 4.7326,
+          "weight": 0.9
         },
+        "anchor_rejected": null,
         "guidance_bound": null,
         "clamped": null,
-        "agreement": 1.0,
+        "agreement": 0.999,
+        "units": "USD / share",
+        "basis": "adjusted",
         "verdict": {
           "metric": "Adjusted diluted EPS",
           "plausible": true,
           "concern": "none",
           "suggested_low": 4.64,
-          "suggested_high": 4.86
-        },
-        "units": "USD / share",
-        "basis": "adjusted"
+          "suggested_high": 4.86216
+        }
       },
       "Comparable sales, total company": {
-        "value": 1.5889,
+        "value": 2.0,
         "method_values": {
-          "guidance": 1.5,
+          "guidance": 2.3,
           "statistical": 2.3,
-          "qualitative": 1.5
+          "qualitative": 2.0,
+          "_anchor": 0.6
         },
         "weights": {
           "guidance": 0.7,
-          "statistical": 0.14,
-          "qualitative": 0.42
+          "statistical": 0.56,
+          "qualitative": 0.42,
+          "_anchor": 0.7
         },
-        "median_of_methods": 1.5,
-        "outliers": [
-          {
-            "method": "statistical",
-            "value": 2.3,
-            "spread_from_median": 0.533
-          }
-        ],
-        "anchor": null,
-        "anchor_rejected": {
-          "reason": "period mismatch",
-          "anchor_period": "FY2026",
-          "target_period": "FY2026Q2",
-          "value": 1.0
+        "median_of_methods": 2.3,
+        "outliers": [],
+        "anchor": {
+          "kind": "last_actual",
+          "value": 0.6,
+          "weight": 0.7
         },
+        "anchor_rejected": null,
         "guidance_bound": null,
         "clamped": null,
-        "agreement": 0.467,
+        "agreement": 1.0,
+        "units": "%",
+        "basis": "reported",
         "verdict": {
           "metric": "Comparable sales, total company",
           "plausible": false,
-          "concern": "Statistical forecast (2.3%) is above company guidance range (0.0% to 2.0%) and above recent historical trend; should not exceed guidance without strong justification.",
-          "suggested_low": 0.0,
-          "suggested_high": 2.0
+          "concern": "Forecasted comparable sales growth (1.7471%) is significantly below all method proposals (2.0-2.3%) and below the recent trend of improvement (from -3.3% to 1.0% to 0.6%). The consensus and methods suggest a higher value is warranted unless there is a structural reason for a sharp slowdown.",
+          "suggested_low": 2.0,
+          "suggested_high": 2.3
         },
-        "units": "%",
-        "basis": "reported"
+        "critic_bound": {
+          "from": 1.7471,
+          "low": 2.0,
+          "high": 2.3,
+          "concern": "Forecasted comparable sales growth (1.7471%) is significantly below all method proposals (2.0-2.3%) and below the recent trend of improvement (from -3.3% to 1.0% to 0.6%). The consensus and methods suggest a higher value is warranted unless there is a structural reason for a sharp slowdown."
+        }
       }
     },
     "evidence": {
@@ -586,22 +547,30 @@
           "value": 43175,
           "units": "USDm",
           "basis": "reported",
-          "doc_id": "2024-08-13__hd-us-20240813-q2-10q__101825"
+          "doc_id": "2025-08-25__hd-us-20250825-q2-10q__144029"
         },
         {
           "metric": "Net sales",
-          "period": "FY2023Q2",
-          "value": 42916,
+          "period": "FY2023Q3",
+          "value": 37710,
           "units": "USDm",
           "basis": "reported",
-          "doc_id": "2023-08-15__hd-us-20230815-q2-10q__101816"
+          "doc_id": "2024-11-12__hd-us-20241112-q3-10q__101846"
+        },
+        {
+          "metric": "Net sales",
+          "period": "FY2025Q3",
+          "value": 41352,
+          "units": "USDm",
+          "basis": "reported",
+          "doc_id": "2025-11-18__hd-us-20251118-q3-10q__437649"
         },
         {
           "metric": "Adjusted diluted EPS",
           "period": "FY2025Q2",
           "value": 4.58,
           "units": "USD / share",
-          "basis": "adjusted",
+          "basis": "reported",
           "doc_id": "2025-08-25__hd-us-20250825-q2-10q__144029"
         },
         {
@@ -609,16 +578,24 @@
           "period": "FY2024Q2",
           "value": 4.6,
           "units": "USD / share",
-          "basis": "adjusted",
-          "doc_id": "2024-08-13__hd-us-20240813-q2-10q__101825"
+          "basis": "reported",
+          "doc_id": "2025-08-25__hd-us-20250825-q2-10q__144029"
         },
         {
           "metric": "Adjusted diluted EPS",
-          "period": "FY2023Q2",
-          "value": 4.65,
+          "period": "FY2025Q3",
+          "value": 3.62,
           "units": "USD / share",
-          "basis": "adjusted",
-          "doc_id": "2023-08-15__hd-us-20230815-q2-10q__101816"
+          "basis": "reported",
+          "doc_id": "2025-11-18__hd-us-20251118-q3-10q__437649"
+        },
+        {
+          "metric": "Adjusted diluted EPS",
+          "period": "FY2024Q3",
+          "value": 3.67,
+          "units": "USD / share",
+          "basis": "reported",
+          "doc_id": "2024-11-12__hd-us-20241112-q3-10q__101846"
         },
         {
           "metric": "Comparable sales, total company",
@@ -634,15 +611,23 @@
           "value": -3.3,
           "units": "%",
           "basis": "reported",
-          "doc_id": "2024-08-13__hd-us-20240813-q2-10q__101825"
+          "doc_id": "2025-08-25__hd-us-20250825-q2-10q__144029"
         },
         {
           "metric": "Comparable sales, total company",
-          "period": "FY2023Q2",
-          "value": -2.0,
+          "period": "FY2025Q3",
+          "value": 0.2,
           "units": "%",
           "basis": "reported",
-          "doc_id": "2023-08-15__hd-us-20230815-q2-10q__101816"
+          "doc_id": "2025-11-18__hd-us-20251118-q3-10q__437649"
+        },
+        {
+          "metric": "Comparable sales, total company",
+          "period": "FY2024Q3",
+          "value": -1.3,
+          "units": "%",
+          "basis": "reported",
+          "doc_id": "2024-11-12__hd-us-20241112-q3-10q__101846"
         }
       ],
       "anchors": [
@@ -659,12 +644,12 @@
         {
           "metric": "Adjusted diluted EPS",
           "kind": "last_actual",
-          "value": 3.43,
+          "value": 3.3,
           "units": "USD / share",
           "period": "FY2026Q1",
-          "note": "Most recent reported quarter, adjusted basis",
-          "doc_id": "2026-05-19__hd-us-20260519-q1-8k-2__1038586",
-          "confidence": "high"
+          "note": "Most recent reported quarter, GAAP diluted EPS (no explicit adjusted, but historically similar)",
+          "doc_id": "2026-05-19__hd-us-20260519-q1-10q__1053121",
+          "confidence": "medium"
         },
         {
           "metric": "Comparable sales, total company",
@@ -674,42 +659,6 @@
           "period": "FY2026Q1",
           "note": "Most recent reported quarter",
           "doc_id": "2026-05-19__hd-us-20260519-q1-10q__1053121",
-          "confidence": "high"
-        },
-        {
-          "metric": "Net sales",
-          "kind": "guidance",
-          "value": 168800,
-          "low": 168000,
-          "high": 171100,
-          "units": "USDm",
-          "period": "FY2026",
-          "note": "Company guided total sales growth of 2.5% to 4.5% for FY2026 vs FY2025 ($164,683m), so range is $168,800m to $171,100m for the full year.",
-          "doc_id": "2026-05-19__hd-us-20260519-q1-8k-2__1038586",
-          "confidence": "high"
-        },
-        {
-          "metric": "Adjusted diluted EPS",
-          "kind": "guidance",
-          "value": 14.23,
-          "low": 14.23,
-          "high": 14.8,
-          "units": "USD / share",
-          "period": "FY2026",
-          "note": "Company guided diluted EPS to grow flat to 4% from $14.23 in FY2025; range is $14.23 to $14.80 for the full year.",
-          "doc_id": "2026-05-19__hd-us-20260519-q1-8k-2__1038586",
-          "confidence": "high"
-        },
-        {
-          "metric": "Comparable sales, total company",
-          "kind": "guidance",
-          "value": 1.0,
-          "low": 0.0,
-          "high": 2.0,
-          "units": "%",
-          "period": "FY2026",
-          "note": "Company guided comparable sales growth of flat to 2.0% for FY2026.",
-          "doc_id": "2026-05-19__hd-us-20260519-q1-8k-2__1038586",
           "confidence": "high"
         },
         {
@@ -740,17 +689,19 @@
         }
       ],
       "drivers": [
-        "Company guidance for FY2026: total sales growth 2.5%-4.5%, comparable sales growth flat to 2.0%, diluted EPS flat to 4% growth.",
-        "Q2 is typically the largest quarter for Home Depot due to seasonality (spring/summer home improvement).",
-        "Comparable sales are driven by both ticket and transaction trends; recent quarters show positive ticket growth but flat/negative transactions.",
-        "FX contributed positively to comps in FY2026Q1 (55bps).",
-        "No major acquisitions or 53-week year distortions noted in recent filings.",
-        "Adjusted diluted EPS is guided on a non-GAAP basis; historical reconciliation is consistent."
+        "Ticket vs transaction split: Q1 2026 comps driven by +2.2% average ticket, -1.3% transactions.",
+        "US vs total comp spread: Not explicitly broken out in available tables.",
+        "Quarter share of full-year sales: Q2 is typically the largest quarter for Home Depot.",
+        "Adjusted operating margin: Q2 historically has higher margins due to seasonality.",
+        "Comparable sales growth: Recent quarters show modest positive comps after prior declines.",
+        "Seasonality: Q2 is peak for home improvement retail.",
+        "No evidence of major acquisitions distorting recent comp vs net sales."
       ],
       "gaps": [
-        "No explicit quarterly guidance for FY2026Q2; only full-year guidance is available.",
-        "No analyst consensus found for FY2026Q2 in reviewed documents.",
-        "Adjusted diluted EPS for Q2 is not always separately disclosed from GAAP in filings; assumed to match reported diluted EPS in absence of exceptions."
+        "No explicit company guidance or analyst consensus for FY2026Q2 found in available filings.",
+        "No explicit 'adjusted' EPS for Q2 in recent filings; only GAAP diluted EPS is reported, but historically these are similar for HD.",
+        "No FY2026Q2 actuals or guidance; only Q1 2026 actuals and prior Q2 history available.",
+        "No explicit FX or inorganic revenue contribution breakdowns for comps."
       ],
       "consensus": null,
       "stopped_because": "complete",
@@ -759,9 +710,9 @@
           "n": 1,
           "tool": "list_index",
           "arguments": {
-            "limit": 10
+            "limit": 12
           },
-          "result": "10 docs: 2026-05-21__hd-us-20260521-call-ag, 2026-05-21__hd-us-20260521-call-ag, 2026-05-19__hd-us-20260519-q1-10q_",
+          "result": "12 docs: 2026-05-21__hd-us-20260521-call-ag, 2026-05-21__hd-us-20260521-call-ag, 2026-05-19__hd-us-20260519-q1-10q_",
           "error": null
         },
         {
@@ -769,8 +720,7 @@
           "tool": "extract_table",
           "arguments": {
             "doc_id": "2026-05-19__hd-us-20260519-q1-10q__1053121",
-            "near": "Net sales",
-            "limit": 2
+            "near": "Net Sales"
           },
           "result": "2 table(s), 2636 chars",
           "error": null
@@ -780,10 +730,9 @@
           "tool": "extract_table",
           "arguments": {
             "doc_id": "2026-05-19__hd-us-20260519-q1-10q__1053121",
-            "near": "Adjusted diluted EPS",
-            "limit": 2
+            "near": "Earnings Per Share"
           },
-          "result": "0 table(s), 2 chars",
+          "result": "2 table(s), 1642 chars",
           "error": null
         },
         {
@@ -791,30 +740,9 @@
           "tool": "extract_table",
           "arguments": {
             "doc_id": "2026-05-19__hd-us-20260519-q1-10q__1053121",
-            "near": "Comparable sales",
-            "limit": 2
+            "near": "Comparable Sales"
           },
           "result": "2 table(s), 1828 chars",
-          "error": null
-        },
-        {
-          "n": 2,
-          "tool": "read_document",
-          "arguments": {
-            "doc_id": "2026-05-19__hd-us-20260519-q1-8k-2__1038586",
-            "contains": "guidance"
-          },
-          "result": "matched=True chars=2500",
-          "error": null
-        },
-        {
-          "n": 2,
-          "tool": "read_document",
-          "arguments": {
-            "doc_id": "2026-05-19__hd-us-20260519-q1-8k__1038584",
-            "contains": "guidance"
-          },
-          "result": "matched=True chars=2500",
           "error": null
         },
         {
@@ -828,11 +756,21 @@
           "error": null
         },
         {
+          "n": 3,
+          "tool": "list_index",
+          "arguments": {
+            "doc_type": "Call Transcript",
+            "limit": 12
+          },
+          "result": "12 docs: 2026-05-21__hd-us-20260521-call-ag, 2026-05-21__hd-us-20260521-call-ag, 2026-05-19__hd-us-20260519-call-qn",
+          "error": null
+        },
+        {
           "n": 4,
           "tool": "extract_table",
           "arguments": {
             "doc_id": "2025-11-18__hd-us-20251118-q3-10q__437649",
-            "near": "Net sales"
+            "near": "Net Sales"
           },
           "result": "2 table(s), 2436 chars",
           "error": null
@@ -842,17 +780,7 @@
           "tool": "extract_table",
           "arguments": {
             "doc_id": "2025-11-18__hd-us-20251118-q3-10q__437649",
-            "near": "Comparable sales"
-          },
-          "result": "2 table(s), 1285 chars",
-          "error": null
-        },
-        {
-          "n": 4,
-          "tool": "extract_table",
-          "arguments": {
-            "doc_id": "2025-11-18__hd-us-20251118-q3-10q__437649",
-            "near": "Diluted earnings per share"
+            "near": "Earnings Per Share"
           },
           "result": "2 table(s), 2040 chars",
           "error": null
@@ -861,8 +789,18 @@
           "n": 4,
           "tool": "extract_table",
           "arguments": {
+            "doc_id": "2025-11-18__hd-us-20251118-q3-10q__437649",
+            "near": "Comparable Sales"
+          },
+          "result": "2 table(s), 1285 chars",
+          "error": null
+        },
+        {
+          "n": 4,
+          "tool": "extract_table",
+          "arguments": {
             "doc_id": "2026-02-24__hd-us-20260224-q4-10k__940544",
-            "near": "Net sales"
+            "near": "Net Sales"
           },
           "result": "2 table(s), 2682 chars",
           "error": null
@@ -872,7 +810,17 @@
           "tool": "extract_table",
           "arguments": {
             "doc_id": "2026-02-24__hd-us-20260224-q4-10k__940544",
-            "near": "Comparable sales"
+            "near": "Earnings Per Share"
+          },
+          "result": "2 table(s), 1942 chars",
+          "error": null
+        },
+        {
+          "n": 4,
+          "tool": "extract_table",
+          "arguments": {
+            "doc_id": "2026-02-24__hd-us-20260224-q4-10k__940544",
+            "near": "Comparable Sales"
           },
           "result": "2 table(s), 2612 chars",
           "error": null
@@ -881,81 +829,70 @@
           "n": 4,
           "tool": "extract_table",
           "arguments": {
-            "doc_id": "2026-02-24__hd-us-20260224-q4-10k__940544",
-            "near": "Diluted earnings per share"
+            "doc_id": "2026-03-18__hd-us-20260318-fy-10k__828355",
+            "near": "Net Sales"
           },
-          "result": "2 table(s), 1942 chars",
+          "result": "2 table(s), 2837 chars",
+          "error": null
+        },
+        {
+          "n": 4,
+          "tool": "extract_table",
+          "arguments": {
+            "doc_id": "2026-03-18__hd-us-20260318-fy-10k__828355",
+            "near": "Earnings Per Share"
+          },
+          "result": "2 table(s), 2124 chars",
+          "error": null
+        },
+        {
+          "n": 4,
+          "tool": "extract_table",
+          "arguments": {
+            "doc_id": "2026-03-18__hd-us-20260318-fy-10k__828355",
+            "near": "Comparable Sales"
+          },
+          "result": "2 table(s), 2761 chars",
           "error": null
         },
         {
           "n": 5,
           "tool": "extract_table",
           "arguments": {
-            "doc_id": "2025-08-15__hd-us-20250815-q2-10q__123456",
-            "near": "Net sales"
+            "doc_id": "2025-08-15__hd-us-20250815-q2-10q__1565276",
+            "near": "Net Sales"
           },
-          "result": "ERROR not_found: No document '2025-08-15__hd-us-20250815-q2-10q__123456' for home-depot",
-          "error": "No document '2025-08-15__hd-us-20250815-q2-10q__123456' for home-depot"
+          "result": "ERROR not_found: No document '2025-08-15__hd-us-20250815-q2-10q__1565276' for home-depot",
+          "error": "No document '2025-08-15__hd-us-20250815-q2-10q__1565276' for home-depot"
         },
         {
           "n": 5,
           "tool": "extract_table",
           "arguments": {
-            "doc_id": "2025-08-15__hd-us-20250815-q2-10q__123456",
-            "near": "Comparable sales"
+            "doc_id": "2025-08-15__hd-us-20250815-q2-10q__1565276",
+            "near": "Earnings Per Share"
           },
-          "result": "ERROR not_found: No document '2025-08-15__hd-us-20250815-q2-10q__123456' for home-depot",
-          "error": "No document '2025-08-15__hd-us-20250815-q2-10q__123456' for home-depot"
+          "result": "ERROR not_found: No document '2025-08-15__hd-us-20250815-q2-10q__1565276' for home-depot",
+          "error": "No document '2025-08-15__hd-us-20250815-q2-10q__1565276' for home-depot"
         },
         {
           "n": 5,
           "tool": "extract_table",
           "arguments": {
-            "doc_id": "2025-08-15__hd-us-20250815-q2-10q__123456",
-            "near": "Diluted earnings per share"
+            "doc_id": "2025-08-15__hd-us-20250815-q2-10q__1565276",
+            "near": "Comparable Sales"
           },
-          "result": "ERROR not_found: No document '2025-08-15__hd-us-20250815-q2-10q__123456' for home-depot",
-          "error": "No document '2025-08-15__hd-us-20250815-q2-10q__123456' for home-depot"
-        },
-        {
-          "n": 5,
-          "tool": "extract_table",
-          "arguments": {
-            "doc_id": "2024-08-15__hd-us-20240815-q2-10q__654321",
-            "near": "Net sales"
-          },
-          "result": "ERROR not_found: No document '2024-08-15__hd-us-20240815-q2-10q__654321' for home-depot",
-          "error": "No document '2024-08-15__hd-us-20240815-q2-10q__654321' for home-depot"
-        },
-        {
-          "n": 5,
-          "tool": "extract_table",
-          "arguments": {
-            "doc_id": "2024-08-15__hd-us-20240815-q2-10q__654321",
-            "near": "Comparable sales"
-          },
-          "result": "ERROR not_found: No document '2024-08-15__hd-us-20240815-q2-10q__654321' for home-depot",
-          "error": "No document '2024-08-15__hd-us-20240815-q2-10q__654321' for home-depot"
-        },
-        {
-          "n": 5,
-          "tool": "extract_table",
-          "arguments": {
-            "doc_id": "2024-08-15__hd-us-20240815-q2-10q__654321",
-            "near": "Diluted earnings per share"
-          },
-          "result": "ERROR not_found: No document '2024-08-15__hd-us-20240815-q2-10q__654321' for home-depot",
-          "error": "No document '2024-08-15__hd-us-20240815-q2-10q__654321' for home-depot"
+          "result": "ERROR not_found: No document '2025-08-15__hd-us-20250815-q2-10q__1565276' for home-depot",
+          "error": "No document '2025-08-15__hd-us-20250815-q2-10q__1565276' for home-depot"
         },
         {
           "n": 6,
           "tool": "list_index",
           "arguments": {
             "doc_type": "Filing",
-            "period": "Q2",
-            "limit": 8
+            "limit": 20
           },
-          "result": "8 docs: 2025-08-25__hd-us-20250825-q2-10q_, 2025-08-20__hd-us-20250820-q2-8k__, 2025-08-19__hd-us-20250819-q2-10q_",
+          "result": "20 docs (2 period conflicts): 2026-05-19__hd-us-20260519-q1-10q_, 2026-05-19__hd-us-20260519-q1-8k-2, 2026-05-19__hd-us-20260519-q1-8k__",
           "error": null
         },
         {
@@ -963,7 +900,7 @@
           "tool": "extract_table",
           "arguments": {
             "doc_id": "2025-08-25__hd-us-20250825-q2-10q__144029",
-            "near": "Net sales"
+            "near": "Net Sales"
           },
           "result": "2 table(s), 2450 chars",
           "error": null
@@ -973,17 +910,7 @@
           "tool": "extract_table",
           "arguments": {
             "doc_id": "2025-08-25__hd-us-20250825-q2-10q__144029",
-            "near": "Comparable sales"
-          },
-          "result": "2 table(s), 1921 chars",
-          "error": null
-        },
-        {
-          "n": 7,
-          "tool": "extract_table",
-          "arguments": {
-            "doc_id": "2025-08-25__hd-us-20250825-q2-10q__144029",
-            "near": "Diluted earnings per share"
+            "near": "Earnings Per Share"
           },
           "result": "2 table(s), 2120 chars",
           "error": null
@@ -992,60 +919,150 @@
           "n": 7,
           "tool": "extract_table",
           "arguments": {
-            "doc_id": "2024-08-13__hd-us-20240813-q2-10q__101825",
-            "near": "Net sales"
+            "doc_id": "2025-08-25__hd-us-20250825-q2-10q__144029",
+            "near": "Comparable Sales"
           },
-          "result": "2 table(s), 3106 chars",
+          "result": "2 table(s), 1921 chars",
           "error": null
         },
         {
-          "n": 7,
+          "n": 8,
           "tool": "extract_table",
           "arguments": {
-            "doc_id": "2024-08-13__hd-us-20240813-q2-10q__101825",
-            "near": "Comparable sales"
+            "doc_id": "2024-08-15__hd-us-20240815-q2-10q__1565275",
+            "near": "Net Sales"
           },
-          "result": "2 table(s), 1411 chars",
+          "result": "ERROR not_found: No document '2024-08-15__hd-us-20240815-q2-10q__1565275' for home-depot",
+          "error": "No document '2024-08-15__hd-us-20240815-q2-10q__1565275' for home-depot"
+        },
+        {
+          "n": 8,
+          "tool": "extract_table",
+          "arguments": {
+            "doc_id": "2024-08-15__hd-us-20240815-q2-10q__1565275",
+            "near": "Earnings Per Share"
+          },
+          "result": "ERROR not_found: No document '2024-08-15__hd-us-20240815-q2-10q__1565275' for home-depot",
+          "error": "No document '2024-08-15__hd-us-20240815-q2-10q__1565275' for home-depot"
+        },
+        {
+          "n": 8,
+          "tool": "extract_table",
+          "arguments": {
+            "doc_id": "2024-08-15__hd-us-20240815-q2-10q__1565275",
+            "near": "Comparable Sales"
+          },
+          "result": "ERROR not_found: No document '2024-08-15__hd-us-20240815-q2-10q__1565275' for home-depot",
+          "error": "No document '2024-08-15__hd-us-20240815-q2-10q__1565275' for home-depot"
+        },
+        {
+          "n": 9,
+          "tool": "list_index",
+          "arguments": {
+            "doc_type": "Filing",
+            "limit": 30
+          },
+          "result": "25 docs (4 period conflicts): 2026-05-19__hd-us-20260519-q1-10q_, 2026-05-19__hd-us-20260519-q1-8k-2, 2026-05-19__hd-us-20260519-q1-8k__",
           "error": null
         },
         {
-          "n": 7,
+          "n": 10,
           "tool": "extract_table",
           "arguments": {
-            "doc_id": "2024-08-13__hd-us-20240813-q2-10q__101825",
-            "near": "Diluted earnings per share"
+            "doc_id": "2024-08-20__hd-us-20240820-q2-8k__143688",
+            "near": "Net Sales"
           },
-          "result": "2 table(s), 2087 chars",
+          "result": "ERROR not_found: No document '2024-08-20__hd-us-20240820-q2-8k__143688' for home-depot",
+          "error": "No document '2024-08-20__hd-us-20240820-q2-8k__143688' for home-depot"
+        },
+        {
+          "n": 10,
+          "tool": "extract_table",
+          "arguments": {
+            "doc_id": "2024-08-20__hd-us-20240820-q2-8k__143688",
+            "near": "Earnings Per Share"
+          },
+          "result": "ERROR not_found: No document '2024-08-20__hd-us-20240820-q2-8k__143688' for home-depot",
+          "error": "No document '2024-08-20__hd-us-20240820-q2-8k__143688' for home-depot"
+        },
+        {
+          "n": 10,
+          "tool": "extract_table",
+          "arguments": {
+            "doc_id": "2024-08-20__hd-us-20240820-q2-8k__143688",
+            "near": "Comparable Sales"
+          },
+          "result": "ERROR not_found: No document '2024-08-20__hd-us-20240820-q2-8k__143688' for home-depot",
+          "error": "No document '2024-08-20__hd-us-20240820-q2-8k__143688' for home-depot"
+        },
+        {
+          "n": 11,
+          "tool": "extract_table",
+          "arguments": {
+            "doc_id": "2024-11-12__hd-us-20241112-q3-10q__101846",
+            "near": "Net Sales"
+          },
+          "result": "2 table(s), 3135 chars",
           "error": null
         },
         {
-          "n": 7,
+          "n": 12,
           "tool": "extract_table",
           "arguments": {
-            "doc_id": "2023-08-15__hd-us-20230815-q2-10q__101816",
-            "near": "Net sales"
+            "doc_id": "2024-11-12__hd-us-20241112-q3-10q__101846",
+            "near": "Earnings Per Share"
           },
-          "result": "2 table(s), 2400 chars",
+          "result": "2 table(s), 2120 chars",
           "error": null
         },
         {
-          "n": 7,
+          "n": 12,
           "tool": "extract_table",
           "arguments": {
-            "doc_id": "2023-08-15__hd-us-20230815-q2-10q__101816",
-            "near": "Comparable sales"
+            "doc_id": "2024-11-12__hd-us-20241112-q3-10q__101846",
+            "near": "Comparable Sales"
           },
-          "result": "2 table(s), 1395 chars",
+          "result": "2 table(s), 1431 chars",
           "error": null
         },
         {
-          "n": 7,
+          "n": 13,
           "tool": "extract_table",
           "arguments": {
-            "doc_id": "2023-08-15__hd-us-20230815-q2-10q__101816",
-            "near": "Diluted earnings per share"
+            "doc_id": "2023-08-15__hd-us-20230815-q2-10q__101845",
+            "near": "Net Sales"
           },
-          "result": "2 table(s), 2084 chars",
+          "result": "ERROR not_found: No document '2023-08-15__hd-us-20230815-q2-10q__101845' for home-depot",
+          "error": "No document '2023-08-15__hd-us-20230815-q2-10q__101845' for home-depot"
+        },
+        {
+          "n": 14,
+          "tool": "list_index",
+          "arguments": {
+            "doc_type": "Filing",
+            "limit": 40
+          },
+          "result": "25 docs (4 period conflicts): 2026-05-19__hd-us-20260519-q1-10q_, 2026-05-19__hd-us-20260519-q1-8k-2, 2026-05-19__hd-us-20260519-q1-8k__",
+          "error": null
+        },
+        {
+          "n": 15,
+          "tool": "extract_table",
+          "arguments": {
+            "doc_id": "2023-11-14__hd-us-20231114-q3-10q__101843",
+            "near": "Net Sales"
+          },
+          "result": "ERROR not_found: No document '2023-11-14__hd-us-20231114-q3-10q__101843' for home-depot",
+          "error": "No document '2023-11-14__hd-us-20231114-q3-10q__101843' for home-depot"
+        },
+        {
+          "n": 16,
+          "tool": "list_index",
+          "arguments": {
+            "doc_type": "Filing",
+            "limit": 50
+          },
+          "result": "25 docs (4 period conflicts): 2026-05-19__hd-us-20260519-q1-10q_, 2026-05-19__hd-us-20260519-q1-8k-2, 2026-05-19__hd-us-20260519-q1-8k__",
           "error": null
         }
       ]
@@ -1084,15 +1101,15 @@
       "inventory days",
       "utilization"
     ],
-    "elapsed_s": 45.1,
-    "tool_calls": 40,
-    "history_rows": 6,
+    "elapsed_s": 44.2,
+    "tool_calls": 32,
+    "history_rows": 11,
     "followup_passes": 1,
     "channels": [
       {
         "channel": "finance",
         "available": true,
-        "rows": 9,
+        "rows": 14,
         "note": "reported actuals from filings"
       },
       {
@@ -1116,16 +1133,15 @@
     ],
     "evidence_gaps": [
       "Revenue: no guidance or management commentary found",
-      "Adjusted diluted EPS: only 2 historical point(s), need 4 to fit a trend or clamp",
       "Adjusted diluted EPS: no guidance or management commentary found",
-      "Adjusted gross margin: only 2 historical point(s), need 4 to fit a trend or clamp",
+      "Adjusted gross margin: only 3 historical point(s), need 4 to fit a trend or clamp",
       "Adjusted gross margin: no guidance or management commentary found"
     ],
     "thin_metrics": [
-      "Adjusted diluted EPS",
       "Adjusted gross margin"
     ],
     "consensus_found": [],
+    "rescued_metrics": [],
     "market": {
       "ticker": "ADI",
       "symbol": "ADI",
@@ -1185,27 +1201,19 @@
           },
           {
             "metric": "Revenue",
-            "period": "FY2025",
-            "value": 11019.707,
+            "period": "FY2025Q3",
+            "value": 3012,
             "units": "USDm",
             "basis": "reported",
-            "doc_id": "2025-11-25__adi-us-20251125-q4-10k__361135"
+            "doc_id": "2025-08-20__adi-us-20250820-q3-8k__155976"
           },
           {
             "metric": "Revenue",
-            "period": "FY2024",
-            "value": 9427.157,
+            "period": "FY2025Q2",
+            "value": 2640,
             "units": "USDm",
             "basis": "reported",
-            "doc_id": "2025-11-25__adi-us-20251125-q4-10k__361135"
-          },
-          {
-            "metric": "Revenue",
-            "period": "FY2023",
-            "value": 12305.539,
-            "units": "USDm",
-            "basis": "reported",
-            "doc_id": "2025-11-25__adi-us-20251125-q4-10k__361135"
+            "doc_id": "2026-05-20__adi-us-20260520-q2-8k-2__1040614"
           },
           {
             "metric": "Revenue",
@@ -1213,7 +1221,7 @@
             "value": 3623,
             "units": "USDm",
             "period": "FY2026Q2",
-            "note": "Most recent reported quarterly revenue",
+            "note": "Most recent reported quarter",
             "doc_id": "2026-05-20__adi-us-20260520-q2-8k-2__1040614",
             "confidence": "high"
           }
@@ -1236,20 +1244,19 @@
         ],
         "cyclical": {
           "available": true,
-          "points": 5,
-          "min": 3623.0,
-          "max": 12305.539,
+          "points": 4,
+          "min": 2640.0,
+          "max": 3623.0,
           "latest": 3623.0,
           "growth_rates": [
-            2.3965,
-            -0.2339,
-            0.1689,
-            -0.6712
+            -0.2713,
+            0.1409,
+            0.2029
           ],
-          "recent_growth": -0.6712,
-          "mean_growth": 0.4151,
-          "direction": "inflected negative",
-          "naive_projection": 1191.1505
+          "recent_growth": 0.2029,
+          "mean_growth": 0.0241,
+          "direction": "growth accelerating",
+          "naive_projection": 4357.9446
         },
         "sufficient": true
       },
@@ -1266,11 +1273,51 @@
           },
           {
             "metric": "Adjusted diluted EPS",
+            "period": "FY2025Q2",
+            "value": 1.85,
+            "units": "USD / share",
+            "basis": "adjusted",
+            "doc_id": "2026-05-20__adi-us-20260520-q2-8k-2__1040614"
+          },
+          {
+            "metric": "Adjusted diluted EPS",
+            "period": "FY2025Q3",
+            "value": 1.04,
+            "units": "USD / share",
+            "basis": "reported",
+            "doc_id": "2025-08-21__adi-us-20250821-q3-10q__143765"
+          },
+          {
+            "metric": "Adjusted diluted EPS",
+            "period": "FY2024Q3",
+            "value": 0.79,
+            "units": "USD / share",
+            "basis": "reported",
+            "doc_id": "2024-08-21__adi-us-20240821-q3-10q__102682"
+          },
+          {
+            "metric": "Adjusted diluted EPS",
+            "period": "FY2023Q3",
+            "value": 1.74,
+            "units": "USD / share",
+            "basis": "reported",
+            "doc_id": "2023-08-23__adi-us-20230823-q3-10q__102684"
+          },
+          {
+            "metric": "Adjusted diluted EPS",
+            "period": "FY2022Q3",
+            "value": 1.44,
+            "units": "USD / share",
+            "basis": "reported",
+            "doc_id": "2022-08-17__adi-us-20220817-q3-10q__102678"
+          },
+          {
+            "metric": "Adjusted diluted EPS",
             "kind": "last_actual",
             "value": 3.09,
             "units": "USD / share",
             "period": "FY2026Q2",
-            "note": "Most recent reported adjusted diluted EPS",
+            "note": "Most recent reported quarter",
             "doc_id": "2026-05-20__adi-us-20260520-q2-8k-2__1040614",
             "confidence": "high"
           }
@@ -1293,19 +1340,24 @@
         ],
         "cyclical": {
           "available": true,
-          "points": 2,
-          "min": 3.09,
+          "points": 7,
+          "min": 0.79,
           "max": 3.09,
           "latest": 3.09,
           "growth_rates": [
-            0.0
+            -0.534,
+            0.2083,
+            -0.546,
+            0.3165,
+            0.7788,
+            0.6703
           ],
-          "recent_growth": 0.0,
-          "mean_growth": 0.0,
-          "direction": "single interval - direction unknown",
-          "naive_projection": 3.09
+          "recent_growth": 0.6703,
+          "mean_growth": 0.149,
+          "direction": "growth slowing",
+          "naive_projection": 5.1611
         },
-        "sufficient": false
+        "sufficient": true
       },
       "Adjusted gross margin": {
         "metric": "Adjusted gross margin",
@@ -1320,11 +1372,19 @@
           },
           {
             "metric": "Adjusted gross margin",
+            "period": "FY2025Q2",
+            "value": 69.4,
+            "units": "%",
+            "basis": "adjusted",
+            "doc_id": "2026-05-20__adi-us-20260520-q2-8k-2__1040614"
+          },
+          {
+            "metric": "Adjusted gross margin",
             "kind": "last_actual",
             "value": 73.0,
             "units": "%",
             "period": "FY2026Q2",
-            "note": "Most recent reported adjusted gross margin",
+            "note": "Most recent reported quarter",
             "doc_id": "2026-05-20__adi-us-20260520-q2-8k-2__1040614",
             "confidence": "high"
           }
@@ -1333,17 +1393,18 @@
         "news": [],
         "cyclical": {
           "available": true,
-          "points": 2,
-          "min": 73.0,
+          "points": 3,
+          "min": 69.4,
           "max": 73.0,
           "latest": 73.0,
           "growth_rates": [
-            0.0
+            -0.0493,
+            0.0519
           ],
-          "recent_growth": 0.0,
-          "mean_growth": 0.0,
-          "direction": "single interval - direction unknown",
-          "naive_projection": 73.0
+          "recent_growth": 0.0519,
+          "mean_growth": 0.0013,
+          "direction": "inflected positive",
+          "naive_projection": 76.7867
         },
         "sufficient": false
       }
@@ -1355,7 +1416,7 @@
         "value": 3623,
         "units": "USDm",
         "period": "FY2026Q2",
-        "note": "Most recent reported quarterly revenue",
+        "note": "Most recent reported quarter",
         "doc_id": "2026-05-20__adi-us-20260520-q2-8k-2__1040614",
         "confidence": "high"
       },
@@ -1365,7 +1426,7 @@
         "value": 3.09,
         "units": "USD / share",
         "period": "FY2026Q2",
-        "note": "Most recent reported adjusted diluted EPS",
+        "note": "Most recent reported quarter",
         "doc_id": "2026-05-20__adi-us-20260520-q2-8k-2__1040614",
         "confidence": "high"
       },
@@ -1375,7 +1436,7 @@
         "value": 73.0,
         "units": "%",
         "period": "FY2026Q2",
-        "note": "Most recent reported adjusted gross margin",
+        "note": "Most recent reported quarter",
         "doc_id": "2026-05-20__adi-us-20260520-q2-8k-2__1040614",
         "confidence": "high"
       },
@@ -1407,27 +1468,27 @@
       }
     ],
     "gaps": [
-      "No explicit company guidance or consensus for FY2026Q3 revenue, adjusted EPS, or adjusted gross margin found in available documents.",
-      "Historical quarterly data for FY2025Q3, FY2024Q3, and earlier quarters is missing for all metrics.",
-      "Adjusted gross margin for FY2025 and prior years not found in available tables."
+      "No explicit company guidance or consensus for FY2026Q3 Revenue, Adjusted diluted EPS, or Adjusted gross margin found in available documents.",
+      "Not enough historical data for Adjusted diluted EPS and Adjusted gross margin for 8-12 periods; only two quarters available.",
+      "No explicit Q3 2026 point estimate or range for any metric."
     ],
     "consensus": null,
     "results": {
       "Revenue": {
-        "value": 3929.0825,
+        "value": 3998.0,
         "method_values": {
           "guidance": 3925.0,
-          "statistical": 3925.0,
+          "statistical": 4358.0,
           "qualitative": 3950.0,
           "_anchor": 3925.0365
         },
         "weights": {
-          "guidance": 0.7,
+          "guidance": 1.0,
           "statistical": 0.56,
           "qualitative": 0.42,
           "_anchor": 0.9
         },
-        "median_of_methods": 3925.0,
+        "median_of_methods": 3950.0,
         "outliers": [],
         "anchor": {
           "kind": "consensus",
@@ -1437,33 +1498,45 @@
         "anchor_rejected": null,
         "guidance_bound": null,
         "clamped": null,
-        "agreement": 0.994,
+        "agreement": 0.897,
+        "units": "USDm",
+        "basis": "reported",
         "verdict": {
           "metric": "Revenue",
-          "plausible": true,
-          "concern": "none",
+          "plausible": false,
+          "concern": "Magnitude is high: The FINAL_SUBMITTED_VALUE of 4012.85 USDm is ~10.7% above the most recent actual (3623 USDm) and ~2.2% above the analyst consensus (3925.04 USDm). While not >30% above the last actual, it is above the consensus high (3998.0 USDm) and all guidance/qualitative/statistical anchors except the outlier statistical method. Unless there is a clear structural reason for such outperformance, this is aggressive.",
           "suggested_low": 3899.7,
           "suggested_high": 3998.0
         },
-        "units": "USDm",
-        "basis": "reported"
+        "critic_bound": {
+          "from": 4012.8517,
+          "low": 3899.7,
+          "high": 3998.0,
+          "concern": "Magnitude is high: The FINAL_SUBMITTED_VALUE of 4012.85 USDm is ~10.7% above the most recent actual (3623 USDm) and ~2.2% above the analyst consensus (3925.04 USDm). While not >30% above the last actual, it is above the consensus high (3998.0 USDm) and all guidance/qualitative/statistical anchors except the outlier statistical method. Unless there is a clear structural reason for such outperformance, this is aggressive."
+        }
       },
       "Adjusted diluted EPS": {
-        "value": 3.3395,
+        "value": 3.396,
         "method_values": {
           "guidance": 3.33,
-          "statistical": 3.33,
-          "qualitative": 3.38,
+          "statistical": 5.16,
+          "qualitative": 3.35,
           "_anchor": 3.3339
         },
         "weights": {
-          "guidance": 0.7,
-          "statistical": 0.56,
+          "guidance": 1.0,
+          "statistical": 0.08,
           "qualitative": 0.42,
           "_anchor": 0.9
         },
-        "median_of_methods": 3.33,
-        "outliers": [],
+        "median_of_methods": 3.35,
+        "outliers": [
+          {
+            "method": "statistical",
+            "value": 5.16,
+            "spread_from_median": 0.54
+          }
+        ],
         "anchor": {
           "kind": "consensus",
           "value": 3.3339,
@@ -1472,45 +1545,57 @@
         "anchor_rejected": null,
         "guidance_bound": null,
         "clamped": null,
-        "agreement": 0.985,
+        "agreement": 0.46,
+        "units": "USD / share",
+        "basis": "adjusted",
         "verdict": {
           "metric": "Adjusted diluted EPS",
           "plausible": true,
           "concern": "none",
           "suggested_low": 3.29,
           "suggested_high": 3.42
-        },
-        "units": "USD / share",
-        "basis": "adjusted"
+        }
       },
       "Adjusted gross margin": {
-        "value": 73.0769,
+        "value": 73.5,
         "method_values": {
-          "guidance": 73.0,
-          "statistical": 73.0,
-          "qualitative": 73.2
+          "guidance": 73.5,
+          "statistical": 76.8,
+          "qualitative": 73.2,
+          "_anchor": 73.0
         },
         "weights": {
-          "guidance": 0.4,
+          "guidance": 0.7,
           "statistical": 0.56,
-          "qualitative": 0.6
+          "qualitative": 0.42,
+          "_anchor": 0.7
         },
-        "median_of_methods": 73.0,
+        "median_of_methods": 73.5,
         "outliers": [],
-        "anchor": null,
+        "anchor": {
+          "kind": "last_actual",
+          "value": 73.0,
+          "weight": 0.7
+        },
         "anchor_rejected": null,
         "guidance_bound": null,
         "clamped": null,
-        "agreement": 0.997,
+        "agreement": 0.955,
+        "units": "%",
+        "basis": "adjusted",
         "verdict": {
           "metric": "Adjusted gross margin",
-          "plausible": true,
-          "concern": "none",
+          "plausible": false,
+          "concern": "Magnitude is high: The FINAL_SUBMITTED_VALUE of 74.08% is above the most recent actual (73.0%) and above both guidance (73.5%) and qualitative (73.2%) anchors. The statistical method (76.8%) is an outlier. A 1 percentage point increase in gross margin is aggressive for a mature semiconductor company without clear justification.",
           "suggested_low": 73.0,
-          "suggested_high": 73.2
+          "suggested_high": 73.5
         },
-        "units": "%",
-        "basis": "adjusted"
+        "critic_bound": {
+          "from": 74.0765,
+          "low": 73.0,
+          "high": 73.5,
+          "concern": "Magnitude is high: The FINAL_SUBMITTED_VALUE of 74.08% is above the most recent actual (73.0%) and above both guidance (73.5%) and qualitative (73.2%) anchors. The statistical method (76.8%) is an outlier. A 1 percentage point increase in gross margin is aggressive for a mature semiconductor company without clear justification."
+        }
       }
     },
     "evidence": {
@@ -1529,9 +1614,33 @@
           "doc_id": "2026-05-20__adi-us-20260520-q2-8k-2__1040614"
         },
         {
+          "metric": "Revenue",
+          "period": "FY2025Q3",
+          "value": 3012,
+          "units": "USDm",
+          "basis": "reported",
+          "doc_id": "2025-08-20__adi-us-20250820-q3-8k__155976"
+        },
+        {
+          "metric": "Revenue",
+          "period": "FY2025Q2",
+          "value": 2640,
+          "units": "USDm",
+          "basis": "reported",
+          "doc_id": "2026-05-20__adi-us-20260520-q2-8k-2__1040614"
+        },
+        {
           "metric": "Adjusted diluted EPS",
           "period": "FY2026Q2",
           "value": 3.09,
+          "units": "USD / share",
+          "basis": "adjusted",
+          "doc_id": "2026-05-20__adi-us-20260520-q2-8k-2__1040614"
+        },
+        {
+          "metric": "Adjusted diluted EPS",
+          "period": "FY2025Q2",
+          "value": 1.85,
           "units": "USD / share",
           "basis": "adjusted",
           "doc_id": "2026-05-20__adi-us-20260520-q2-8k-2__1040614"
@@ -1545,28 +1654,44 @@
           "doc_id": "2026-05-20__adi-us-20260520-q2-8k-2__1040614"
         },
         {
-          "metric": "Revenue",
-          "period": "FY2025",
-          "value": 11019.707,
-          "units": "USDm",
-          "basis": "reported",
-          "doc_id": "2025-11-25__adi-us-20251125-q4-10k__361135"
+          "metric": "Adjusted gross margin",
+          "period": "FY2025Q2",
+          "value": 69.4,
+          "units": "%",
+          "basis": "adjusted",
+          "doc_id": "2026-05-20__adi-us-20260520-q2-8k-2__1040614"
         },
         {
-          "metric": "Revenue",
-          "period": "FY2024",
-          "value": 9427.157,
-          "units": "USDm",
+          "metric": "Adjusted diluted EPS",
+          "period": "FY2025Q3",
+          "value": 1.04,
+          "units": "USD / share",
           "basis": "reported",
-          "doc_id": "2025-11-25__adi-us-20251125-q4-10k__361135"
+          "doc_id": "2025-08-21__adi-us-20250821-q3-10q__143765"
         },
         {
-          "metric": "Revenue",
-          "period": "FY2023",
-          "value": 12305.539,
-          "units": "USDm",
+          "metric": "Adjusted diluted EPS",
+          "period": "FY2024Q3",
+          "value": 0.79,
+          "units": "USD / share",
           "basis": "reported",
-          "doc_id": "2025-11-25__adi-us-20251125-q4-10k__361135"
+          "doc_id": "2024-08-21__adi-us-20240821-q3-10q__102682"
+        },
+        {
+          "metric": "Adjusted diluted EPS",
+          "period": "FY2023Q3",
+          "value": 1.74,
+          "units": "USD / share",
+          "basis": "reported",
+          "doc_id": "2023-08-23__adi-us-20230823-q3-10q__102684"
+        },
+        {
+          "metric": "Adjusted diluted EPS",
+          "period": "FY2022Q3",
+          "value": 1.44,
+          "units": "USD / share",
+          "basis": "reported",
+          "doc_id": "2022-08-17__adi-us-20220817-q3-10q__102678"
         }
       ],
       "anchors": [
@@ -1576,7 +1701,7 @@
           "value": 3623,
           "units": "USDm",
           "period": "FY2026Q2",
-          "note": "Most recent reported quarterly revenue",
+          "note": "Most recent reported quarter",
           "doc_id": "2026-05-20__adi-us-20260520-q2-8k-2__1040614",
           "confidence": "high"
         },
@@ -1586,7 +1711,7 @@
           "value": 3.09,
           "units": "USD / share",
           "period": "FY2026Q2",
-          "note": "Most recent reported adjusted diluted EPS",
+          "note": "Most recent reported quarter",
           "doc_id": "2026-05-20__adi-us-20260520-q2-8k-2__1040614",
           "confidence": "high"
         },
@@ -1596,7 +1721,7 @@
           "value": 73.0,
           "units": "%",
           "period": "FY2026Q2",
-          "note": "Most recent reported adjusted gross margin",
+          "note": "Most recent reported quarter",
           "doc_id": "2026-05-20__adi-us-20260520-q2-8k-2__1040614",
           "confidence": "high"
         },
@@ -1628,16 +1753,15 @@
         }
       ],
       "drivers": [
-        "Q2 2026 results show strong year-over-year growth in revenue and margins, led by industrial and communications end-markets.",
-        "Company commentary highlights record bookings and strong demand signals for Q3.",
-        "Gross margin is at a local peak due to high utilization; further upside may require more outsourcing.",
-        "End-market mix: communications (including data center) is above corporate average margin.",
-        "Inventory levels are flat, suggesting no further inventory correction drag."
+        "Company commentary indicates record bookings and strong demand in Industrial, Automotive, and Communications for Q2 2026, with expectations for continued strong growth in Q3.",
+        "Management noted utilization rates are high and gross margin is at a likely near-term ceiling unless mix shifts further.",
+        "Comms (including data center) is above corporate average margin and is expected to be the fastest grower sequentially in Q3.",
+        "Channel inventory weeks are expected to remain flat into Q3."
       ],
       "gaps": [
-        "No explicit company guidance or consensus for FY2026Q3 revenue, adjusted EPS, or adjusted gross margin found in available documents.",
-        "Historical quarterly data for FY2025Q3, FY2024Q3, and earlier quarters is missing for all metrics.",
-        "Adjusted gross margin for FY2025 and prior years not found in available tables."
+        "No explicit company guidance or consensus for FY2026Q3 Revenue, Adjusted diluted EPS, or Adjusted gross margin found in available documents.",
+        "Not enough historical data for Adjusted diluted EPS and Adjusted gross margin for 8-12 periods; only two quarters available.",
+        "No explicit Q3 2026 point estimate or range for any metric."
       ],
       "consensus": null,
       "stopped_because": "complete",
@@ -1646,9 +1770,9 @@
           "n": 1,
           "tool": "list_index",
           "arguments": {
-            "limit": 10
+            "limit": 8
           },
-          "result": "10 docs (1 period conflicts): 2026-06-02__adi-us-20260602-call-c, 2026-06-02__adi-us-20260602-call-c, 2026-05-20__adi-us-20260520-call-q",
+          "result": "8 docs (1 period conflicts): 2026-06-02__adi-us-20260602-call-c, 2026-06-02__adi-us-20260602-call-c, 2026-05-20__adi-us-20260520-call-q",
           "error": null
         },
         {
@@ -1683,36 +1807,36 @@
         },
         {
           "n": 2,
+          "tool": "search",
+          "arguments": {
+            "query": "company compiled consensus",
+            "limit": 4
+          },
+          "result": "4 docs: 2023-09-06__adi-us-20230906-call-c, 2024-02-29__adi-us-20240229-filing, 2023-08-23__adi-us-20230823-call-q",
+          "error": null
+        },
+        {
+          "n": 3,
           "tool": "read_document",
           "arguments": {
-            "doc_id": "2026-05-20__adi-us-20260520-call-qna__1041159",
-            "contains": "guidance"
+            "doc_id": "2026-05-20__adi-us-20260520-q2-8k-2__1040614",
+            "contains": "outlook for continued strong growth in the third quarter"
           },
           "result": "matched=True chars=2500",
           "error": null
         },
         {
-          "n": 2,
-          "tool": "read_document",
+          "n": 4,
+          "tool": "extract_table",
           "arguments": {
-            "doc_id": "2026-06-02__adi-us-20260602-call-conf-qna__1135033",
-            "contains": "Q3 guidance"
+            "doc_id": "2026-05-20__adi-us-20260520-q2-8k-2__1040614",
+            "near": "Results Summary"
           },
-          "result": "matched=False chars=2500",
+          "result": "0 table(s), 2 chars",
           "error": null
         },
         {
-          "n": 2,
-          "tool": "read_document",
-          "arguments": {
-            "doc_id": "2026-06-02__adi-us-20260602-call-conf-pres__1135032",
-            "contains": "Q3 guidance"
-          },
-          "result": "matched=False chars=886",
-          "error": null
-        },
-        {
-          "n": 3,
+          "n": 5,
           "tool": "read_document",
           "arguments": {
             "doc_id": "2026-05-20__adi-us-20260520-q2-8k-2__1040614",
@@ -1722,56 +1846,67 @@
           "error": null
         },
         {
-          "n": 4,
+          "n": 6,
           "tool": "read_document",
           "arguments": {
             "doc_id": "2026-05-20__adi-us-20260520-q2-8k-2__1040614",
-            "contains": "guidance"
+            "contains": "guidance for the third quarter"
           },
           "result": "matched=False chars=2500",
           "error": null
         },
         {
-          "n": 5,
-          "tool": "extract_table",
+          "n": 7,
+          "tool": "read_document",
           "arguments": {
-            "doc_id": "2026-05-20__adi-us-20260520-q2-8k-2__1040614",
-            "near": "outlook"
+            "doc_id": "2026-05-20__adi-us-20260520-call-pres__1041157",
+            "contains": "third quarter guidance"
           },
-          "result": "0 table(s), 2 chars",
+          "result": "matched=False chars=2500",
           "error": null
         },
         {
-          "n": 6,
+          "n": 8,
+          "tool": "read_document",
+          "arguments": {
+            "doc_id": "2026-05-20__adi-us-20260520-call-pres__1041157",
+            "contains": "guidance"
+          },
+          "result": "matched=True chars=2500",
+          "error": null
+        },
+        {
+          "n": 9,
+          "tool": "read_document",
+          "arguments": {
+            "doc_id": "2026-05-20__adi-us-20260520-call-qna__1041159",
+            "contains": "guidance"
+          },
+          "result": "matched=True chars=2500",
+          "error": null
+        },
+        {
+          "n": 10,
           "tool": "extract_table",
           "arguments": {
             "doc_id": "2026-05-20__adi-us-20260520-q2-8k-2__1040614",
+            "near": "Adjusted diluted earnings per share"
+          },
+          "result": "1 table(s), 989 chars",
+          "error": null
+        },
+        {
+          "n": 11,
+          "tool": "extract_table",
+          "arguments": {
+            "doc_id": "2025-12-02__adi-us-20251202-call-conf-pres-3__381899",
             "near": "guidance"
           },
           "result": "0 table(s), 2 chars",
           "error": null
         },
         {
-          "n": 7,
-          "tool": "extract_table",
-          "arguments": {
-            "doc_id": "2026-05-20__adi-us-20260520-q2-8k-2__1040614"
-          },
-          "result": "2 table(s), 4456 chars",
-          "error": null
-        },
-        {
-          "n": 8,
-          "tool": "search",
-          "arguments": {
-            "query": "company compiled consensus",
-            "limit": 5
-          },
-          "result": "5 docs: 2023-09-06__adi-us-20230906-call-c, 2024-02-29__adi-us-20240229-filing, 2023-08-23__adi-us-20230823-call-q",
-          "error": null
-        },
-        {
-          "n": 9,
+          "n": 12,
           "tool": "extract_table",
           "arguments": {
             "doc_id": "2026-05-20__adi-us-20260520-q2-8k-2__1040614",
@@ -1781,59 +1916,21 @@
           "error": null
         },
         {
-          "n": 10,
+          "n": 13,
           "tool": "list_index",
           "arguments": {
-            "limit": 20
+            "limit": 12,
+            "doc_type": "Filing"
           },
-          "result": "20 docs (2 period conflicts): 2026-06-02__adi-us-20260602-call-c, 2026-06-02__adi-us-20260602-call-c, 2026-05-20__adi-us-20260520-call-q",
+          "result": "12 docs (3 period conflicts): 2026-05-20__adi-us-20260520-q2-8k-, 2026-05-20__adi-us-20260520-q2-10q, 2026-05-20__adi-us-20260520-q2-8k_",
           "error": null
         },
         {
-          "n": 11,
+          "n": 14,
           "tool": "extract_table",
           "arguments": {
-            "doc_id": "2025-11-25__adi-us-20251125-q4-10k__361135",
-            "near": "Revenue"
-          },
-          "result": "2 table(s), 2511 chars",
-          "error": null
-        },
-        {
-          "n": 11,
-          "tool": "extract_table",
-          "arguments": {
-            "doc_id": "2025-11-25__adi-us-20251125-q4-10k__361135",
-            "near": "Adjusted gross margin"
-          },
-          "result": "0 table(s), 2 chars",
-          "error": null
-        },
-        {
-          "n": 11,
-          "tool": "extract_table",
-          "arguments": {
-            "doc_id": "2025-11-25__adi-us-20251125-q4-10k__361135",
-            "near": "diluted earnings per share"
-          },
-          "result": "0 table(s), 2 chars",
-          "error": null
-        },
-        {
-          "n": 12,
-          "tool": "extract_table",
-          "arguments": {
-            "doc_id": "2025-11-25__adi-us-20251125-call-q4-pres-3__361121",
-            "near": "Adjusted gross margin"
-          },
-          "result": "0 table(s), 2 chars",
-          "error": null
-        },
-        {
-          "n": 13,
-          "tool": "extract_table",
-          "arguments": {
-            "doc_id": "2025-11-25__adi-us-20251125-call-q4-pres-3__361121"
+            "doc_id": "2025-08-20__adi-us-20250820-q3-8k__155976",
+            "near": "Results Summary"
           },
           "result": "0 table(s), 2 chars",
           "error": null
@@ -1842,103 +1939,44 @@
           "n": 14,
           "tool": "extract_table",
           "arguments": {
-            "doc_id": "2025-11-25__adi-us-20251125-q4-10k__361135"
+            "doc_id": "2025-11-25__adi-us-20251125-q4-10k__361135",
+            "near": "Results of Operations"
           },
-          "result": "2 table(s), 11403 chars",
+          "result": "1 table(s), 2074 chars",
           "error": null
         },
         {
-          "n": 15,
+          "n": 14,
           "tool": "extract_table",
           "arguments": {
-            "doc_id": "2025-08-23__adi-us-20250823-q3-10q__301135",
-            "near": "Revenue"
-          },
-          "result": "ERROR not_found: No document '2025-08-23__adi-us-20250823-q3-10q__301135' for analog-devices",
-          "error": "No document '2025-08-23__adi-us-20250823-q3-10q__301135' for analog-devices"
-        },
-        {
-          "n": 15,
-          "tool": "extract_table",
-          "arguments": {
-            "doc_id": "2025-08-23__adi-us-20250823-q3-10q__301135",
-            "near": "Adjusted gross margin"
-          },
-          "result": "ERROR not_found: No document '2025-08-23__adi-us-20250823-q3-10q__301135' for analog-devices",
-          "error": "No document '2025-08-23__adi-us-20250823-q3-10q__301135' for analog-devices"
-        },
-        {
-          "n": 15,
-          "tool": "extract_table",
-          "arguments": {
-            "doc_id": "2025-08-23__adi-us-20250823-q3-10q__301135",
-            "near": "diluted earnings per share"
-          },
-          "result": "ERROR not_found: No document '2025-08-23__adi-us-20250823-q3-10q__301135' for analog-devices",
-          "error": "No document '2025-08-23__adi-us-20250823-q3-10q__301135' for analog-devices"
-        },
-        {
-          "n": 16,
-          "tool": "extract_table",
-          "arguments": {
-            "doc_id": "2025-11-25__adi-us-20251125-call-q4-pres__361104",
-            "near": "Revenue"
+            "doc_id": "2025-08-21__adi-us-20250821-q3-10q__143765",
+            "near": "Results of Operations"
           },
           "result": "0 table(s), 2 chars",
           "error": null
         },
         {
-          "n": 16,
+          "n": 14,
           "tool": "extract_table",
           "arguments": {
-            "doc_id": "2025-11-25__adi-us-20251125-call-q4-pres__361104",
-            "near": "Adjusted gross margin"
+            "doc_id": "2026-02-18__adi-us-20260218-q1-8k-2__602115",
+            "near": "Results Summary"
           },
           "result": "0 table(s), 2 chars",
           "error": null
         },
         {
-          "n": 16,
-          "tool": "extract_table",
-          "arguments": {
-            "doc_id": "2025-11-25__adi-us-20251125-call-q4-pres__361104",
-            "near": "diluted earnings per share"
-          },
-          "result": "0 table(s), 2 chars",
-          "error": null
-        },
-        {
-          "n": 1,
-          "tool": "list_index",
-          "arguments": {
-            "doc_type": "Filing",
-            "limit": 10
-          },
-          "result": "10 docs (3 period conflicts): 2026-05-20__adi-us-20260520-q2-8k-, 2026-05-20__adi-us-20260520-q2-10q, 2026-05-20__adi-us-20260520-q2-8k_",
-          "error": null
-        },
-        {
-          "n": 2,
+          "n": 15,
           "tool": "extract_table",
           "arguments": {
             "doc_id": "2025-11-25__adi-us-20251125-q4-10k__361135",
-            "near": "Revenue"
+            "near": "Consolidated Statements of Income"
           },
-          "result": "2 table(s), 2511 chars",
+          "result": "1 table(s), 2074 chars",
           "error": null
         },
         {
-          "n": 2,
-          "tool": "extract_table",
-          "arguments": {
-            "doc_id": "2025-11-25__adi-us-20251125-q4-10k__361135",
-            "near": "Adjusted diluted EPS"
-          },
-          "result": "0 table(s), 2 chars",
-          "error": null
-        },
-        {
-          "n": 2,
+          "n": 16,
           "tool": "extract_table",
           "arguments": {
             "doc_id": "2025-11-25__adi-us-20251125-q4-10k__361135",
@@ -1948,96 +1986,105 @@
           "error": null
         },
         {
-          "n": 3,
+          "n": 1,
           "tool": "list_index",
           "arguments": {
             "doc_type": "Filing",
-            "limit": 5,
-            "since": "2024-01-01"
+            "limit": 12
           },
-          "result": "5 docs (1 period conflicts): 2026-05-20__adi-us-20260520-q2-8k-, 2026-05-20__adi-us-20260520-q2-10q, 2026-05-20__adi-us-20260520-q2-8k_",
+          "result": "12 docs (3 period conflicts): 2026-05-20__adi-us-20260520-q2-8k-, 2026-05-20__adi-us-20260520-q2-10q, 2026-05-20__adi-us-20260520-q2-8k_",
           "error": null
         },
         {
-          "n": 3,
+          "n": 1,
           "tool": "list_index",
           "arguments": {
             "doc_type": "Filing",
-            "limit": 5,
-            "since": "2023-01-01"
+            "limit": 12,
+            "period": "Q3"
           },
-          "result": "5 docs (1 period conflicts): 2026-05-20__adi-us-20260520-q2-8k-, 2026-05-20__adi-us-20260520-q2-10q, 2026-05-20__adi-us-20260520-q2-8k_",
+          "result": "12 docs (2 period conflicts): 2026-05-20__adi-us-20260520-q2-10q, 2025-08-21__adi-us-20250821-q3-10q, 2025-08-20__adi-us-20250820-q3-8k_",
           "error": null
         },
         {
-          "n": 4,
+          "n": 2,
           "tool": "extract_table",
           "arguments": {
-            "doc_id": "2024-11-21__adi-us-20241121-q4-10k__210011",
-            "near": "Revenue"
-          },
-          "result": "ERROR not_found: No document '2024-11-21__adi-us-20241121-q4-10k__210011' for analog-devices",
-          "error": "No document '2024-11-21__adi-us-20241121-q4-10k__210011' for analog-devices"
-        },
-        {
-          "n": 4,
-          "tool": "extract_table",
-          "arguments": {
-            "doc_id": "2024-11-21__adi-us-20241121-q4-10k__210011",
-            "near": "gross margin"
-          },
-          "result": "ERROR not_found: No document '2024-11-21__adi-us-20241121-q4-10k__210011' for analog-devices",
-          "error": "No document '2024-11-21__adi-us-20241121-q4-10k__210011' for analog-devices"
-        },
-        {
-          "n": 4,
-          "tool": "extract_table",
-          "arguments": {
-            "doc_id": "2024-11-21__adi-us-20241121-q4-10k__210011",
+            "doc_id": "2025-08-21__adi-us-20250821-q3-10q__143765",
             "near": "Adjusted diluted EPS"
           },
-          "result": "ERROR not_found: No document '2024-11-21__adi-us-20241121-q4-10k__210011' for analog-devices",
-          "error": "No document '2024-11-21__adi-us-20241121-q4-10k__210011' for analog-devices"
-        },
-        {
-          "n": 5,
-          "tool": "list_index",
-          "arguments": {
-            "doc_type": "Filing",
-            "limit": 15
-          },
-          "result": "15 docs (3 period conflicts): 2026-05-20__adi-us-20260520-q2-8k-, 2026-05-20__adi-us-20260520-q2-10q, 2026-05-20__adi-us-20260520-q2-8k_",
+          "result": "0 table(s), 2 chars",
           "error": null
         },
         {
-          "n": 6,
+          "n": 2,
           "tool": "extract_table",
           "arguments": {
-            "doc_id": "2024-11-26__adi-us-20241126-q4-10k__210011",
-            "near": "Revenue"
-          },
-          "result": "ERROR not_found: No document '2024-11-26__adi-us-20241126-q4-10k__210011' for analog-devices",
-          "error": "No document '2024-11-26__adi-us-20241126-q4-10k__210011' for analog-devices"
-        },
-        {
-          "n": 6,
-          "tool": "extract_table",
-          "arguments": {
-            "doc_id": "2024-11-26__adi-us-20241126-q4-10k__210011",
-            "near": "gross margin"
-          },
-          "result": "ERROR not_found: No document '2024-11-26__adi-us-20241126-q4-10k__210011' for analog-devices",
-          "error": "No document '2024-11-26__adi-us-20241126-q4-10k__210011' for analog-devices"
-        },
-        {
-          "n": 6,
-          "tool": "extract_table",
-          "arguments": {
-            "doc_id": "2024-11-26__adi-us-20241126-q4-10k__210011",
+            "doc_id": "2024-08-21__adi-us-20240821-q3-10q__102682",
             "near": "Adjusted diluted EPS"
           },
-          "result": "ERROR not_found: No document '2024-11-26__adi-us-20241126-q4-10k__210011' for analog-devices",
-          "error": "No document '2024-11-26__adi-us-20241126-q4-10k__210011' for analog-devices"
+          "result": "0 table(s), 2 chars",
+          "error": null
+        },
+        {
+          "n": 2,
+          "tool": "extract_table",
+          "arguments": {
+            "doc_id": "2023-08-23__adi-us-20230823-q3-10q__102684",
+            "near": "Adjusted diluted EPS"
+          },
+          "result": "0 table(s), 2 chars",
+          "error": null
+        },
+        {
+          "n": 2,
+          "tool": "extract_table",
+          "arguments": {
+            "doc_id": "2022-08-17__adi-us-20220817-q3-10q__102678",
+            "near": "Adjusted diluted EPS"
+          },
+          "result": "0 table(s), 2 chars",
+          "error": null
+        },
+        {
+          "n": 2,
+          "tool": "extract_table",
+          "arguments": {
+            "doc_id": "2025-08-21__adi-us-20250821-q3-10q__143765",
+            "near": "gross margin"
+          },
+          "result": "2 table(s), 2259 chars",
+          "error": null
+        },
+        {
+          "n": 2,
+          "tool": "extract_table",
+          "arguments": {
+            "doc_id": "2024-08-21__adi-us-20240821-q3-10q__102682",
+            "near": "gross margin"
+          },
+          "result": "2 table(s), 2289 chars",
+          "error": null
+        },
+        {
+          "n": 2,
+          "tool": "extract_table",
+          "arguments": {
+            "doc_id": "2023-08-23__adi-us-20230823-q3-10q__102684",
+            "near": "gross margin"
+          },
+          "result": "2 table(s), 2282 chars",
+          "error": null
+        },
+        {
+          "n": 2,
+          "tool": "extract_table",
+          "arguments": {
+            "doc_id": "2022-08-17__adi-us-20220817-q3-10q__102678",
+            "near": "gross margin"
+          },
+          "result": "2 table(s), 2257 chars",
+          "error": null
         }
       ]
     }
@@ -2076,21 +2123,21 @@
       "perm vs temp mix",
       "productivity"
     ],
-    "elapsed_s": 48.9,
-    "tool_calls": 46,
-    "history_rows": 10,
-    "followup_passes": 1,
+    "elapsed_s": 47.4,
+    "tool_calls": 32,
+    "history_rows": 12,
+    "followup_passes": 0,
     "channels": [
       {
         "channel": "finance",
         "available": true,
-        "rows": 10,
+        "rows": 12,
         "note": "reported actuals from filings"
       },
       {
         "channel": "calls",
         "available": true,
-        "rows": 2,
+        "rows": 3,
         "note": "guidance and consensus from transcripts and statements"
       },
       {
@@ -2108,14 +2155,9 @@
     ],
     "evidence_gaps": [
       "Net fees: no guidance or management commentary found",
-      "Pre-exceptional basic EPS: only 3 historical point(s), need 4 to fit a trend or clamp",
-      "Pre-exceptional basic EPS: no guidance or management commentary found",
-      "Pre-exceptional operating profit: only 3 historical point(s), need 4 to fit a trend or clamp"
+      "Pre-exceptional basic EPS: no guidance or management commentary found"
     ],
-    "thin_metrics": [
-      "Pre-exceptional basic EPS",
-      "Pre-exceptional operating profit"
-    ],
+    "thin_metrics": [],
     "consensus_found": [
       {
         "metric": "Pre-exceptional operating profit",
@@ -2132,6 +2174,7 @@
         "period": "FY2026"
       }
     ],
+    "rescued_metrics": [],
     "market": {
       "ticker": "LSE:HAS",
       "symbol": "HAS.L",
@@ -2170,7 +2213,7 @@
             "value": 1113.6,
             "units": "GBPm",
             "basis": "reported",
-            "doc_id": "2025-08-21__has-ln-20250821-h2-8k__143890"
+            "doc_id": "2024-08-22__has-ln-20240822-h2-8k__119721"
           },
           {
             "metric": "Net fees",
@@ -2178,7 +2221,7 @@
             "value": 1294.6,
             "units": "GBPm",
             "basis": "reported",
-            "doc_id": "2023-08-24__has-ln-20230824-slide__75015"
+            "doc_id": "2023-08-24__has-ln-20230824-h2-8k__119735"
           },
           {
             "metric": "Net fees",
@@ -2186,7 +2229,7 @@
             "value": 1189.4,
             "units": "GBPm",
             "basis": "reported",
-            "doc_id": "2023-08-24__has-ln-20230824-slide__75015"
+            "doc_id": "2022-08-25__has-ln-20220825-h2-8k__119750"
           }
         ],
         "calls": [],
@@ -2226,7 +2269,7 @@
             "value": 4.03,
             "units": "GBp",
             "basis": "pre-exceptional",
-            "doc_id": "2025-08-21__has-ln-20250821-h2-8k__143890"
+            "doc_id": "2024-08-22__has-ln-20240822-h2-8k__119721"
           },
           {
             "metric": "Pre-exceptional basic EPS",
@@ -2234,27 +2277,36 @@
             "value": 8.59,
             "units": "GBp",
             "basis": "pre-exceptional",
-            "doc_id": "2023-08-24__has-ln-20230824-slide__75015"
+            "doc_id": "2023-08-24__has-ln-20230824-h2-8k__119735"
+          },
+          {
+            "metric": "Pre-exceptional basic EPS",
+            "period": "FY2022",
+            "value": 9.22,
+            "units": "GBp",
+            "basis": "pre-exceptional",
+            "doc_id": "2022-08-25__has-ln-20220825-h2-8k__119750"
           }
         ],
         "calls": [],
         "news": [],
         "cyclical": {
           "available": true,
-          "points": 3,
+          "points": 4,
           "min": 1.31,
-          "max": 8.59,
+          "max": 9.22,
           "latest": 1.31,
           "growth_rates": [
+            -0.0683,
             -0.5308,
             -0.6749
           ],
           "recent_growth": -0.6749,
-          "mean_growth": -0.6029,
+          "mean_growth": -0.4247,
           "direction": "decline deepening",
           "naive_projection": 0.4258
         },
-        "sufficient": false
+        "sufficient": true
       },
       "Pre-exceptional operating profit": {
         "metric": "Pre-exceptional operating profit",
@@ -2273,7 +2325,7 @@
             "value": 105.1,
             "units": "GBPm",
             "basis": "pre-exceptional",
-            "doc_id": "2025-08-21__has-ln-20250821-h2-8k__143890"
+            "doc_id": "2024-08-22__has-ln-20240822-h2-8k__119721"
           },
           {
             "metric": "Pre-exceptional operating profit",
@@ -2282,18 +2334,38 @@
             "units": "GBPm",
             "basis": "pre-exceptional",
             "doc_id": "2023-08-24__has-ln-20230824-h2-8k__119735"
+          },
+          {
+            "metric": "Pre-exceptional operating profit",
+            "period": "FY2022",
+            "value": 210.1,
+            "units": "GBPm",
+            "basis": "pre-exceptional",
+            "doc_id": "2022-08-25__has-ln-20220825-h2-8k__119750"
           }
         ],
         "calls": [
           {
             "metric": "Pre-exceptional operating profit",
-            "kind": "consensus",
+            "kind": "guidance",
             "value": 46.0,
             "low": 37.0,
             "high": 46.0,
             "units": "GBPm",
             "period": "FY2026",
-            "note": "Company states FY26 pre-exceptional operating profit expected at the top of the \u00a337.0-46.0m consensus range as of July 2026 (10 analysts, company-compiled consensus).",
+            "note": "Company expects FY26 pre-exceptional operating profit at the top of the \u00a337.0-46.0m consensus range.",
+            "doc_id": "2026-07-10__has-ln-20260710-q4-8k__1572805",
+            "confidence": "high"
+          },
+          {
+            "metric": "Pre-exceptional operating profit",
+            "kind": "consensus",
+            "value": 43.5,
+            "low": 37.0,
+            "high": 46.0,
+            "units": "GBPm",
+            "period": "FY2026",
+            "note": "Company-compiled consensus for FY26 pre-exceptional operating profit as of 9 July 2026, based on 10 analysts.",
             "doc_id": "2026-07-10__has-ln-20260710-q4-8k__1572805",
             "confidence": "high"
           },
@@ -2315,32 +2387,45 @@
         "news": [],
         "cyclical": {
           "available": true,
-          "points": 3,
+          "points": 4,
           "min": 45.6,
-          "max": 197.0,
+          "max": 210.1,
           "latest": 45.6,
           "growth_rates": [
+            -0.0624,
             -0.4665,
             -0.5661
           ],
           "recent_growth": -0.5661,
-          "mean_growth": -0.5163,
+          "mean_growth": -0.365,
           "direction": "decline deepening",
           "naive_projection": 19.7846
         },
-        "sufficient": false
+        "sufficient": true
       }
     },
     "anchors": [
       {
         "metric": "Pre-exceptional operating profit",
-        "kind": "consensus",
+        "kind": "guidance",
         "value": 46.0,
         "low": 37.0,
         "high": 46.0,
         "units": "GBPm",
         "period": "FY2026",
-        "note": "Company states FY26 pre-exceptional operating profit expected at the top of the \u00a337.0-46.0m consensus range as of July 2026 (10 analysts, company-compiled consensus).",
+        "note": "Company expects FY26 pre-exceptional operating profit at the top of the \u00a337.0-46.0m consensus range.",
+        "doc_id": "2026-07-10__has-ln-20260710-q4-8k__1572805",
+        "confidence": "high"
+      },
+      {
+        "metric": "Pre-exceptional operating profit",
+        "kind": "consensus",
+        "value": 43.5,
+        "low": 37.0,
+        "high": 46.0,
+        "units": "GBPm",
+        "period": "FY2026",
+        "note": "Company-compiled consensus for FY26 pre-exceptional operating profit as of 9 July 2026, based on 10 analysts.",
         "doc_id": "2026-07-10__has-ln-20260710-q4-8k__1572805",
         "confidence": "high"
       },
@@ -2360,19 +2445,18 @@
       }
     ],
     "gaps": [
-      "No reported FY2026 actuals for any metric (as of 16 Aug 2026, full-year results due 20 Aug 2026)",
-      "No explicit FY2026 company guidance for Net fees or Pre-exceptional basic EPS; only operating profit consensus/guidance found",
-      "No FY2021 or earlier values included due to step limit; trend fitting may be less robust",
-      "No explicit company-compiled consensus for Net fees or EPS for FY2026 found"
+      "No reported FY2026 figures for Net fees or Pre-exceptional basic EPS yet available; only operating profit guidance and consensus found.",
+      "No explicit company guidance or consensus for FY2026 Net fees or Pre-exceptional basic EPS.",
+      "No full FY2026 income statement table available as of last trading update."
     ],
-    "consensus": "Company-compiled consensus for FY2026 pre-exceptional operating profit: \u00a343.5m (range \u00a337.0-46.0m, 10 analysts, as of July 2026). No consensus found for Net fees or EPS.",
+    "consensus": "Company-compiled consensus for FY26 pre-exceptional operating profit: \u00a343.5m (range \u00a337.0-46.0m) as of 9 July 2026, based on 10 analysts.",
     "results": {
       "Net fees": {
-        "value": 861.75,
+        "value": 950,
         "method_values": {
           "guidance": 849.0,
           "statistical": 849.0,
-          "qualitative": 900.0
+          "qualitative": 850.0
         },
         "weights": {
           "guidance": 0.7,
@@ -2385,35 +2469,41 @@
         "anchor_rejected": null,
         "guidance_bound": null,
         "clamped": null,
-        "agreement": 0.94,
+        "agreement": 0.999,
+        "units": "GBPm",
+        "basis": "reported",
         "verdict": {
           "metric": "Net fees",
           "plausible": false,
-          "concern": "Magnitude implausible: Forecasts (849.0/900.0) are 13-24% below FY2025 (972.4m), and 24-31% below FY2024 (1113.6m). This is a much steeper decline than recent history, which already saw a sharp drop from FY2024 to FY2025. Unless there is a stated structural reason for further decline, this is likely too low.",
-          "suggested_low": 900.0,
-          "suggested_high": 972.4
+          "concern": "Magnitude implausible: Forecast (\u00a3849.25m) is ~13% below FY2025 (\u00a3972.4m), which itself was already a sharp drop from FY2024 (\u00a31113.6m). This would imply a cumulative ~24% drop over two years, and ~34% from FY2023, with no stated structural reason. Such a continued decline is extreme and not supported by evidence of further deterioration.",
+          "suggested_low": 950,
+          "suggested_high": 1050
         },
-        "units": "GBPm",
-        "basis": "reported"
+        "critic_bound": {
+          "from": 849.25,
+          "low": 950,
+          "high": 1050,
+          "concern": "Magnitude implausible: Forecast (\u00a3849.25m) is ~13% below FY2025 (\u00a3972.4m), which itself was already a sharp drop from FY2024 (\u00a31113.6m). This would imply a cumulative ~24% drop over two years, and ~34% from FY2023, with no stated structural reason. Such a continued decline is extreme and not supported by evidence of further deterioration."
+        }
       },
       "Pre-exceptional basic EPS": {
-        "value": 0.5153,
+        "value": 1.2,
         "method_values": {
           "guidance": 0.43,
           "statistical": 0.43,
-          "qualitative": 1.1
+          "qualitative": 1.2
         },
         "weights": {
           "guidance": 0.4,
           "statistical": 0.32,
-          "qualitative": 0.105
+          "qualitative": 0.06
         },
         "median_of_methods": 0.43,
         "outliers": [
           {
             "method": "qualitative",
-            "value": 1.1,
-            "spread_from_median": 1.558
+            "value": 1.2,
+            "spread_from_median": 1.791
           }
         ],
         "anchor": null,
@@ -2421,15 +2511,21 @@
         "guidance_bound": null,
         "clamped": null,
         "agreement": 0.0,
+        "units": "GBp",
+        "basis": "pre-exceptional",
         "verdict": {
           "metric": "Pre-exceptional basic EPS",
           "plausible": false,
-          "concern": "Magnitude implausible: Forecasts (0.43/1.1) are dramatically below FY2025 (1.31p) and FY2024 (4.03p). 0.43p is a 67% drop from FY2025, which is already down 67% from FY2024. Unless there is a structural reason for further collapse, this is likely too low.",
-          "suggested_low": 1.0,
-          "suggested_high": 1.31
+          "concern": "Magnitude implausible: Forecast (0.4892p) is a drastic drop from FY2025 (1.31p) and FY2024 (4.03p). This would be a ~63% drop from FY2025 and a >95% drop from FY2023, which is not justified by the operating profit guidance (which is flat vs FY2025). EPS should be roughly stable if profit is stable.",
+          "suggested_low": 1.2,
+          "suggested_high": 1.5
         },
-        "units": "GBp",
-        "basis": "pre-exceptional"
+        "critic_bound": {
+          "from": 0.4892,
+          "low": 1.2,
+          "high": 1.5,
+          "concern": "Magnitude implausible: Forecast (0.4892p) is a drastic drop from FY2025 (1.31p) and FY2024 (4.03p). This would be a ~63% drop from FY2025 and a >95% drop from FY2023, which is not justified by the operating profit guidance (which is flat vs FY2025). EPS should be roughly stable if profit is stable."
+        }
       },
       "Pre-exceptional operating profit": {
         "value": 46.0,
@@ -2443,28 +2539,28 @@
           "guidance": 1.0,
           "statistical": 0.8,
           "qualitative": 0.6,
-          "_anchor": 0.9
+          "_anchor": 1.2
         },
         "median_of_methods": 46.0,
         "outliers": [],
         "anchor": {
-          "kind": "consensus",
+          "kind": "guidance",
           "value": 46.0,
-          "weight": 0.9
+          "weight": 1.2
         },
         "anchor_rejected": null,
         "guidance_bound": null,
         "clamped": null,
         "agreement": 1.0,
+        "units": "GBPm",
+        "basis": "pre-exceptional",
         "verdict": {
           "metric": "Pre-exceptional operating profit",
           "plausible": true,
           "concern": "none",
           "suggested_low": 45.0,
           "suggested_high": 46.0
-        },
-        "units": "GBPm",
-        "basis": "pre-exceptional"
+        }
       }
     },
     "evidence": {
@@ -2488,7 +2584,7 @@
           "value": 1113.6,
           "units": "GBPm",
           "basis": "reported",
-          "doc_id": "2025-08-21__has-ln-20250821-h2-8k__143890"
+          "doc_id": "2024-08-22__has-ln-20240822-h2-8k__119721"
         },
         {
           "metric": "Net fees",
@@ -2496,7 +2592,7 @@
           "value": 1294.6,
           "units": "GBPm",
           "basis": "reported",
-          "doc_id": "2023-08-24__has-ln-20230824-slide__75015"
+          "doc_id": "2023-08-24__has-ln-20230824-h2-8k__119735"
         },
         {
           "metric": "Net fees",
@@ -2504,7 +2600,7 @@
           "value": 1189.4,
           "units": "GBPm",
           "basis": "reported",
-          "doc_id": "2023-08-24__has-ln-20230824-slide__75015"
+          "doc_id": "2022-08-25__has-ln-20220825-h2-8k__119750"
         },
         {
           "metric": "Pre-exceptional basic EPS",
@@ -2520,7 +2616,7 @@
           "value": 4.03,
           "units": "GBp",
           "basis": "pre-exceptional",
-          "doc_id": "2025-08-21__has-ln-20250821-h2-8k__143890"
+          "doc_id": "2024-08-22__has-ln-20240822-h2-8k__119721"
         },
         {
           "metric": "Pre-exceptional basic EPS",
@@ -2528,7 +2624,15 @@
           "value": 8.59,
           "units": "GBp",
           "basis": "pre-exceptional",
-          "doc_id": "2023-08-24__has-ln-20230824-slide__75015"
+          "doc_id": "2023-08-24__has-ln-20230824-h2-8k__119735"
+        },
+        {
+          "metric": "Pre-exceptional basic EPS",
+          "period": "FY2022",
+          "value": 9.22,
+          "units": "GBp",
+          "basis": "pre-exceptional",
+          "doc_id": "2022-08-25__has-ln-20220825-h2-8k__119750"
         },
         {
           "metric": "Pre-exceptional operating profit",
@@ -2544,7 +2648,7 @@
           "value": 105.1,
           "units": "GBPm",
           "basis": "pre-exceptional",
-          "doc_id": "2025-08-21__has-ln-20250821-h2-8k__143890"
+          "doc_id": "2024-08-22__has-ln-20240822-h2-8k__119721"
         },
         {
           "metric": "Pre-exceptional operating profit",
@@ -2553,18 +2657,38 @@
           "units": "GBPm",
           "basis": "pre-exceptional",
           "doc_id": "2023-08-24__has-ln-20230824-h2-8k__119735"
+        },
+        {
+          "metric": "Pre-exceptional operating profit",
+          "period": "FY2022",
+          "value": 210.1,
+          "units": "GBPm",
+          "basis": "pre-exceptional",
+          "doc_id": "2022-08-25__has-ln-20220825-h2-8k__119750"
         }
       ],
       "anchors": [
         {
           "metric": "Pre-exceptional operating profit",
-          "kind": "consensus",
+          "kind": "guidance",
           "value": 46.0,
           "low": 37.0,
           "high": 46.0,
           "units": "GBPm",
           "period": "FY2026",
-          "note": "Company states FY26 pre-exceptional operating profit expected at the top of the \u00a337.0-46.0m consensus range as of July 2026 (10 analysts, company-compiled consensus).",
+          "note": "Company expects FY26 pre-exceptional operating profit at the top of the \u00a337.0-46.0m consensus range.",
+          "doc_id": "2026-07-10__has-ln-20260710-q4-8k__1572805",
+          "confidence": "high"
+        },
+        {
+          "metric": "Pre-exceptional operating profit",
+          "kind": "consensus",
+          "value": 43.5,
+          "low": 37.0,
+          "high": 46.0,
+          "units": "GBPm",
+          "period": "FY2026",
+          "note": "Company-compiled consensus for FY26 pre-exceptional operating profit as of 9 July 2026, based on 10 analysts.",
           "doc_id": "2026-07-10__has-ln-20260710-q4-8k__1572805",
           "confidence": "high"
         },
@@ -2584,29 +2708,28 @@
         }
       ],
       "drivers": [
-        "LFL net fee growth by division and geography (Q4 2026: Group LFL net fees -5%, with Temp & Contracting -3% and Perm -7%)",
-        "Perm vs Temp mix (Q4 2026: Temp & Contracting 65% of group net fees, Perm 35%)",
-        "Consultant net fee productivity growth (Q4 2026: 8% YoY productivity growth)",
-        "Cost savings programme: \u00a350m annualised savings secured in FY26, ahead of \u00a345m target",
-        "Country exits/disposals: Czech Republic, Denmark, Hungary, Luxembourg, Romania, and Sweden disposed June 2026 (not in continuing ops base)",
-        "Net fees to operating profit conversion (historically volatile, affected by cost actions and mix)"
+        "LFL net fee growth by division and geography (Q4 2026: Group net fees down 5% YoY, Temp & Contracting more resilient than Perm)",
+        "Consultant headcount down 12% YoY in FY26, productivity up 8% in Q4",
+        "Cost savings programme delivered \u00a350m annualised savings in FY26, exceeding target",
+        "Country disposals (six European countries exited in June 2026) impact reported vs LFL",
+        "Perm vs Temp mix: Temp & Contracting now 65% of group net fees in Q4 2026",
+        "Exceptional items: c.\u00a340m restructuring charge and c.\u00a330m impairment in FY26, excluded from pre-exceptional metrics"
       ],
       "gaps": [
-        "No reported FY2026 actuals for any metric (as of 16 Aug 2026, full-year results due 20 Aug 2026)",
-        "No explicit FY2026 company guidance for Net fees or Pre-exceptional basic EPS; only operating profit consensus/guidance found",
-        "No FY2021 or earlier values included due to step limit; trend fitting may be less robust",
-        "No explicit company-compiled consensus for Net fees or EPS for FY2026 found"
+        "No reported FY2026 figures for Net fees or Pre-exceptional basic EPS yet available; only operating profit guidance and consensus found.",
+        "No explicit company guidance or consensus for FY2026 Net fees or Pre-exceptional basic EPS.",
+        "No full FY2026 income statement table available as of last trading update."
       ],
-      "consensus": "Company-compiled consensus for FY2026 pre-exceptional operating profit: \u00a343.5m (range \u00a337.0-46.0m, 10 analysts, as of July 2026). No consensus found for Net fees or EPS.",
+      "consensus": "Company-compiled consensus for FY26 pre-exceptional operating profit: \u00a343.5m (range \u00a337.0-46.0m) as of 9 July 2026, based on 10 analysts.",
       "stopped_because": "complete",
       "trace": [
         {
           "n": 1,
           "tool": "list_index",
           "arguments": {
-            "limit": 10
+            "limit": 12
           },
-          "result": "10 docs: 2026-08-03__has-ln-20260803-filing, 2026-07-10__has-ln-20260710-call-q, 2026-07-10__has-ln-20260710-call-p",
+          "result": "12 docs: 2026-08-03__has-ln-20260803-filing, 2026-07-10__has-ln-20260710-call-q, 2026-07-10__has-ln-20260710-call-p",
           "error": null
         },
         {
@@ -2641,31 +2764,62 @@
         },
         {
           "n": 2,
-          "tool": "read_document",
+          "tool": "search",
           "arguments": {
-            "doc_id": "2026-07-10__has-ln-20260710-filing-4__1572907",
-            "contains": "guidance"
+            "query": "company compiled consensus",
+            "limit": 6
           },
-          "result": "matched=False chars=2430",
+          "result": "6 docs: 2025-06-19__has-ln-20250619-q4-8k_, 2024-01-09__has-ln-20240109-q2-8k_, 2025-01-15__has-ln-20250115-q2-8k_",
           "error": null
         },
         {
           "n": 2,
-          "tool": "search",
+          "tool": "read_document",
           "arguments": {
-            "query": "company compiled consensus",
-            "limit": 5
+            "doc_id": "2026-07-10__has-ln-20260710-filing-4__1572907",
+            "contains": "outlook"
           },
-          "result": "5 docs: 2025-06-19__has-ln-20250619-q4-8k_, 2024-01-09__has-ln-20240109-q2-8k_, 2025-01-15__has-ln-20250115-q2-8k_",
+          "result": "matched=False chars=2430",
           "error": null
         },
         {
           "n": 3,
           "tool": "extract_table",
           "arguments": {
-            "doc_id": "2026-07-10__has-ln-20260710-q4-8k__1572805"
+            "doc_id": "2026-07-10__has-ln-20260710-q4-8k__1572805",
+            "near": "net fees"
           },
-          "result": "2 table(s), 978 chars",
+          "result": "1 table(s), 597 chars",
+          "error": null
+        },
+        {
+          "n": 3,
+          "tool": "extract_table",
+          "arguments": {
+            "doc_id": "2026-07-10__has-ln-20260710-q4-8k__1572805",
+            "near": "operating profit"
+          },
+          "result": "0 table(s), 2 chars",
+          "error": null
+        },
+        {
+          "n": 3,
+          "tool": "extract_table",
+          "arguments": {
+            "doc_id": "2026-07-10__has-ln-20260710-q4-8k__1572805",
+            "near": "EPS"
+          },
+          "result": "0 table(s), 2 chars",
+          "error": null
+        },
+        {
+          "n": 3,
+          "tool": "read_document",
+          "arguments": {
+            "doc_id": "2026-07-10__has-ln-20260710-q4-8k__1572805",
+            "contains": "outlook"
+          },
+          "result": "matched=True chars=2500",
           "error": null
         },
         {
@@ -2683,13 +2837,23 @@
           "tool": "extract_table",
           "arguments": {
             "doc_id": "2026-07-10__has-ln-20260710-q4-8k__1572805",
-            "near": "net fees"
+            "near": "income statement"
           },
-          "result": "1 table(s), 597 chars",
+          "result": "0 table(s), 2 chars",
           "error": null
         },
         {
           "n": 5,
+          "tool": "extract_table",
+          "arguments": {
+            "doc_id": "2026-07-10__has-ln-20260710-q4-8k__1572805",
+            "near": "financial summary"
+          },
+          "result": "0 table(s), 2 chars",
+          "error": null
+        },
+        {
+          "n": 6,
           "tool": "extract_table",
           "arguments": {
             "doc_id": "2026-07-10__has-ln-20260710-q4-8k__1572805"
@@ -2698,7 +2862,7 @@
           "error": null
         },
         {
-          "n": 6,
+          "n": 7,
           "tool": "list_index",
           "arguments": {
             "limit": 12,
@@ -2708,34 +2872,47 @@
           "error": null
         },
         {
-          "n": 7,
+          "n": 8,
           "tool": "extract_table",
           "arguments": {
-            "doc_id": "2025-08-21__has-ln-20250821-h2-8k__143890"
+            "doc_id": "2025-08-21__has-ln-20250821-h2-8k__143890",
+            "near": "net fees"
           },
-          "result": "2 table(s), 2688 chars",
-          "error": null
-        },
-        {
-          "n": 7,
-          "tool": "extract_table",
-          "arguments": {
-            "doc_id": "2025-08-21__has-ln-20250821-slide__143884"
-          },
-          "result": "2 table(s), 2593 chars",
-          "error": null
-        },
-        {
-          "n": 7,
-          "tool": "extract_table",
-          "arguments": {
-            "doc_id": "2025-08-21__has-ln-20250821-filing__143845"
-          },
-          "result": "2 table(s), 5198 chars",
+          "result": "2 table(s), 2066 chars",
           "error": null
         },
         {
           "n": 8,
+          "tool": "extract_table",
+          "arguments": {
+            "doc_id": "2025-08-21__has-ln-20250821-h2-8k__143890",
+            "near": "operating profit"
+          },
+          "result": "2 table(s), 3254 chars",
+          "error": null
+        },
+        {
+          "n": 8,
+          "tool": "extract_table",
+          "arguments": {
+            "doc_id": "2025-08-21__has-ln-20250821-h2-8k__143890",
+            "near": "EPS"
+          },
+          "result": "0 table(s), 2 chars",
+          "error": null
+        },
+        {
+          "n": 9,
+          "tool": "extract_table",
+          "arguments": {
+            "doc_id": "2024-08-24__has-ln-20240824-h2-8k__119701",
+            "near": "net fees"
+          },
+          "result": "ERROR not_found: No document '2024-08-24__has-ln-20240824-h2-8k__119701' for hays",
+          "error": "No document '2024-08-24__has-ln-20240824-h2-8k__119701' for hays"
+        },
+        {
+          "n": 10,
           "tool": "list_index",
           "arguments": {
             "limit": 12,
@@ -2745,25 +2922,37 @@
           "error": null
         },
         {
-          "n": 9,
+          "n": 11,
           "tool": "extract_table",
           "arguments": {
-            "doc_id": "2024-08-22__has-ln-20240822-h2-8k__119721"
+            "doc_id": "2024-08-22__has-ln-20240822-h2-8k__119721",
+            "near": "net fees"
           },
-          "result": "2 table(s), 3407 chars",
+          "result": "2 table(s), 1761 chars",
           "error": null
         },
         {
-          "n": 9,
+          "n": 11,
           "tool": "extract_table",
           "arguments": {
-            "doc_id": "2024-08-22__has-ln-20240822-slide__74994"
+            "doc_id": "2024-08-22__has-ln-20240822-h2-8k__119721",
+            "near": "operating profit"
           },
-          "result": "2 table(s), 2603 chars",
+          "result": "2 table(s), 2841 chars",
           "error": null
         },
         {
-          "n": 10,
+          "n": 11,
+          "tool": "extract_table",
+          "arguments": {
+            "doc_id": "2024-08-22__has-ln-20240822-h2-8k__119721",
+            "near": "EPS"
+          },
+          "result": "0 table(s), 2 chars",
+          "error": null
+        },
+        {
+          "n": 12,
           "tool": "list_index",
           "arguments": {
             "limit": 12,
@@ -2773,25 +2962,37 @@
           "error": null
         },
         {
-          "n": 11,
+          "n": 13,
           "tool": "extract_table",
           "arguments": {
-            "doc_id": "2023-08-24__has-ln-20230824-h2-8k__119735"
+            "doc_id": "2023-08-24__has-ln-20230824-h2-8k__119735",
+            "near": "net fees"
           },
-          "result": "2 table(s), 3333 chars",
+          "result": "2 table(s), 1341 chars",
           "error": null
         },
         {
-          "n": 11,
+          "n": 13,
           "tool": "extract_table",
           "arguments": {
-            "doc_id": "2023-08-24__has-ln-20230824-slide__75015"
+            "doc_id": "2023-08-24__has-ln-20230824-h2-8k__119735",
+            "near": "operating profit"
           },
-          "result": "2 table(s), 1210 chars",
+          "result": "2 table(s), 2508 chars",
           "error": null
         },
         {
-          "n": 12,
+          "n": 13,
+          "tool": "extract_table",
+          "arguments": {
+            "doc_id": "2023-08-24__has-ln-20230824-h2-8k__119735",
+            "near": "EPS"
+          },
+          "result": "0 table(s), 2 chars",
+          "error": null
+        },
+        {
+          "n": 14,
           "tool": "list_index",
           "arguments": {
             "limit": 12,
@@ -2801,49 +3002,33 @@
           "error": null
         },
         {
-          "n": 13,
+          "n": 15,
           "tool": "extract_table",
           "arguments": {
-            "doc_id": "2022-08-25__has-ln-20220825-h2-8k__119750"
+            "doc_id": "2022-08-25__has-ln-20220825-h2-8k__119750",
+            "near": "net fees"
           },
-          "result": "2 table(s), 3249 chars",
-          "error": null
-        },
-        {
-          "n": 13,
-          "tool": "extract_table",
-          "arguments": {
-            "doc_id": "2022-08-25__has-ln-20220825-slide__75007"
-          },
-          "result": "2 table(s), 1682 chars",
-          "error": null
-        },
-        {
-          "n": 14,
-          "tool": "list_index",
-          "arguments": {
-            "limit": 12,
-            "period": "FY 2021"
-          },
-          "result": "5 docs: 2021-08-26__has-ln-20210826-h2-8k-, 2021-08-26__has-ln-20210826-h2-8k_, 2021-08-26__has-ln-20210826-call-p",
+          "result": "2 table(s), 1353 chars",
           "error": null
         },
         {
           "n": 15,
           "tool": "extract_table",
           "arguments": {
-            "doc_id": "2021-08-26__has-ln-20210826-h2-8k__119734"
+            "doc_id": "2022-08-25__has-ln-20220825-h2-8k__119750",
+            "near": "operating profit"
           },
-          "result": "2 table(s), 3412 chars",
+          "result": "2 table(s), 2463 chars",
           "error": null
         },
         {
           "n": 15,
           "tool": "extract_table",
           "arguments": {
-            "doc_id": "2021-08-26__has-ln-20210826-slide__75008"
+            "doc_id": "2022-08-25__has-ln-20220825-h2-8k__119750",
+            "near": "EPS"
           },
-          "result": "2 table(s), 1574 chars",
+          "result": "0 table(s), 2 chars",
           "error": null
         },
         {
@@ -2851,200 +3036,9 @@
           "tool": "list_index",
           "arguments": {
             "limit": 12,
-            "period": "FY 2020"
+            "period": "FY 2021"
           },
-          "result": "8 docs: 2020-08-27__has-ln-20200827-h2-8k-, 2020-08-27__has-ln-20200827-h2-8k_, 2020-08-27__has-ln-20200827-slide_",
-          "error": null
-        },
-        {
-          "n": 1,
-          "tool": "list_index",
-          "arguments": {
-            "doc_type": "Filing",
-            "limit": 10
-          },
-          "result": "10 docs: 2026-08-03__has-ln-20260803-filing, 2026-07-10__has-ln-20260710-filing, 2026-07-10__has-ln-20260710-q4-8k_",
-          "error": null
-        },
-        {
-          "n": 1,
-          "tool": "search",
-          "arguments": {
-            "query": "Pre-exceptional basic EPS",
-            "limit": 6
-          },
-          "result": "6 docs: 2024-08-22__has-ln-20240822-h2-8k_, 2026-02-27__has-ln-20260227-h1-8k_, 2024-02-22__has-ln-20240222-h1-8k_",
-          "error": null
-        },
-        {
-          "n": 1,
-          "tool": "search",
-          "arguments": {
-            "query": "Pre-exceptional operating profit",
-            "limit": 6
-          },
-          "result": "6 docs: 2026-02-27__has-ln-20260227-h1-8k_, 2025-02-20__has-ln-20250220-q2-8k_, 2025-08-21__has-ln-20250821-filing",
-          "error": null
-        },
-        {
-          "n": 2,
-          "tool": "extract_table",
-          "arguments": {
-            "doc_id": "2025-08-21__has-ln-20250821-filing__143845",
-            "near": "Pre-exceptional basic EPS"
-          },
-          "result": "0 table(s), 2 chars",
-          "error": null
-        },
-        {
-          "n": 2,
-          "tool": "extract_table",
-          "arguments": {
-            "doc_id": "2024-08-22__has-ln-20240822-h2-8k__119721",
-            "near": "Pre-exceptional basic EPS"
-          },
-          "result": "0 table(s), 2 chars",
-          "error": null
-        },
-        {
-          "n": 2,
-          "tool": "extract_table",
-          "arguments": {
-            "doc_id": "2024-02-22__has-ln-20240222-h1-8k__119744",
-            "near": "Pre-exceptional basic EPS"
-          },
-          "result": "0 table(s), 2 chars",
-          "error": null
-        },
-        {
-          "n": 2,
-          "tool": "extract_table",
-          "arguments": {
-            "doc_id": "2025-02-20__has-ln-20250220-q2-8k__119730",
-            "near": "Pre-exceptional basic EPS"
-          },
-          "result": "0 table(s), 2 chars",
-          "error": null
-        },
-        {
-          "n": 2,
-          "tool": "extract_table",
-          "arguments": {
-            "doc_id": "2025-08-21__has-ln-20250821-filing__143845",
-            "near": "Pre-exceptional operating profit"
-          },
-          "result": "2 table(s), 3207 chars",
-          "error": null
-        },
-        {
-          "n": 2,
-          "tool": "extract_table",
-          "arguments": {
-            "doc_id": "2024-08-22__has-ln-20240822-h2-8k__119721",
-            "near": "Pre-exceptional operating profit"
-          },
-          "result": "2 table(s), 868 chars",
-          "error": null
-        },
-        {
-          "n": 2,
-          "tool": "extract_table",
-          "arguments": {
-            "doc_id": "2024-02-22__has-ln-20240222-h1-8k__119744",
-            "near": "Pre-exceptional operating profit"
-          },
-          "result": "0 table(s), 2 chars",
-          "error": null
-        },
-        {
-          "n": 2,
-          "tool": "extract_table",
-          "arguments": {
-            "doc_id": "2025-02-20__has-ln-20250220-q2-8k__119730",
-            "near": "Pre-exceptional operating profit"
-          },
-          "result": "2 table(s), 882 chars",
-          "error": null
-        },
-        {
-          "n": 3,
-          "tool": "extract_table",
-          "arguments": {
-            "doc_id": "2023-08-24__has-ln-20230824-filing__119700",
-            "near": "Pre-exceptional basic EPS"
-          },
-          "result": "ERROR not_found: No document '2023-08-24__has-ln-20230824-filing__119700' for hays",
-          "error": "No document '2023-08-24__has-ln-20230824-filing__119700' for hays"
-        },
-        {
-          "n": 3,
-          "tool": "extract_table",
-          "arguments": {
-            "doc_id": "2023-08-24__has-ln-20230824-filing__119700",
-            "near": "Pre-exceptional operating profit"
-          },
-          "result": "ERROR not_found: No document '2023-08-24__has-ln-20230824-filing__119700' for hays",
-          "error": "No document '2023-08-24__has-ln-20230824-filing__119700' for hays"
-        },
-        {
-          "n": 4,
-          "tool": "list_index",
-          "arguments": {
-            "doc_type": "Filing",
-            "limit": 20
-          },
-          "result": "20 docs: 2026-08-03__has-ln-20260803-filing, 2026-07-10__has-ln-20260710-filing, 2026-07-10__has-ln-20260710-q4-8k_",
-          "error": null
-        },
-        {
-          "n": 5,
-          "tool": "search",
-          "arguments": {
-            "query": "Preliminary Results",
-            "limit": 8,
-            "doc_type": "Filing"
-          },
-          "result": "8 docs: 2024-08-22__has-ln-20240822-h2-8k_, 2025-08-21__has-ln-20250821-h2-8k_, 2021-08-26__has-ln-20210826-h2-8k_",
-          "error": null
-        },
-        {
-          "n": 6,
-          "tool": "extract_table",
-          "arguments": {
-            "doc_id": "2023-08-24__has-ln-20230824-h2-8k__119735",
-            "near": "Pre-exceptional"
-          },
-          "result": "0 table(s), 2 chars",
-          "error": null
-        },
-        {
-          "n": 6,
-          "tool": "extract_table",
-          "arguments": {
-            "doc_id": "2022-08-25__has-ln-20220825-h2-8k__119750",
-            "near": "Pre-exceptional"
-          },
-          "result": "0 table(s), 2 chars",
-          "error": null
-        },
-        {
-          "n": 6,
-          "tool": "extract_table",
-          "arguments": {
-            "doc_id": "2021-08-26__has-ln-20210826-h2-8k__119734",
-            "near": "Pre-exceptional"
-          },
-          "result": "0 table(s), 2 chars",
-          "error": null
-        },
-        {
-          "n": 6,
-          "tool": "extract_table",
-          "arguments": {
-            "doc_id": "2020-08-27__has-ln-20200827-h2-8k__119727",
-            "near": "Pre-exceptional"
-          },
-          "result": "0 table(s), 2 chars",
+          "result": "5 docs: 2021-08-26__has-ln-20210826-h2-8k-, 2021-08-26__has-ln-20210826-h2-8k_, 2021-08-26__has-ln-20210826-call-p",
           "error": null
         }
       ]
@@ -3085,21 +3079,21 @@
       "unit volumes",
       "dealer inventory"
     ],
-    "elapsed_s": 29.4,
-    "tool_calls": 24,
-    "history_rows": 10,
+    "elapsed_s": 57.3,
+    "tool_calls": 53,
+    "history_rows": 8,
     "followup_passes": 1,
     "channels": [
       {
         "channel": "finance",
         "available": true,
-        "rows": 10,
+        "rows": 11,
         "note": "reported actuals from filings"
       },
       {
         "channel": "calls",
         "available": true,
-        "rows": 0,
+        "rows": 1,
         "note": "guidance and consensus from transcripts and statements"
       },
       {
@@ -3116,15 +3110,17 @@
       }
     ],
     "evidence_gaps": [
-      "Worldwide net sales and revenues: no guidance or management commentary found",
+      "Worldwide net sales and revenues: only 3 historical point(s), need 4 to fit a trend or clamp",
+      "Diluted EPS (GAAP): only 3 historical point(s), need 4 to fit a trend or clamp",
       "Diluted EPS (GAAP): no guidance or management commentary found",
-      "Production & Precision Ag operating profit: only 2 historical point(s), need 4 to fit a trend or clamp",
       "Production & Precision Ag operating profit: no guidance or management commentary found"
     ],
     "thin_metrics": [
-      "Production & Precision Ag operating profit"
+      "Worldwide net sales and revenues",
+      "Diluted EPS (GAAP)"
     ],
     "consensus_found": [],
+    "rescued_metrics": [],
     "market": {
       "ticker": "DE",
       "symbol": "DE",
@@ -3176,38 +3172,43 @@
         "finance": [
           {
             "metric": "Worldwide net sales and revenues",
-            "period": "FY2025",
-            "value": 45684,
+            "period": "FY2025Q3",
+            "value": 12018,
             "units": "USDm",
             "basis": "reported",
-            "doc_id": "2025-11-26__de-us-20251126-q4-10k__469216"
+            "doc_id": "2025-08-14__de-us-20250814-q3-10q__155834"
           },
           {
             "metric": "Worldwide net sales and revenues",
-            "period": "FY2024",
-            "value": 51716,
+            "period": "FY2024Q3",
+            "value": 13152,
             "units": "USDm",
             "basis": "reported",
-            "doc_id": "2025-11-26__de-us-20251126-q4-10k__469216"
+            "doc_id": "2024-08-15__de-us-20240815-q3-10q__105828"
           },
           {
             "metric": "Worldwide net sales and revenues",
-            "period": "FY2023",
-            "value": 61251,
+            "kind": "last_actual",
+            "value": 13369,
             "units": "USDm",
-            "basis": "reported",
-            "doc_id": "2025-11-26__de-us-20251126-q4-10k__469216"
-          },
-          {
-            "metric": "Worldwide net sales and revenues",
-            "period": "FY2022",
-            "value": 52577,
-            "units": "USDm",
-            "basis": "reported",
-            "doc_id": "2025-11-26__de-us-20251126-q4-10k__469216"
+            "period": "FY2026Q2",
+            "note": "Most recent reported quarter",
+            "doc_id": "2026-05-21__de-us-20260521-q2-8k-2__1042168",
+            "confidence": "high"
           }
         ],
-        "calls": [],
+        "calls": [
+          {
+            "metric": "Worldwide net sales and revenues",
+            "kind": "guidance",
+            "value": null,
+            "units": "USDm",
+            "period": "FY2026Q3",
+            "note": "No explicit Q3 2026 guidance found; company guided FY2026 net income only",
+            "doc_id": "2026-05-21__de-us-20260521-q2-8k-2__1042168",
+            "confidence": "low"
+          }
+        ],
         "news": [
           {
             "metric": "Worldwide net sales and revenues",
@@ -3225,56 +3226,49 @@
         ],
         "cyclical": {
           "available": true,
-          "points": 4,
-          "min": 45684.0,
-          "max": 61251.0,
-          "latest": 45684.0,
+          "points": 3,
+          "min": 12018.0,
+          "max": 13369.0,
+          "latest": 12018.0,
           "growth_rates": [
-            0.165,
-            -0.1557,
-            -0.1166
+            -0.0162,
+            -0.0862
           ],
-          "recent_growth": -0.1166,
-          "mean_growth": -0.0358,
-          "direction": "decline easing",
-          "naive_projection": 40355.5545
+          "recent_growth": -0.0862,
+          "mean_growth": -0.0512,
+          "direction": "decline deepening",
+          "naive_projection": 10981.7765
         },
-        "sufficient": true
+        "sufficient": false
       },
       "Diluted EPS (GAAP)": {
         "metric": "Diluted EPS (GAAP)",
         "finance": [
           {
             "metric": "Diluted EPS (GAAP)",
-            "period": "FY2025",
-            "value": 18.5,
+            "period": "FY2025Q3",
+            "value": 4.75,
             "units": "USD / share",
             "basis": "gaap",
-            "doc_id": "2025-11-26__de-us-20251126-q4-10k__469216"
+            "doc_id": "2025-08-14__de-us-20250814-q3-10q__155834"
           },
           {
             "metric": "Diluted EPS (GAAP)",
-            "period": "FY2024",
-            "value": 25.62,
+            "period": "FY2024Q3",
+            "value": 6.29,
             "units": "USD / share",
             "basis": "gaap",
-            "doc_id": "2025-11-26__de-us-20251126-q4-10k__469216"
+            "doc_id": "2024-08-15__de-us-20240815-q3-10q__105828"
           },
           {
             "metric": "Diluted EPS (GAAP)",
-            "period": "FY2023",
-            "value": 34.63,
+            "kind": "last_actual",
+            "value": 6.55,
             "units": "USD / share",
-            "basis": "gaap",
-            "doc_id": "2025-11-26__de-us-20251126-q4-10k__469216"
-          },
-          {
-            "metric": "Diluted EPS (GAAP)",
-            "period": "FY2022",
-            "value": 23.28,
-            "units": "USD / share",
-            "basis": "gaap",
-            "doc_id": "2025-11-26__de-us-20251126-q4-10k__469216"
+            "period": "FY2026Q2",
+            "note": "Most recent reported quarter",
+            "doc_id": "2026-05-21__de-us-20260521-q2-8k-2__1042168",
+            "confidence": "high"
           }
         ],
         "calls": [],
@@ -3295,32 +3289,47 @@
         ],
         "cyclical": {
           "available": true,
-          "points": 4,
-          "min": 18.5,
-          "max": 34.63,
-          "latest": 18.5,
+          "points": 3,
+          "min": 4.75,
+          "max": 6.55,
+          "latest": 4.75,
           "growth_rates": [
-            0.4875,
-            -0.2602,
-            -0.2779
+            -0.0397,
+            -0.2448
           ],
-          "recent_growth": -0.2779,
-          "mean_growth": -0.0168,
+          "recent_growth": -0.2448,
+          "mean_growth": -0.1423,
           "direction": "decline deepening",
-          "naive_projection": 13.3587
+          "naive_projection": 3.587
         },
-        "sufficient": true
+        "sufficient": false
       },
       "Production & Precision Ag operating profit": {
         "metric": "Production & Precision Ag operating profit",
         "finance": [
           {
             "metric": "Production & Precision Ag operating profit",
+            "period": "FY2025Q3",
+            "value": 580,
+            "units": "USDm",
+            "basis": "reported",
+            "doc_id": "2025-08-14__de-us-20250814-q3-10q__155834"
+          },
+          {
+            "metric": "Production & Precision Ag operating profit",
+            "period": "FY2024Q3",
+            "value": 1162,
+            "units": "USDm",
+            "basis": "reported",
+            "doc_id": "2024-08-15__de-us-20240815-q3-10q__105828"
+          },
+          {
+            "metric": "Production & Precision Ag operating profit",
             "period": "FY2025",
             "value": 1673,
             "units": "USDm",
             "basis": "reported",
-            "doc_id": "2025-11-26__de-us-20251126-q4-10k__469216"
+            "doc_id": "2025-12-18__de-us-20251218-fy-10k__393777"
           },
           {
             "metric": "Production & Precision Ag operating profit",
@@ -3328,29 +3337,82 @@
             "value": 1532,
             "units": "USDm",
             "basis": "reported",
-            "doc_id": "2025-11-26__de-us-20251126-q4-10k__469216"
+            "doc_id": "2025-12-18__de-us-20251218-fy-10k__393777"
+          },
+          {
+            "metric": "Production & Precision Ag operating profit",
+            "kind": "last_actual",
+            "value": 706,
+            "units": "USDm",
+            "period": "FY2026Q2",
+            "note": "Most recent reported quarter",
+            "doc_id": "2026-05-28__de-us-20260528-q2-10q__1055932",
+            "confidence": "high"
           }
         ],
         "calls": [],
         "news": [],
         "cyclical": {
           "available": true,
-          "points": 2,
-          "min": 1532.0,
+          "points": 5,
+          "min": 580.0,
           "max": 1673.0,
-          "latest": 1673.0,
+          "latest": 580.0,
           "growth_rates": [
-            0.092
+            1.17,
+            0.092,
+            -0.3054,
+            -0.5009
           ],
-          "recent_growth": 0.092,
-          "mean_growth": 0.092,
-          "direction": "single interval - direction unknown",
-          "naive_projection": 1826.9772
+          "recent_growth": -0.5009,
+          "mean_growth": 0.1139,
+          "direction": "decline deepening",
+          "naive_projection": 289.5009
         },
-        "sufficient": false
+        "sufficient": true
       }
     },
     "anchors": [
+      {
+        "metric": "Worldwide net sales and revenues",
+        "kind": "last_actual",
+        "value": 13369,
+        "units": "USDm",
+        "period": "FY2026Q2",
+        "note": "Most recent reported quarter",
+        "doc_id": "2026-05-21__de-us-20260521-q2-8k-2__1042168",
+        "confidence": "high"
+      },
+      {
+        "metric": "Diluted EPS (GAAP)",
+        "kind": "last_actual",
+        "value": 6.55,
+        "units": "USD / share",
+        "period": "FY2026Q2",
+        "note": "Most recent reported quarter",
+        "doc_id": "2026-05-21__de-us-20260521-q2-8k-2__1042168",
+        "confidence": "high"
+      },
+      {
+        "metric": "Production & Precision Ag operating profit",
+        "kind": "last_actual",
+        "value": 706,
+        "units": "USDm",
+        "period": "FY2026Q2",
+        "note": "Most recent reported quarter",
+        "doc_id": "2026-05-28__de-us-20260528-q2-10q__1055932",
+        "confidence": "high"
+      },
+      {
+        "metric": "Worldwide net sales and revenues",
+        "kind": "guidance",
+        "value": null,
+        "units": "USDm",
+        "period": "FY2026Q3",
+        "note": "No explicit Q3 2026 guidance found; company guided FY2026 net income only",
+        "doc_id": "2026-05-21__de-us-20260521-q2-8k-2__1042168",
+        "confidence": "low"
+      },
       {
         "metric": "Worldwide net sales and revenues",
         "kind": "consensus",
@@ -3379,26 +3441,28 @@
       }
     ],
     "gaps": [
-      "No FY2026Q3 reported results yet (as-of date is before Q3 end). Need to extract latest guidance and consensus for Q3 2026.",
-      "Must build 8-12 period history for each metric from available filings and slides."
+      "No explicit company guidance for FY2026Q3 for any metric.",
+      "No analyst consensus found for FY2026Q3.",
+      "Only two years of Q3 history for each metric; more would improve trend fitting.",
+      "No Q3 2026 actuals yet reported."
     ],
     "consensus": null,
     "results": {
       "Worldwide net sales and revenues": {
-        "value": 10734.9964,
+        "value": 10884.0,
         "method_values": {
-          "guidance": 10731.5,
-          "statistical": 10732.0,
-          "qualitative": 10750.0,
+          "guidance": 10732.0,
+          "statistical": 10982.0,
+          "qualitative": 10850.0,
           "_anchor": 10731.5422
         },
         "weights": {
-          "guidance": 1.0,
-          "statistical": 0.8,
-          "qualitative": 0.6,
+          "guidance": 0.7,
+          "statistical": 0.56,
+          "qualitative": 0.42,
           "_anchor": 0.9
         },
-        "median_of_methods": 10732.0,
+        "median_of_methods": 10850.0,
         "outliers": [],
         "anchor": {
           "kind": "consensus",
@@ -3407,33 +3471,37 @@
         },
         "anchor_rejected": null,
         "guidance_bound": null,
-        "clamped": null,
-        "agreement": 0.998,
+        "clamped": {
+          "from": 10805.3132,
+          "floor": 10884.0,
+          "ceiling": 14286.0
+        },
+        "agreement": 0.988,
+        "units": "USDm",
+        "basis": "reported",
         "verdict": {
           "metric": "Worldwide net sales and revenues",
           "plausible": true,
           "concern": "none",
           "suggested_low": 10319.0,
           "suggested_high": 11295.2
-        },
-        "units": "USDm",
-        "basis": "reported"
+        }
       },
       "Diluted EPS (GAAP)": {
-        "value": 4.6747,
+        "value": 4.4232,
         "method_values": {
           "guidance": 4.67,
-          "statistical": 4.67,
-          "qualitative": 4.7,
+          "statistical": 3.59,
+          "qualitative": 4.6,
           "_anchor": 4.6673
         },
         "weights": {
-          "guidance": 1.0,
-          "statistical": 0.8,
-          "qualitative": 0.6,
+          "guidance": 0.7,
+          "statistical": 0.56,
+          "qualitative": 0.42,
           "_anchor": 0.9
         },
-        "median_of_methods": 4.67,
+        "median_of_methods": 4.6,
         "outliers": [],
         "anchor": {
           "kind": "consensus",
@@ -3443,51 +3511,57 @@
         "anchor_rejected": null,
         "guidance_bound": null,
         "clamped": null,
-        "agreement": 0.994,
+        "agreement": 0.985,
+        "units": "USD / share",
+        "basis": "gaap",
         "verdict": {
           "metric": "Diluted EPS (GAAP)",
           "plausible": true,
           "concern": "none",
           "suggested_low": 4.33,
           "suggested_high": 5.02
-        },
-        "units": "USD / share",
-        "basis": "gaap"
+        }
       },
       "Production & Precision Ag operating profit": {
-        "value": 1718.7692,
+        "value": 500,
         "method_values": {
-          "guidance": 1827.0,
-          "statistical": 1827.0,
-          "qualitative": 420.0
+          "guidance": 290.0,
+          "statistical": 290.0,
+          "qualitative": 350.0,
+          "_anchor": 706.0
         },
         "weights": {
-          "guidance": 0.7,
+          "guidance": 0.4,
           "statistical": 0.56,
-          "qualitative": 0.105
+          "qualitative": 0.42,
+          "_anchor": 0.7
         },
-        "median_of_methods": 1827.0,
-        "outliers": [
-          {
-            "method": "qualitative",
-            "value": 420.0,
-            "spread_from_median": 0.77
-          }
-        ],
-        "anchor": null,
+        "median_of_methods": 290.0,
+        "outliers": [],
+        "anchor": {
+          "kind": "last_actual",
+          "value": 706.0,
+          "weight": 0.7
+        },
         "anchor_rejected": null,
         "guidance_bound": null,
         "clamped": null,
-        "agreement": 1.0,
+        "agreement": 0.0,
+        "units": "USDm",
+        "basis": "reported",
         "verdict": {
           "metric": "Production & Precision Ag operating profit",
           "plausible": false,
-          "concern": "Magnitude error: 'qualitative' forecast (420.0) is implausibly low compared to recent history (1532 in FY2024, 1673 in FY2025). Guidance/statistical forecasts (1827.0) are plausible.",
-          "suggested_low": 1200.0,
-          "suggested_high": 2000.0
+          "concern": "Magnitude implausible: Forecasted value (442.1) is a sharp drop from prior Q3s (580 in FY2025Q3, 1162 in FY2024Q3) and is well below the most recent quarter (706). No structural reason for such a large drop is stated. Even with recent declines, a drop to 442 is more than 30% below the last actual and consensus is not provided to justify it.",
+          "suggested_low": 500,
+          "suggested_high": 700
         },
-        "units": "USDm",
-        "basis": "reported"
+        "critic_bound": {
+          "from": 442.1154,
+          "low": 500,
+          "high": 700,
+          "concern": "Magnitude implausible: Forecasted value (442.1) is a sharp drop from prior Q3s (580 in FY2025Q3, 1162 in FY2024Q3) and is well below the most recent quarter (706). No structural reason for such a large drop is stated. Even with recent declines, a drop to 442 is more than 30% below the last actual and consensus is not provided to justify it."
+        }
       }
     },
     "evidence": {
@@ -3499,67 +3573,51 @@
       "history": [
         {
           "metric": "Worldwide net sales and revenues",
-          "period": "FY2025",
-          "value": 45684,
+          "period": "FY2025Q3",
+          "value": 12018,
           "units": "USDm",
           "basis": "reported",
-          "doc_id": "2025-11-26__de-us-20251126-q4-10k__469216"
+          "doc_id": "2025-08-14__de-us-20250814-q3-10q__155834"
         },
         {
           "metric": "Worldwide net sales and revenues",
-          "period": "FY2024",
-          "value": 51716,
+          "period": "FY2024Q3",
+          "value": 13152,
           "units": "USDm",
           "basis": "reported",
-          "doc_id": "2025-11-26__de-us-20251126-q4-10k__469216"
+          "doc_id": "2024-08-15__de-us-20240815-q3-10q__105828"
         },
         {
-          "metric": "Worldwide net sales and revenues",
-          "period": "FY2023",
-          "value": 61251,
+          "metric": "Diluted EPS (GAAP)",
+          "period": "FY2025Q3",
+          "value": 4.75,
+          "units": "USD / share",
+          "basis": "gaap",
+          "doc_id": "2025-08-14__de-us-20250814-q3-10q__155834"
+        },
+        {
+          "metric": "Diluted EPS (GAAP)",
+          "period": "FY2024Q3",
+          "value": 6.29,
+          "units": "USD / share",
+          "basis": "gaap",
+          "doc_id": "2024-08-15__de-us-20240815-q3-10q__105828"
+        },
+        {
+          "metric": "Production & Precision Ag operating profit",
+          "period": "FY2025Q3",
+          "value": 580,
           "units": "USDm",
           "basis": "reported",
-          "doc_id": "2025-11-26__de-us-20251126-q4-10k__469216"
+          "doc_id": "2025-08-14__de-us-20250814-q3-10q__155834"
         },
         {
-          "metric": "Worldwide net sales and revenues",
-          "period": "FY2022",
-          "value": 52577,
+          "metric": "Production & Precision Ag operating profit",
+          "period": "FY2024Q3",
+          "value": 1162,
           "units": "USDm",
           "basis": "reported",
-          "doc_id": "2025-11-26__de-us-20251126-q4-10k__469216"
-        },
-        {
-          "metric": "Diluted EPS (GAAP)",
-          "period": "FY2025",
-          "value": 18.5,
-          "units": "USD / share",
-          "basis": "gaap",
-          "doc_id": "2025-11-26__de-us-20251126-q4-10k__469216"
-        },
-        {
-          "metric": "Diluted EPS (GAAP)",
-          "period": "FY2024",
-          "value": 25.62,
-          "units": "USD / share",
-          "basis": "gaap",
-          "doc_id": "2025-11-26__de-us-20251126-q4-10k__469216"
-        },
-        {
-          "metric": "Diluted EPS (GAAP)",
-          "period": "FY2023",
-          "value": 34.63,
-          "units": "USD / share",
-          "basis": "gaap",
-          "doc_id": "2025-11-26__de-us-20251126-q4-10k__469216"
-        },
-        {
-          "metric": "Diluted EPS (GAAP)",
-          "period": "FY2022",
-          "value": 23.28,
-          "units": "USD / share",
-          "basis": "gaap",
-          "doc_id": "2025-11-26__de-us-20251126-q4-10k__469216"
+          "doc_id": "2024-08-15__de-us-20240815-q3-10q__105828"
         },
         {
           "metric": "Production & Precision Ag operating profit",
@@ -3567,7 +3625,7 @@
           "value": 1673,
           "units": "USDm",
           "basis": "reported",
-          "doc_id": "2025-11-26__de-us-20251126-q4-10k__469216"
+          "doc_id": "2025-12-18__de-us-20251218-fy-10k__393777"
         },
         {
           "metric": "Production & Precision Ag operating profit",
@@ -3575,10 +3633,50 @@
           "value": 1532,
           "units": "USDm",
           "basis": "reported",
-          "doc_id": "2025-11-26__de-us-20251126-q4-10k__469216"
+          "doc_id": "2025-12-18__de-us-20251218-fy-10k__393777"
         }
       ],
       "anchors": [
+        {
+          "metric": "Worldwide net sales and revenues",
+          "kind": "last_actual",
+          "value": 13369,
+          "units": "USDm",
+          "period": "FY2026Q2",
+          "note": "Most recent reported quarter",
+          "doc_id": "2026-05-21__de-us-20260521-q2-8k-2__1042168",
+          "confidence": "high"
+        },
+        {
+          "metric": "Diluted EPS (GAAP)",
+          "kind": "last_actual",
+          "value": 6.55,
+          "units": "USD / share",
+          "period": "FY2026Q2",
+          "note": "Most recent reported quarter",
+          "doc_id": "2026-05-21__de-us-20260521-q2-8k-2__1042168",
+          "confidence": "high"
+        },
+        {
+          "metric": "Production & Precision Ag operating profit",
+          "kind": "last_actual",
+          "value": 706,
+          "units": "USDm",
+          "period": "FY2026Q2",
+          "note": "Most recent reported quarter",
+          "doc_id": "2026-05-28__de-us-20260528-q2-10q__1055932",
+          "confidence": "high"
+        },
+        {
+          "metric": "Worldwide net sales and revenues",
+          "kind": "guidance",
+          "value": null,
+          "units": "USDm",
+          "period": "FY2026Q3",
+          "note": "No explicit Q3 2026 guidance found; company guided FY2026 net income only",
+          "doc_id": "2026-05-21__de-us-20260521-q2-8k-2__1042168",
+          "confidence": "low"
+        },
         {
           "metric": "Worldwide net sales and revenues",
           "kind": "consensus",
@@ -3607,13 +3705,17 @@
         }
       ],
       "drivers": [
-        "Located recent filings and call transcripts up to Q2 2026, with Q3 2026 earnings call transcript available.",
-        "Slides and filings provide quarterly and annual results and outlooks, including segment and group-level data.",
-        "Next steps: Extract explicit guidance, consensus, and historical data for the three target metrics from these documents."
+        "Company guided FY2026 net income ($4.5-5.0bn), not quarterly or segment figures.",
+        "Recent quarters show declining Production & Precision Ag operating profit and net sales year-on-year.",
+        "Q2 2026 net sales and revenues up 5% YoY, but segment-level PPA sales and profit down sharply.",
+        "No explicit Q3 guidance; must phase full-year outlook and use historical Q3 share.",
+        "Industry drivers: farm income, dealer inventory, equipment finance rates, and order backlog."
       ],
       "gaps": [
-        "No FY2026Q3 reported results yet (as-of date is before Q3 end). Need to extract latest guidance and consensus for Q3 2026.",
-        "Must build 8-12 period history for each metric from available filings and slides."
+        "No explicit company guidance for FY2026Q3 for any metric.",
+        "No analyst consensus found for FY2026Q3.",
+        "Only two years of Q3 history for each metric; more would improve trend fitting.",
+        "No Q3 2026 actuals yet reported."
       ],
       "consensus": null,
       "stopped_because": "complete",
@@ -3622,49 +3724,449 @@
           "n": 1,
           "tool": "list_index",
           "arguments": {
-            "limit": 10
+            "limit": 8
           },
-          "result": "10 docs: 2026-05-28__de-us-20260528-q2-10q_, 2026-05-26__de-us-20260526-slide__, 2026-05-21__de-us-20260521-q2-10q_",
+          "result": "8 docs: 2026-05-28__de-us-20260528-q2-10q_, 2026-05-26__de-us-20260526-slide__, 2026-05-21__de-us-20260521-q2-10q_",
           "error": null
         },
         {
           "n": 2,
-          "tool": "list_index",
+          "tool": "read_document",
           "arguments": {
-            "limit": 12,
-            "doc_type": "Filing"
+            "doc_id": "2026-05-21__de-us-20260521-q2-8k-2__1042168",
+            "contains": "outlook"
           },
-          "result": "12 docs (2 period conflicts): 2026-05-28__de-us-20260528-q2-10q_, 2026-05-21__de-us-20260521-q2-10q_, 2026-05-21__de-us-20260521-q2-8k-2",
+          "result": "matched=True chars=2500",
           "error": null
         },
         {
           "n": 2,
-          "tool": "list_index",
+          "tool": "read_document",
           "arguments": {
-            "limit": 12,
-            "doc_type": "Call Transcript"
+            "doc_id": "2026-05-21__de-us-20260521-call-qna__1042775",
+            "contains": "guidance"
           },
-          "result": "12 docs (1 period conflicts): 2026-05-21__de-us-20260521-call-qn, 2026-05-21__de-us-20260521-call-pr, 2026-02-25__de-us-20260225-call-ag",
+          "result": "matched=False chars=2500",
           "error": null
         },
         {
           "n": 2,
+          "tool": "search",
+          "arguments": {
+            "query": "company compiled consensus",
+            "limit": 4
+          },
+          "result": "4 docs: 2024-08-15__de-us-20240815-call-qn, 2012-05-16__de-us-20120516-call-qn, 2012-11-21__de-us-20121121-call-qn",
+          "error": null
+        },
+        {
+          "n": 2,
+          "tool": "extract_table",
+          "arguments": {
+            "doc_id": "2026-05-28__de-us-20260528-q2-10q__1055932",
+            "near": "Production & Precision Ag",
+            "limit": 2
+          },
+          "result": "1 table(s), 659 chars",
+          "error": null
+        },
+        {
+          "n": 2,
+          "tool": "extract_table",
+          "arguments": {
+            "doc_id": "2026-05-28__de-us-20260528-q2-10q__1055932",
+            "near": "net sales and revenues",
+            "limit": 2
+          },
+          "result": "2 table(s), 4200 chars",
+          "error": null
+        },
+        {
+          "n": 2,
+          "tool": "extract_table",
+          "arguments": {
+            "doc_id": "2026-05-28__de-us-20260528-q2-10q__1055932",
+            "near": "Diluted EPS",
+            "limit": 2
+          },
+          "result": "0 table(s), 2 chars",
+          "error": null
+        },
+        {
+          "n": 3,
+          "tool": "extract_table",
+          "arguments": {
+            "doc_id": "2025-08-15__de-us-20250815-q3-10q__1055933",
+            "near": "net sales and revenues",
+            "limit": 2
+          },
+          "result": "ERROR not_found: No document '2025-08-15__de-us-20250815-q3-10q__1055933' for deere",
+          "error": "No document '2025-08-15__de-us-20250815-q3-10q__1055933' for deere"
+        },
+        {
+          "n": 3,
+          "tool": "extract_table",
+          "arguments": {
+            "doc_id": "2025-08-15__de-us-20250815-q3-10q__1055933",
+            "near": "Diluted EPS",
+            "limit": 2
+          },
+          "result": "ERROR not_found: No document '2025-08-15__de-us-20250815-q3-10q__1055933' for deere",
+          "error": "No document '2025-08-15__de-us-20250815-q3-10q__1055933' for deere"
+        },
+        {
+          "n": 3,
+          "tool": "extract_table",
+          "arguments": {
+            "doc_id": "2025-08-15__de-us-20250815-q3-10q__1055933",
+            "near": "Production & Precision Ag",
+            "limit": 2
+          },
+          "result": "ERROR not_found: No document '2025-08-15__de-us-20250815-q3-10q__1055933' for deere",
+          "error": "No document '2025-08-15__de-us-20250815-q3-10q__1055933' for deere"
+        },
+        {
+          "n": 4,
           "tool": "list_index",
           "arguments": {
-            "limit": 12,
-            "doc_type": "Slide"
+            "limit": 20
           },
-          "result": "12 docs: 2026-05-26__de-us-20260526-slide__, 2026-05-21__de-us-20260521-slide__, 2026-02-19__de-us-20260219-slide__",
+          "result": "20 docs: 2026-05-28__de-us-20260528-q2-10q_, 2026-05-26__de-us-20260526-slide__, 2026-05-21__de-us-20260521-q2-10q_",
           "error": null
+        },
+        {
+          "n": 5,
+          "tool": "extract_table",
+          "arguments": {
+            "doc_id": "2025-12-18__de-us-20251218-fy-10k__393777",
+            "near": "net sales and revenues",
+            "limit": 2
+          },
+          "result": "2 table(s), 5379 chars",
+          "error": null
+        },
+        {
+          "n": 5,
+          "tool": "extract_table",
+          "arguments": {
+            "doc_id": "2025-12-18__de-us-20251218-fy-10k__393777",
+            "near": "Diluted EPS",
+            "limit": 2
+          },
+          "result": "0 table(s), 2 chars",
+          "error": null
+        },
+        {
+          "n": 5,
+          "tool": "extract_table",
+          "arguments": {
+            "doc_id": "2025-12-18__de-us-20251218-fy-10k__393777",
+            "near": "Production & Precision Ag",
+            "limit": 2
+          },
+          "result": "2 table(s), 3160 chars",
+          "error": null
+        },
+        {
+          "n": 6,
+          "tool": "extract_table",
+          "arguments": {
+            "doc_id": "2025-08-15__de-us-20250815-q3-10q__1055931",
+            "near": "net sales and revenues",
+            "limit": 2
+          },
+          "result": "ERROR not_found: No document '2025-08-15__de-us-20250815-q3-10q__1055931' for deere",
+          "error": "No document '2025-08-15__de-us-20250815-q3-10q__1055931' for deere"
+        },
+        {
+          "n": 6,
+          "tool": "extract_table",
+          "arguments": {
+            "doc_id": "2025-08-15__de-us-20250815-q3-10q__1055931",
+            "near": "Diluted EPS",
+            "limit": 2
+          },
+          "result": "ERROR not_found: No document '2025-08-15__de-us-20250815-q3-10q__1055931' for deere",
+          "error": "No document '2025-08-15__de-us-20250815-q3-10q__1055931' for deere"
+        },
+        {
+          "n": 6,
+          "tool": "extract_table",
+          "arguments": {
+            "doc_id": "2025-08-15__de-us-20250815-q3-10q__1055931",
+            "near": "Production & Precision Ag",
+            "limit": 2
+          },
+          "result": "ERROR not_found: No document '2025-08-15__de-us-20250815-q3-10q__1055931' for deere",
+          "error": "No document '2025-08-15__de-us-20250815-q3-10q__1055931' for deere"
+        },
+        {
+          "n": 7,
+          "tool": "list_index",
+          "arguments": {
+            "limit": 30
+          },
+          "result": "25 docs (3 period conflicts): 2026-05-28__de-us-20260528-q2-10q_, 2026-05-26__de-us-20260526-slide__, 2026-05-21__de-us-20260521-q2-10q_",
+          "error": null
+        },
+        {
+          "n": 8,
+          "tool": "extract_table",
+          "arguments": {
+            "doc_id": "2025-11-26__de-us-20251126-q4-10k__469216",
+            "near": "net sales and revenues",
+            "limit": 2
+          },
+          "result": "2 table(s), 6367 chars",
+          "error": null
+        },
+        {
+          "n": 8,
+          "tool": "extract_table",
+          "arguments": {
+            "doc_id": "2025-11-26__de-us-20251126-q4-10k__469216",
+            "near": "Diluted EPS",
+            "limit": 2
+          },
+          "result": "0 table(s), 2 chars",
+          "error": null
+        },
+        {
+          "n": 8,
+          "tool": "extract_table",
+          "arguments": {
+            "doc_id": "2025-11-26__de-us-20251126-q4-10k__469216",
+            "near": "Production & Precision Ag",
+            "limit": 2
+          },
+          "result": "2 table(s), 2704 chars",
+          "error": null
+        },
+        {
+          "n": 9,
+          "tool": "extract_table",
+          "arguments": {
+            "doc_id": "2025-08-14__de-us-20250814-q3-10q__1055930",
+            "near": "net sales and revenues",
+            "limit": 2
+          },
+          "result": "ERROR not_found: No document '2025-08-14__de-us-20250814-q3-10q__1055930' for deere",
+          "error": "No document '2025-08-14__de-us-20250814-q3-10q__1055930' for deere"
+        },
+        {
+          "n": 9,
+          "tool": "extract_table",
+          "arguments": {
+            "doc_id": "2025-08-14__de-us-20250814-q3-10q__1055930",
+            "near": "Diluted EPS",
+            "limit": 2
+          },
+          "result": "ERROR not_found: No document '2025-08-14__de-us-20250814-q3-10q__1055930' for deere",
+          "error": "No document '2025-08-14__de-us-20250814-q3-10q__1055930' for deere"
+        },
+        {
+          "n": 9,
+          "tool": "extract_table",
+          "arguments": {
+            "doc_id": "2025-08-14__de-us-20250814-q3-10q__1055930",
+            "near": "Production & Precision Ag",
+            "limit": 2
+          },
+          "result": "ERROR not_found: No document '2025-08-14__de-us-20250814-q3-10q__1055930' for deere",
+          "error": "No document '2025-08-14__de-us-20250814-q3-10q__1055930' for deere"
+        },
+        {
+          "n": 10,
+          "tool": "list_index",
+          "arguments": {
+            "limit": 40
+          },
+          "result": "25 docs (3 period conflicts): 2026-05-28__de-us-20260528-q2-10q_, 2026-05-26__de-us-20260526-slide__, 2026-05-21__de-us-20260521-q2-10q_",
+          "error": null
+        },
+        {
+          "n": 11,
+          "tool": "list_index",
+          "arguments": {
+            "doc_type": "Filing",
+            "limit": 50
+          },
+          "result": "25 docs (4 period conflicts): 2026-05-28__de-us-20260528-q2-10q_, 2026-05-21__de-us-20260521-q2-10q_, 2026-05-21__de-us-20260521-q2-8k-2",
+          "error": null
+        },
+        {
+          "n": 12,
+          "tool": "extract_table",
+          "arguments": {
+            "doc_id": "2025-08-14__de-us-20250814-q3-10q__155834",
+            "near": "net sales and revenues",
+            "limit": 2
+          },
+          "result": "2 table(s), 1975 chars",
+          "error": null
+        },
+        {
+          "n": 12,
+          "tool": "extract_table",
+          "arguments": {
+            "doc_id": "2025-08-14__de-us-20250814-q3-10q__155834",
+            "near": "Diluted EPS",
+            "limit": 2
+          },
+          "result": "0 table(s), 2 chars",
+          "error": null
+        },
+        {
+          "n": 12,
+          "tool": "extract_table",
+          "arguments": {
+            "doc_id": "2025-08-14__de-us-20250814-q3-10q__155834",
+            "near": "Production & Precision Ag",
+            "limit": 2
+          },
+          "result": "0 table(s), 2 chars",
+          "error": null
+        },
+        {
+          "n": 13,
+          "tool": "extract_table",
+          "arguments": {
+            "doc_id": "2024-08-15__de-us-20240815-q3-10q__105828",
+            "near": "net sales and revenues",
+            "limit": 2
+          },
+          "result": "2 table(s), 2221 chars",
+          "error": null
+        },
+        {
+          "n": 13,
+          "tool": "extract_table",
+          "arguments": {
+            "doc_id": "2024-08-15__de-us-20240815-q3-10q__105828",
+            "near": "Diluted EPS",
+            "limit": 2
+          },
+          "result": "0 table(s), 2 chars",
+          "error": null
+        },
+        {
+          "n": 13,
+          "tool": "extract_table",
+          "arguments": {
+            "doc_id": "2024-08-15__de-us-20240815-q3-10q__105828",
+            "near": "Production & Precision Ag",
+            "limit": 2
+          },
+          "result": "0 table(s), 2 chars",
+          "error": null
+        },
+        {
+          "n": 14,
+          "tool": "extract_table",
+          "arguments": {
+            "doc_id": "2023-08-17__de-us-20230817-q3-10q__105829",
+            "near": "net sales and revenues",
+            "limit": 2
+          },
+          "result": "ERROR not_found: No document '2023-08-17__de-us-20230817-q3-10q__105829' for deere",
+          "error": "No document '2023-08-17__de-us-20230817-q3-10q__105829' for deere"
+        },
+        {
+          "n": 14,
+          "tool": "extract_table",
+          "arguments": {
+            "doc_id": "2023-08-17__de-us-20230817-q3-10q__105829",
+            "near": "Diluted EPS",
+            "limit": 2
+          },
+          "result": "ERROR not_found: No document '2023-08-17__de-us-20230817-q3-10q__105829' for deere",
+          "error": "No document '2023-08-17__de-us-20230817-q3-10q__105829' for deere"
+        },
+        {
+          "n": 14,
+          "tool": "extract_table",
+          "arguments": {
+            "doc_id": "2023-08-17__de-us-20230817-q3-10q__105829",
+            "near": "Production & Precision Ag",
+            "limit": 2
+          },
+          "result": "ERROR not_found: No document '2023-08-17__de-us-20230817-q3-10q__105829' for deere",
+          "error": "No document '2023-08-17__de-us-20230817-q3-10q__105829' for deere"
+        },
+        {
+          "n": 15,
+          "tool": "extract_table",
+          "arguments": {
+            "doc_id": "2022-08-18__de-us-20220818-q3-10q__105830",
+            "near": "net sales and revenues",
+            "limit": 2
+          },
+          "result": "ERROR not_found: No document '2022-08-18__de-us-20220818-q3-10q__105830' for deere",
+          "error": "No document '2022-08-18__de-us-20220818-q3-10q__105830' for deere"
+        },
+        {
+          "n": 15,
+          "tool": "extract_table",
+          "arguments": {
+            "doc_id": "2022-08-18__de-us-20220818-q3-10q__105830",
+            "near": "Diluted EPS",
+            "limit": 2
+          },
+          "result": "ERROR not_found: No document '2022-08-18__de-us-20220818-q3-10q__105830' for deere",
+          "error": "No document '2022-08-18__de-us-20220818-q3-10q__105830' for deere"
+        },
+        {
+          "n": 15,
+          "tool": "extract_table",
+          "arguments": {
+            "doc_id": "2022-08-18__de-us-20220818-q3-10q__105830",
+            "near": "Production & Precision Ag",
+            "limit": 2
+          },
+          "result": "ERROR not_found: No document '2022-08-18__de-us-20220818-q3-10q__105830' for deere",
+          "error": "No document '2022-08-18__de-us-20220818-q3-10q__105830' for deere"
+        },
+        {
+          "n": 16,
+          "tool": "extract_table",
+          "arguments": {
+            "doc_id": "2021-08-20__de-us-20210820-q3-10q__105831",
+            "near": "net sales and revenues",
+            "limit": 2
+          },
+          "result": "ERROR not_found: No document '2021-08-20__de-us-20210820-q3-10q__105831' for deere",
+          "error": "No document '2021-08-20__de-us-20210820-q3-10q__105831' for deere"
+        },
+        {
+          "n": 16,
+          "tool": "extract_table",
+          "arguments": {
+            "doc_id": "2021-08-20__de-us-20210820-q3-10q__105831",
+            "near": "Diluted EPS",
+            "limit": 2
+          },
+          "result": "ERROR not_found: No document '2021-08-20__de-us-20210820-q3-10q__105831' for deere",
+          "error": "No document '2021-08-20__de-us-20210820-q3-10q__105831' for deere"
+        },
+        {
+          "n": 16,
+          "tool": "extract_table",
+          "arguments": {
+            "doc_id": "2021-08-20__de-us-20210820-q3-10q__105831",
+            "near": "Production & Precision Ag",
+            "limit": 2
+          },
+          "result": "ERROR not_found: No document '2021-08-20__de-us-20210820-q3-10q__105831' for deere",
+          "error": "No document '2021-08-20__de-us-20210820-q3-10q__105831' for deere"
         },
         {
           "n": 1,
           "tool": "list_index",
           "arguments": {
             "doc_type": "Filing",
-            "limit": 10
+            "limit": 12
           },
-          "result": "10 docs: 2026-05-28__de-us-20260528-q2-10q_, 2026-05-21__de-us-20260521-q2-10q_, 2026-05-21__de-us-20260521-q2-8k-2",
+          "result": "12 docs (2 period conflicts): 2026-05-28__de-us-20260528-q2-10q_, 2026-05-21__de-us-20260521-q2-10q_, 2026-05-21__de-us-20260521-q2-8k-2",
           "error": null
         },
         {
@@ -3702,7 +4204,7 @@
           "tool": "extract_table",
           "arguments": {
             "doc_id": "2024-12-20__de-us-20241220-fy-10k__393776",
-            "near": "net sales"
+            "near": "Worldwide net sales"
           },
           "result": "ERROR not_found: No document '2024-12-20__de-us-20241220-fy-10k__393776' for deere",
           "error": "No document '2024-12-20__de-us-20241220-fy-10k__393776' for deere"
@@ -3732,130 +4234,50 @@
           "tool": "list_index",
           "arguments": {
             "doc_type": "Filing",
-            "limit": 15
+            "limit": 20
           },
-          "result": "15 docs (2 period conflicts): 2026-05-28__de-us-20260528-q2-10q_, 2026-05-21__de-us-20260521-q2-10q_, 2026-05-21__de-us-20260521-q2-8k-2",
+          "result": "20 docs (2 period conflicts): 2026-05-28__de-us-20260528-q2-10q_, 2026-05-21__de-us-20260521-q2-10q_, 2026-05-21__de-us-20260521-q2-8k-2",
           "error": null
         },
         {
           "n": 5,
           "tool": "extract_table",
           "arguments": {
-            "doc_id": "2025-11-26__de-us-20251126-q4-10k__469216",
-            "near": "net sales"
+            "doc_id": "2024-12-20__de-us-20241220-fy-10k__393775",
+            "near": "Worldwide net sales"
           },
-          "result": "2 table(s), 6218 chars",
+          "result": "ERROR not_found: No document '2024-12-20__de-us-20241220-fy-10k__393775' for deere",
+          "error": "No document '2024-12-20__de-us-20241220-fy-10k__393775' for deere"
+        },
+        {
+          "n": 5,
+          "tool": "extract_table",
+          "arguments": {
+            "doc_id": "2024-12-20__de-us-20241220-fy-10k__393775",
+            "near": "Diluted EPS"
+          },
+          "result": "ERROR not_found: No document '2024-12-20__de-us-20241220-fy-10k__393775' for deere",
+          "error": "No document '2024-12-20__de-us-20241220-fy-10k__393775' for deere"
+        },
+        {
+          "n": 5,
+          "tool": "extract_table",
+          "arguments": {
+            "doc_id": "2024-12-20__de-us-20241220-fy-10k__393775",
+            "near": "Production & Precision Ag"
+          },
+          "result": "ERROR not_found: No document '2024-12-20__de-us-20241220-fy-10k__393775' for deere",
+          "error": "No document '2024-12-20__de-us-20241220-fy-10k__393775' for deere"
+        },
+        {
+          "n": 6,
+          "tool": "list_index",
+          "arguments": {
+            "doc_type": "Filing",
+            "limit": 30
+          },
+          "result": "25 docs (4 period conflicts): 2026-05-28__de-us-20260528-q2-10q_, 2026-05-21__de-us-20260521-q2-10q_, 2026-05-21__de-us-20260521-q2-8k-2",
           "error": null
-        },
-        {
-          "n": 5,
-          "tool": "extract_table",
-          "arguments": {
-            "doc_id": "2025-11-26__de-us-20251126-q4-10k__469216",
-            "near": "Diluted EPS"
-          },
-          "result": "0 table(s), 2 chars",
-          "error": null
-        },
-        {
-          "n": 5,
-          "tool": "extract_table",
-          "arguments": {
-            "doc_id": "2025-11-26__de-us-20251126-q4-10k__469216",
-            "near": "Production & Precision Ag"
-          },
-          "result": "2 table(s), 2704 chars",
-          "error": null
-        },
-        {
-          "n": 5,
-          "tool": "extract_table",
-          "arguments": {
-            "doc_id": "2024-11-22__de-us-20241122-q4-10k__469215",
-            "near": "net sales"
-          },
-          "result": "ERROR not_found: No document '2024-11-22__de-us-20241122-q4-10k__469215' for deere",
-          "error": "No document '2024-11-22__de-us-20241122-q4-10k__469215' for deere"
-        },
-        {
-          "n": 5,
-          "tool": "extract_table",
-          "arguments": {
-            "doc_id": "2024-11-22__de-us-20241122-q4-10k__469215",
-            "near": "Diluted EPS"
-          },
-          "result": "ERROR not_found: No document '2024-11-22__de-us-20241122-q4-10k__469215' for deere",
-          "error": "No document '2024-11-22__de-us-20241122-q4-10k__469215' for deere"
-        },
-        {
-          "n": 5,
-          "tool": "extract_table",
-          "arguments": {
-            "doc_id": "2024-11-22__de-us-20241122-q4-10k__469215",
-            "near": "Production & Precision Ag"
-          },
-          "result": "ERROR not_found: No document '2024-11-22__de-us-20241122-q4-10k__469215' for deere",
-          "error": "No document '2024-11-22__de-us-20241122-q4-10k__469215' for deere"
-        },
-        {
-          "n": 6,
-          "tool": "extract_table",
-          "arguments": {
-            "doc_id": "2024-12-18__de-us-20241218-fy-10k__393778",
-            "near": "net sales"
-          },
-          "result": "ERROR not_found: No document '2024-12-18__de-us-20241218-fy-10k__393778' for deere",
-          "error": "No document '2024-12-18__de-us-20241218-fy-10k__393778' for deere"
-        },
-        {
-          "n": 6,
-          "tool": "extract_table",
-          "arguments": {
-            "doc_id": "2024-12-18__de-us-20241218-fy-10k__393778",
-            "near": "Diluted EPS"
-          },
-          "result": "ERROR not_found: No document '2024-12-18__de-us-20241218-fy-10k__393778' for deere",
-          "error": "No document '2024-12-18__de-us-20241218-fy-10k__393778' for deere"
-        },
-        {
-          "n": 6,
-          "tool": "extract_table",
-          "arguments": {
-            "doc_id": "2024-12-18__de-us-20241218-fy-10k__393778",
-            "near": "Production & Precision Ag"
-          },
-          "result": "ERROR not_found: No document '2024-12-18__de-us-20241218-fy-10k__393778' for deere",
-          "error": "No document '2024-12-18__de-us-20241218-fy-10k__393778' for deere"
-        },
-        {
-          "n": 6,
-          "tool": "extract_table",
-          "arguments": {
-            "doc_id": "2023-11-22__de-us-20231122-q4-10k__469214",
-            "near": "net sales"
-          },
-          "result": "ERROR not_found: No document '2023-11-22__de-us-20231122-q4-10k__469214' for deere",
-          "error": "No document '2023-11-22__de-us-20231122-q4-10k__469214' for deere"
-        },
-        {
-          "n": 6,
-          "tool": "extract_table",
-          "arguments": {
-            "doc_id": "2023-11-22__de-us-20231122-q4-10k__469214",
-            "near": "Diluted EPS"
-          },
-          "result": "ERROR not_found: No document '2023-11-22__de-us-20231122-q4-10k__469214' for deere",
-          "error": "No document '2023-11-22__de-us-20231122-q4-10k__469214' for deere"
-        },
-        {
-          "n": 6,
-          "tool": "extract_table",
-          "arguments": {
-            "doc_id": "2023-11-22__de-us-20231122-q4-10k__469214",
-            "near": "Production & Precision Ag"
-          },
-          "result": "ERROR not_found: No document '2023-11-22__de-us-20231122-q4-10k__469214' for deere",
-          "error": "No document '2023-11-22__de-us-20231122-q4-10k__469214' for deere"
         }
       ]
     }

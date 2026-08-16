@@ -17,7 +17,7 @@ failure.
 from __future__ import annotations
 
 import re
-from datetime import timedelta
+from datetime import date, timedelta
 
 from .documents import DocumentTools
 
@@ -206,3 +206,101 @@ def scan_consensus(tools: DocumentTools, metric_labels: list[str],
 # anchor. The scan itself proved fiddly (filings spell quarters out, guidance blocks span
 # several sentences, magnitudes mix billions and millions) and was cut at feature freeze
 # rather than shipped half-working. The gap is real and is declared in the write-up.
+
+
+# ---------------------------------------------------------------- last actual
+
+def _percent_from_tables(tools: DocumentTools, doc_id: str, key: str) -> float | None:
+    """First plausible percentage on the table row naming `key`."""
+    for table in tools.extract_table(doc_id, near=key, limit=2):
+        for line in table["table"].splitlines():
+            if key not in line.lower():
+                continue
+            for raw in re.findall(r"(\d{1,3}(?:\.\d+)?)\s*%", line):
+                value = float(raw)
+                if 0 < value <= 100:
+                    return value
+    return None
+
+
+def scan_last_actual(tools: DocumentTools, metric_label: str, units: str,
+                     limit_docs: int = 4) -> dict | None:
+    """Deterministically read the most recent reported value for a metric.
+
+    The safety net for the worst failure mode this system has: when the research pass
+    returns no history at all, the three forecasters have nothing to reason over, quietly
+    agree on a guess, and every rail passes it because there is no series to clamp
+    against. ADI adjusted gross margin came back at 65.0 that way - unanimous, unflagged,
+    and about eight points wrong.
+
+    Reads the metric's own label out of the latest results release, so it is a measurement
+    rather than a stored answer.
+    """
+    # Use the catalog rather than search ranking: we want the MOST RECENT results
+    # document, and BM25 relevance is not recency. An older filing that mentions the
+    # metric more often would otherwise win and report a stale figure.
+    candidates = tools.list_index(doc_type="Filing", limit=40)
+    candidates = [c for c in candidates if any(
+        w in c.title.lower() for w in ("result", "quarter", "financial", "earnings", "annual")
+    )][:limit_docs * 3]
+
+    key = metric_label.lower().split("(")[0].strip()
+    is_percent = "%" in units
+
+    for entry in candidates:
+        try:
+            doc = tools.read_document(entry.doc_id)
+        except Exception:
+            continue
+        body = repair_numbers(" ".join(doc["text"].split()))
+        lowered = body.lower()
+        idx = lowered.find(key)
+        if idx < 0:
+            continue
+        window = body[idx: idx + 220]
+
+        if is_percent:
+            # Percentages sit in tables, not prose: reading forward from the label picks
+            # up tax rates and growth figures. extract_table already returns cleaned
+            # filing tables, so use the row that names the metric.
+            value = _percent_from_tables(tools, entry.doc_id, key)
+            if value is None:
+                continue
+            return {
+                "metric": metric_label, "kind": "last_actual", "value": round(value, 4),
+                "units": units, "period": entry.period_from_slug or "most recent reported",
+                "note": f"most recent reported value read from a table in {entry.doc_id}",
+                "doc_id": entry.doc_id,
+                "published_at": entry.published_at.isoformat(),
+                "confidence": "medium", "source": "deterministic_scan",
+            }
+        if False:
+            match = None
+            magnitude = None
+        else:
+            match = re.search(
+                r"[£$€]?\s*(\d[\d,]*(?:\.\d+)?)\s*(billion|bn|million|m\b)?", window, re.I)
+            magnitude = match.group(2) if match else None
+        if not match:
+            continue
+
+        try:
+            value = float(match.group(1).replace(",", ""))
+        except ValueError:
+            continue
+
+        # "$3.62 billion" is 3,620 in a workbook that reports millions.
+        if magnitude and magnitude.lower() in ("billion", "bn"):
+            value *= 1000.0
+        if is_percent and not 0 < value <= 100:
+            continue
+
+        return {
+            "metric": metric_label, "kind": "last_actual", "value": round(value, 4),
+            "units": units, "period": entry.period_from_slug or "most recent reported",
+            "note": f"most recent reported value: {window[:150]}",
+            "doc_id": entry.doc_id,
+            "published_at": entry.published_at.isoformat(),
+            "confidence": "medium", "source": "deterministic_scan",
+        }
+    return None
