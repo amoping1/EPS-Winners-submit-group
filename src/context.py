@@ -72,8 +72,12 @@ class RunContext:
         """Write one JSON artifact under this run's directory."""
         target = self.run_dir / relative_path
         target.parent.mkdir(parents=True, exist_ok=True)
-        text = json.dumps(payload, indent=2, ensure_ascii=False, default=str)
-        target.write_text(self.logger.redactor.scrub_text(text), encoding="utf-8")
+        # Redact the structure, not the serialised text: scrubbing the finished
+        # JSON string would apply the log-field length cap to the whole file and
+        # leave the dashboard reading truncated, unparseable artifacts.
+        safe = self.logger.redactor.scrub(payload, truncate=False)
+        text = json.dumps(safe, indent=2, ensure_ascii=False, default=str)
+        target.write_text(text, encoding="utf-8")
         return target
 
     def manifest(self, **extra: Any) -> dict[str, Any]:

@@ -15,9 +15,12 @@ import argparse
 import sys
 from datetime import date, datetime
 
-from src.config import PATHS, Settings, find_company, load_companies, load_dotenv
-from src.context import create_run_context
+from src.baseline import estimate_company
+from src.config import PATHS, Company, Settings, find_company, load_companies, load_dotenv
+from src.context import RunContext, create_run_context
+from src.corpus import get_index
 from src.errors import ForecastSystemError
+from src.workbook import verify_workbook, write_company_workbook
 
 
 def parse_as_of(value: str) -> date:
@@ -79,36 +82,92 @@ def main(argv: list[str] | None = None) -> int:
     )
 
     try:
-        with context.logger.stage("pipeline"):
-            for company in context.companies:
-                context.logger.event(
-                    "company.registered",
-                    company=company.slug,
-                    period=company.period,
-                    output_file=company.output_file,
-                    metrics=[m.label for m in company.metrics],
-                    corpus_dir=str(company.corpus_dir.relative_to(PATHS.root)),
-                )
-            # Retrieval, modelling, forecasting and workbook writing are added
-            # in build steps 2-7. The guard and the log are live from here on.
-            context.logger.warning(
-                "Pipeline stages are not implemented yet; no workbooks were written."
-            )
+        results = run_pipeline(context)
     except ForecastSystemError as exc:
         context.logger.error(str(exc), error_type=type(exc).__name__)
         context.write_manifest(status="failed", error=str(exc))
         context.close()
         return 1
 
-    manifest_path = context.write_manifest(status="skeleton")
+    manifest_path = context.write_manifest(status="baseline", forecasts=results)
     context.logger.event(
         "run.end",
-        status="skeleton",
+        status="baseline",
         manifest=str(manifest_path.relative_to(PATHS.root)),
         guard=context.guard.describe()["stats"],
+        workbooks=len(results),
     )
     context.close()
     return 0
+
+
+def forecast_company(context: RunContext, company: Company) -> dict:
+    """Produce and write one company's three forecasts."""
+    logger = context.logger
+    with logger.stage("company", company=company.slug) as state:
+        index = get_index()
+
+        estimates = estimate_company(index, company)
+        for estimate in estimates.values():
+            logger.event(
+                "forecast.metric",
+                company=company.slug,
+                metric=estimate.metric,
+                units=estimate.units,
+                value=estimate.value,
+                confidence=estimate.confidence,
+                method=estimate.method,
+                evidence=len(estimate.candidates),
+            )
+
+        values = {label: estimate.value for label, estimate in estimates.items()}
+        path, written = write_company_workbook(company, values)
+        verified = verify_workbook(company, path)
+
+        state["metrics"] = len(written)
+        state["workbook"] = str(path.relative_to(PATHS.root))
+
+        context.write_artifact(
+            f"{company.slug}/baseline.json",
+            {
+                "company": company.describe(),
+                "as_of": context.as_of.isoformat(),
+                "estimates": [estimate.as_dict() for estimate in estimates.values()],
+                "written_cells": [cell.as_dict() for cell in written],
+            },
+        )
+        return {
+            "company": company.slug,
+            "workbook": str(path.relative_to(PATHS.root)),
+            "cells": [cell.as_dict() for cell in verified],
+        }
+
+
+def run_pipeline(context: RunContext) -> list[dict]:
+    """Run every company and produce the four workbooks.
+
+    Companies are independent, so a failure in one must not cost the other three
+    their output.
+    """
+    logger = context.logger
+    results: list[dict] = []
+
+    with logger.stage("pipeline", companies=len(context.companies)):
+        with logger.stage("corpus.index") as state:
+            index = get_index()
+            state.update(index.stats())
+
+        for company in context.companies:
+            try:
+                results.append(forecast_company(context, company))
+            except Exception as exc:  # noqa: BLE001 - one company must not sink the rest
+                logger.error(
+                    f"{company.slug} failed: {exc}",
+                    company=company.slug,
+                    error_type=type(exc).__name__,
+                )
+
+    return results
 
 
 if __name__ == "__main__":

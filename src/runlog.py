@@ -57,27 +57,33 @@ class Redactor:
         # Longest first, so a key that contains another string is masked whole.
         self._literals.sort(key=lambda pair: len(pair[0]), reverse=True)
 
-    def scrub_text(self, text: str) -> str:
+    def scrub_text(self, text: str, *, truncate: bool = True) -> str:
+        """Redact credentials. Truncation applies to log fields, not artifacts.
+
+        A log line with a 200 KB prompt in it is unreadable, so log fields are
+        capped. Artifact files are the dashboard's data source and must survive
+        intact, so they pass ``truncate=False``.
+        """
         for literal, replacement in self._literals:
             if literal in text:
                 text = text.replace(literal, replacement)
         for pattern in _SECRET_PATTERNS:
             text = pattern.sub(_REDACTED, text)
-        if len(text) > _MAX_STRING:
+        if truncate and len(text) > _MAX_STRING:
             text = text[:_MAX_STRING] + f"...[truncated {len(text) - _MAX_STRING} chars]"
         return text
 
-    def scrub(self, value: Any) -> Any:
+    def scrub(self, value: Any, *, truncate: bool = True) -> Any:
         """Recursively redact strings inside dicts, lists and tuples."""
         if isinstance(value, str):
-            return self.scrub_text(value)
+            return self.scrub_text(value, truncate=truncate)
         if isinstance(value, dict):
-            return {str(k): self.scrub(v) for k, v in value.items()}
+            return {str(k): self.scrub(v, truncate=truncate) for k, v in value.items()}
         if isinstance(value, (list, tuple)):
-            return [self.scrub(item) for item in value]
+            return [self.scrub(item, truncate=truncate) for item in value]
         if isinstance(value, (int, float, bool)) or value is None:
             return value
-        return self.scrub_text(str(value))
+        return self.scrub_text(str(value), truncate=truncate)
 
 
 class RunLogger:
