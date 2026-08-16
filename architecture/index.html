@@ -1,0 +1,702 @@
+<title>EPS-Winners Forecasting Agent</title>
+<style>
+  :root {
+    --ground: #f3f5f6;
+    --surface: #ffffff;
+    --surface-sunk: #e9edee;
+    --ink: #16232b;
+    --ink-soft: #4a5a63;
+    --ink-faint: #7d8d95;
+    --rule: #d3dadd;
+    --rule-strong: #b6c1c6;
+    --accent: #1a6f6a;
+    --accent-soft: #d8e8e6;
+    --pass: #2e7d5b;
+    --warn: #b07a18;
+    --fail: #af3a2c;
+    --pass-bg: #e2efe8;
+    --warn-bg: #f6eeda;
+    --fail-bg: #f7e4e1;
+
+    --serif: Georgia, "Iowan Old Style", "Times New Roman", serif;
+    --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    --mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --ground: #0f1619;
+      --surface: #161f24;
+      --surface-sunk: #1d282e;
+      --ink: #dee6e9;
+      --ink-soft: #a3b2b9;
+      --ink-faint: #74848c;
+      --rule: #2a373e;
+      --rule-strong: #3b4a52;
+      --accent: #4fb3ac;
+      --accent-soft: #1a3a38;
+      --pass: #5fb98d;
+      --warn: #d9a541;
+      --fail: #e0705f;
+      --pass-bg: #16301f;
+      --warn-bg: #322813;
+      --fail-bg: #34191a;
+    }
+  }
+
+  :root[data-theme="dark"] {
+    --ground: #0f1619;
+    --surface: #161f24;
+    --surface-sunk: #1d282e;
+    --ink: #dee6e9;
+    --ink-soft: #a3b2b9;
+    --ink-faint: #74848c;
+    --rule: #2a373e;
+    --rule-strong: #3b4a52;
+    --accent: #4fb3ac;
+    --accent-soft: #1a3a38;
+    --pass: #5fb98d;
+    --warn: #d9a541;
+    --fail: #e0705f;
+    --pass-bg: #16301f;
+    --warn-bg: #322813;
+    --fail-bg: #34191a;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    background: var(--ground);
+    color: var(--ink);
+    font-family: var(--sans);
+    font-size: 16px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .wrap {
+    max-width: 1080px;
+    margin: 0 auto;
+    padding: 40px 24px 80px;
+    display: flex;
+    flex-direction: column;
+    gap: 44px;
+  }
+
+  /* ---------- masthead ---------- */
+
+  .masthead {
+    border-bottom: 2px solid var(--ink);
+    padding-bottom: 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .eyebrow {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--accent);
+  }
+
+  h1 {
+    font-family: var(--serif);
+    font-size: clamp(30px, 5vw, 44px);
+    line-height: 1.1;
+    margin: 0;
+    font-weight: 400;
+    text-wrap: balance;
+  }
+
+  .standfirst {
+    font-size: 17px;
+    color: var(--ink-soft);
+    max-width: 62ch;
+    margin: 0;
+  }
+
+  .runbar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px 26px;
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--ink-faint);
+    padding-top: 6px;
+  }
+  .runbar b { color: var(--ink); font-weight: 600; }
+
+  /* ---------- sections ---------- */
+
+  section { display: flex; flex-direction: column; gap: 18px; }
+
+  h2 {
+    font-family: var(--serif);
+    font-size: 22px;
+    font-weight: 400;
+    margin: 0;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--rule);
+  }
+
+  h2 .num {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--accent);
+    margin-right: 12px;
+    vertical-align: 3px;
+  }
+
+  p { margin: 0; max-width: 68ch; color: var(--ink-soft); }
+
+  /* ---------- diagram ---------- */
+
+  .diagram {
+    background: var(--surface);
+    border: 1px solid var(--rule);
+    padding: 20px;
+    overflow-x: auto;
+  }
+  .diagram svg { display: block; min-width: 900px; width: 100%; height: auto; }
+
+  .d-box { fill: var(--surface); stroke: var(--rule-strong); stroke-width: 1.5; }
+  .d-box-accent { fill: var(--accent-soft); stroke: var(--accent); stroke-width: 1.5; }
+  .d-box-rail { fill: var(--surface-sunk); stroke: var(--rule-strong); stroke-width: 1.5; }
+  .d-label { fill: var(--ink); font-family: var(--sans); font-size: 13px; font-weight: 600; }
+  .d-sub { fill: var(--ink-faint); font-family: var(--mono); font-size: 10.5px; }
+  .d-line { stroke: var(--rule-strong); stroke-width: 1.5; fill: none; }
+  .d-loop { stroke: var(--accent); stroke-width: 1.5; fill: none; stroke-dasharray: 4 3; }
+  .d-loop-label { fill: var(--accent); font-family: var(--mono); font-size: 10.5px; }
+
+  /* ---------- stage list ---------- */
+
+  .stages { display: flex; flex-direction: column; gap: 0; }
+
+  .stage {
+    display: grid;
+    grid-template-columns: 54px 1fr;
+    gap: 20px;
+    padding: 18px 0;
+    border-bottom: 1px solid var(--rule);
+  }
+  .stage:first-child { border-top: 1px solid var(--rule); }
+
+  .stage-n {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--accent);
+    padding-top: 3px;
+  }
+  .stage-body { display: flex; flex-direction: column; gap: 6px; }
+  .stage-title { font-weight: 650; font-size: 15px; }
+  .stage-title .kind {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    border: 1px solid var(--rule-strong);
+    padding: 1px 6px;
+    margin-left: 10px;
+    vertical-align: 1px;
+  }
+  .stage-title .kind.agentic { color: var(--accent); border-color: var(--accent); }
+  .stage p { font-size: 14.5px; }
+  .stage code {
+    font-family: var(--mono);
+    font-size: 12.5px;
+    background: var(--surface-sunk);
+    padding: 1px 5px;
+  }
+
+  /* ---------- phase tracker ---------- */
+
+  .phases { display: flex; flex-direction: column; gap: 2px; }
+
+  .phase {
+    display: grid;
+    grid-template-columns: 92px 1fr 128px;
+    gap: 16px;
+    align-items: baseline;
+    padding: 10px 12px;
+    background: var(--surface);
+    border-left: 3px solid var(--rule-strong);
+  }
+  .phase.done { border-left-color: var(--pass); }
+  .phase.active { border-left-color: var(--warn); background: var(--warn-bg); }
+  .phase.todo { opacity: 0.62; }
+
+  .phase-time { font-family: var(--mono); font-size: 12px; color: var(--ink-faint); }
+  .phase-name { font-size: 14.5px; }
+  .phase-name span { color: var(--ink-faint); font-size: 13px; }
+
+  .pill {
+    font-family: var(--mono);
+    font-size: 10.5px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    padding: 2px 8px;
+    justify-self: start;
+    white-space: nowrap;
+  }
+  .pill.pass { background: var(--pass-bg); color: var(--pass); }
+  .pill.warn { background: var(--warn-bg); color: var(--warn); }
+  .pill.fail { background: var(--fail-bg); color: var(--fail); }
+  .pill.idle { background: var(--surface-sunk); color: var(--ink-faint); }
+
+  /* ---------- output table ---------- */
+
+  .tablewrap { overflow-x: auto; border: 1px solid var(--rule); background: var(--surface); }
+
+  table { border-collapse: collapse; width: 100%; min-width: 660px; }
+
+  th {
+    font-family: var(--mono);
+    font-size: 10.5px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    text-align: left;
+    font-weight: 400;
+    padding: 10px 14px;
+    border-bottom: 1px solid var(--rule-strong);
+    white-space: nowrap;
+  }
+  td {
+    padding: 9px 14px;
+    border-bottom: 1px solid var(--rule);
+    font-size: 14px;
+    vertical-align: baseline;
+  }
+  tr:last-child td { border-bottom: none; }
+  td.num { font-family: var(--mono); text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
+  td.unit { font-family: var(--mono); font-size: 12px; color: var(--ink-faint); white-space: nowrap; }
+  td.tick { font-family: var(--mono); font-size: 12px; font-weight: 600; }
+  .grouprow td {
+    background: var(--surface-sunk);
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    padding: 6px 14px;
+  }
+
+  /* ---------- notes ---------- */
+
+  .notes { display: flex; flex-direction: column; gap: 14px; }
+  .note {
+    border-left: 3px solid var(--rule-strong);
+    padding: 2px 0 2px 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .note.open { border-left-color: var(--fail); }
+  .note.fixed { border-left-color: var(--pass); }
+  .note-head { font-weight: 650; font-size: 14.5px; }
+  .note p { font-size: 14px; }
+  .note code { font-family: var(--mono); font-size: 12.5px; background: var(--surface-sunk); padding: 1px 5px; }
+
+  footer {
+    border-top: 1px solid var(--rule);
+    padding-top: 16px;
+    font-family: var(--mono);
+    font-size: 11.5px;
+    color: var(--ink-faint);
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px 24px;
+  }
+
+  @media (max-width: 640px) {
+    .phase { grid-template-columns: 1fr; gap: 4px; }
+    .stage { grid-template-columns: 34px 1fr; gap: 12px; }
+  }
+</style>
+
+<div class="wrap">
+
+  <header class="masthead">
+    <div class="eyebrow">Agents vs Wall Street &middot; 16 August 2026</div>
+    <h1>EPS-Winners forecasting agent</h1>
+    <p class="standfirst">
+      A research agent reads a frozen corpus of filings and transcripts, three independent
+      forecasters argue from the same evidence, and deterministic rails decide what reaches
+      the workbook. Twelve metrics, four companies, four industries.
+    </p>
+    <div class="runbar">
+      <span>as_of <b>2026-08-16</b></span>
+      <span>model <b>openai:gpt-4.1</b></span>
+      <span>corpus <b>1,139 docs</b></span>
+      <span>full run <b>76s</b></span>
+      <span>validator <b>PASS &times;4</b></span>
+    </div>
+  </header>
+
+  <section>
+    <h2><span class="num">01</span>How a number gets made</h2>
+    <p>
+      The dashed loop is the part that is genuinely an agent: it chooses its own next tool
+      call from what the last one returned. Everything drawn in grey is deterministic code
+      &mdash; the tools it calls and the rails it cannot argue past.
+    </p>
+
+    <div class="diagram">
+      <svg viewBox="0 0 980 300" role="img" aria-label="Pipeline: corpus feeds a research agent loop, which produces an evidence pack consumed by three independent forecasters, reconciled deterministically, critiqued, validated, and written to a workbook.">
+        <defs>
+          <marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+            <path d="M0,0 L10,5 L0,10 z" fill="currentColor"/>
+          </marker>
+        </defs>
+
+        <g color="var(--rule-strong)">
+          <!-- corpus -->
+          <rect class="d-box-rail" x="8" y="112" width="104" height="56" rx="2"/>
+          <text class="d-label" x="60" y="134" text-anchor="middle">Corpus</text>
+          <text class="d-sub" x="60" y="152" text-anchor="middle">1,139 docs</text>
+
+          <!-- toolbelt -->
+          <rect class="d-box-rail" x="146" y="36" width="128" height="72" rx="2"/>
+          <text class="d-label" x="210" y="60" text-anchor="middle">Toolbelt</text>
+          <text class="d-sub" x="210" y="77" text-anchor="middle">list_index · search</text>
+          <text class="d-sub" x="210" y="92" text-anchor="middle">read · extract_table</text>
+
+          <!-- research agent -->
+          <rect class="d-box-accent" x="146" y="152" width="128" height="72" rx="2"/>
+          <text class="d-label" x="210" y="177" text-anchor="middle">Research agent</text>
+          <text class="d-sub" x="210" y="194" text-anchor="middle">chooses next call</text>
+          <text class="d-sub" x="210" y="209" text-anchor="middle">as_of enforced</text>
+
+          <!-- evidence -->
+          <rect class="d-box" x="310" y="112" width="112" height="56" rx="2"/>
+          <text class="d-label" x="366" y="134" text-anchor="middle">Evidence pack</text>
+          <text class="d-sub" x="366" y="152" text-anchor="middle">every fact cited</text>
+
+          <!-- forecasters -->
+          <rect class="d-box-accent" x="458" y="28" width="132" height="48" rx="2"/>
+          <text class="d-label" x="524" y="48" text-anchor="middle">Guidance</text>
+          <text class="d-sub" x="524" y="64" text-anchor="middle">anchor to management</text>
+
+          <rect class="d-box-accent" x="458" y="116" width="132" height="48" rx="2"/>
+          <text class="d-label" x="524" y="136" text-anchor="middle">Statistical</text>
+          <text class="d-sub" x="524" y="152" text-anchor="middle">same quarter, prior years</text>
+
+          <rect class="d-box-accent" x="458" y="204" width="132" height="48" rx="2"/>
+          <text class="d-label" x="524" y="224" text-anchor="middle">Qualitative</text>
+          <text class="d-sub" x="524" y="240" text-anchor="middle">structural change</text>
+
+          <!-- reconcile -->
+          <rect class="d-box-rail" x="626" y="100" width="118" height="80" rx="2"/>
+          <text class="d-label" x="685" y="126" text-anchor="middle">Reconcile</text>
+          <text class="d-sub" x="685" y="143" text-anchor="middle">weighted, not</text>
+          <text class="d-sub" x="685" y="157" text-anchor="middle">a flat median</text>
+          <text class="d-sub" x="685" y="171" text-anchor="middle">outliers cut</text>
+
+          <!-- critic -->
+          <rect class="d-box-accent" x="626" y="212" width="118" height="48" rx="2"/>
+          <text class="d-label" x="685" y="232" text-anchor="middle">Critic</text>
+          <text class="d-sub" x="685" y="248" text-anchor="middle">sees numbers only</text>
+
+          <!-- rails -->
+          <rect class="d-box-rail" x="780" y="100" width="112" height="80" rx="2"/>
+          <text class="d-label" x="836" y="126" text-anchor="middle">Rails</text>
+          <text class="d-sub" x="836" y="143" text-anchor="middle">units · basis</text>
+          <text class="d-sub" x="836" y="157" text-anchor="middle">period · clamp</text>
+          <text class="d-sub" x="836" y="171" text-anchor="middle">never null</text>
+
+          <!-- workbook -->
+          <rect class="d-box" x="780" y="16" width="112" height="56" rx="2"/>
+          <text class="d-label" x="836" y="38" text-anchor="middle">Workbook</text>
+          <text class="d-sub" x="836" y="56" text-anchor="middle">C7:C9 only</text>
+
+          <!-- flows -->
+          <path class="d-line" marker-end="url(#ar)" d="M112 140 H140"/>
+          <path class="d-line" marker-end="url(#ar)" d="M274 140 H304"/>
+          <path class="d-line" marker-end="url(#ar)" d="M422 136 C 440 136, 440 52, 452 52"/>
+          <path class="d-line" marker-end="url(#ar)" d="M422 140 H452"/>
+          <path class="d-line" marker-end="url(#ar)" d="M422 144 C 440 144, 440 228, 452 228"/>
+          <path class="d-line" marker-end="url(#ar)" d="M590 52 C 608 52, 608 132, 620 132"/>
+          <path class="d-line" marker-end="url(#ar)" d="M590 140 H620"/>
+          <path class="d-line" marker-end="url(#ar)" d="M590 228 C 608 228, 608 152, 620 152"/>
+          <path class="d-line" marker-end="url(#ar)" d="M744 140 H774"/>
+          <path class="d-line" marker-end="url(#ar)" d="M836 100 V78"/>
+
+          <!-- the agent loop -->
+          <g color="var(--accent)">
+            <path class="d-loop" marker-end="url(#ar)" d="M196 152 V114"/>
+            <path class="d-loop" marker-end="url(#ar)" d="M228 108 V146"/>
+            <text class="d-loop-label" x="252" y="132">loop</text>
+            <path class="d-loop" marker-end="url(#ar)" d="M685 212 V186"/>
+          </g>
+        </g>
+      </svg>
+    </div>
+  </section>
+
+  <section>
+    <h2><span class="num">02</span>The six stages</h2>
+
+    <div class="stages">
+      <div class="stage">
+        <div class="stage-n">01</div>
+        <div class="stage-body">
+          <div class="stage-title">Classify the industry<span class="kind">deterministic</span></div>
+          <p>
+            Filing text is scored against an <code>IndustryProfile</code> registry. Industry is
+            data, not a code path &mdash; a new sector is a config entry, not a new branch. All
+            four companies classify correctly from their filings with nothing hardcoded:
+            retail, semiconductors, staffing, industrial.
+          </p>
+        </div>
+      </div>
+
+      <div class="stage">
+        <div class="stage-n">02</div>
+        <div class="stage-body">
+          <div class="stage-title">Research<span class="kind agentic">agent loop</span></div>
+          <p>
+            An LLM with four tools decides its own next move. Asked for Deere's segment
+            operating profit it read the MD&amp;A, found only prose, pivoted to the segment
+            note, noticed the note held Q2 not Q3, then walked back through Q3 2025 and Q3
+            2024 to build a seasonal series. Nothing instructed that path.
+            Every retrieval is filtered by <code>as_of</code>, so a backtest cannot read the answer.
+          </p>
+        </div>
+      </div>
+
+      <div class="stage">
+        <div class="stage-n">03</div>
+        <div class="stage-body">
+          <div class="stage-title">Three forecasters<span class="kind agentic">agent &times;3</span></div>
+          <p>
+            Same evidence, three separate contexts. The separation is the point: one agent asked
+            for three numbers returns three correlated numbers, and an ensemble of correlated
+            estimates is theatre.
+          </p>
+        </div>
+      </div>
+
+      <div class="stage">
+        <div class="stage-n">04</div>
+        <div class="stage-body">
+          <div class="stage-title">Critique<span class="kind agentic">agent</span></div>
+          <p>
+            An adversarial reviewer sees the numbers and the evidence but not the reasoning
+            behind them &mdash; a critic shown the argument tends to agree with it. It checks
+            units, basis, magnitude, direction, and profit-versus-margin confusion.
+          </p>
+        </div>
+      </div>
+
+      <div class="stage">
+        <div class="stage-n">05</div>
+        <div class="stage-body">
+          <div class="stage-title">Reconcile<span class="kind">deterministic</span></div>
+          <p>
+            Confidence-weighted, not a flat median. Guidance quality varies enormously here:
+            ADI guides the target quarter with a point estimate, Deere guides only the full
+            year, Hays has published analyst consensus. Outliers beyond 35% from the median are
+            cut to a quarter weight, because capped scoring punishes blow-ups far harder than
+            it rewards precision.
+          </p>
+        </div>
+      </div>
+
+      <div class="stage">
+        <div class="stage-n">06</div>
+        <div class="stage-body">
+          <div class="stage-title">Rails and workbook<span class="kind">deterministic</span></div>
+          <p>
+            Assertions an agent cannot talk its way past: units, reporting basis, anchor period,
+            and a clamp against observed history. The writer loads the organizer template and
+            sets three cells. A null is never written &mdash; a blank cell scores worse than a
+            poor guess.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2><span class="num">03</span>Where the build is</h2>
+
+    <div class="phases">
+      <div class="phase done">
+        <div class="phase-time">11:15&ndash;12:12</div>
+        <div class="phase-name">Foundation <span>&mdash; corpus tool, as_of guard, metrics config</span></div>
+        <div class="pill pass">0 leaks</div>
+      </div>
+      <div class="phase done">
+        <div class="phase-time">12:15&ndash;12:30</div>
+        <div class="phase-name">Toolbelt &amp; submission path <span>&mdash; four valid workbooks</span></div>
+        <div class="pill pass">pass &times;4</div>
+      </div>
+      <div class="phase done">
+        <div class="phase-time">12:30&ndash;12:50</div>
+        <div class="phase-name">Research agent <span>&mdash; loop, tool schemas, profiles</span></div>
+        <div class="pill pass">live</div>
+      </div>
+      <div class="phase done">
+        <div class="phase-time">13:25&ndash;13:52</div>
+        <div class="phase-name">Forecasters, critic, reconciler</div>
+        <div class="pill pass">live</div>
+      </div>
+      <div class="phase done">
+        <div class="phase-time">13:55&ndash;14:20</div>
+        <div class="phase-name">Verification <span>&mdash; 3 bugs found and fixed</span></div>
+        <div class="pill warn">2 open</div>
+      </div>
+      <div class="phase active">
+        <div class="phase-time">14:20&ndash;16:00</div>
+        <div class="phase-name">Architecture write-up <span>&mdash; this page</span></div>
+        <div class="pill warn">in progress</div>
+      </div>
+      <div class="phase todo">
+        <div class="phase-time">15:30&ndash;16:00</div>
+        <div class="phase-name">Validation rail <span>&mdash; standalone assertions module</span></div>
+        <div class="pill idle">queued</div>
+      </div>
+      <div class="phase todo">
+        <div class="phase-time">16:00&ndash;17:15</div>
+        <div class="phase-name">Judge conversation &amp; timed dry runs</div>
+        <div class="pill idle">queued</div>
+      </div>
+      <div class="phase todo">
+        <div class="phase-time">17:15&ndash;18:00</div>
+        <div class="phase-name">Final run, manual uploads <span>&mdash; hard deadline</span></div>
+        <div class="pill idle">queued</div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2><span class="num">04</span>Current output</h2>
+    <p>
+      Latest full run. Flags are the rails and the critic reporting on their own work, not
+      post-hoc annotation.
+    </p>
+
+    <div class="tablewrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Metric</th>
+            <th style="text-align:right">Forecast</th>
+            <th>Units</th>
+            <th>Flags</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="grouprow"><td colspan="4">Home Depot &middot; FY2026 Q2 &middot; ends 2 Aug 2026 &middot; retail</td></tr>
+          <tr><td>Net sales</td><td class="num">46,966.67</td><td class="unit">USDm</td><td></td></tr>
+          <tr><td>Adjusted diluted EPS</td><td class="num">4.75</td><td class="unit">USD / share</td><td><span class="pill warn">clamped</span></td></tr>
+          <tr><td>Comparable sales, total company</td><td class="num">1.29</td><td class="unit">%</td><td></td></tr>
+
+          <tr class="grouprow"><td colspan="4">Analog Devices &middot; FY2026 Q3 &middot; ends 1 Aug 2026 &middot; semiconductors</td></tr>
+          <tr><td>Revenue</td><td class="num">4,106.50</td><td class="unit">USDm</td><td><span class="pill fail">above guidance</span></td></tr>
+          <tr><td>Adjusted diluted EPS</td><td class="num">3.49</td><td class="unit">USD / share</td><td><span class="pill fail">above guidance</span></td></tr>
+          <tr><td>Adjusted gross margin</td><td class="num">74.34</td><td class="unit">%</td><td></td></tr>
+
+          <tr class="grouprow"><td colspan="4">Hays plc &middot; FY2026 &middot; ended 30 Jun 2026 &middot; staffing</td></tr>
+          <tr><td>Net fees</td><td class="num">886.67</td><td class="unit">GBPm</td><td></td></tr>
+          <tr><td>Pre-exceptional basic EPS</td><td class="num">1.52</td><td class="unit">GBp</td><td><span class="pill fail">critic flagged</span></td></tr>
+          <tr><td>Pre-exceptional operating profit</td><td class="num">25.85</td><td class="unit">GBPm</td><td><span class="pill fail">vs consensus 43.5</span></td></tr>
+
+          <tr class="grouprow"><td colspan="4">Deere &amp; Company &middot; FY2026 Q3 &middot; ends 2 Aug 2026 &middot; industrial</td></tr>
+          <tr><td>Worldwide net sales and revenues</td><td class="num">11,005.33</td><td class="unit">USDm</td><td></td></tr>
+          <tr><td>Diluted EPS (GAAP)</td><td class="num">4.10</td><td class="unit">USD / share</td><td><span class="pill pass">anchor rejected</span></td></tr>
+          <tr><td>Production &amp; Precision Ag operating profit</td><td class="num">466.39</td><td class="unit">USDm</td><td></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section>
+    <h2><span class="num">05</span>What is wrong with it</h2>
+    <p>
+      Written while the problems are still open, because a page that only lists strengths is
+      not an architecture document.
+    </p>
+
+    <div class="notes">
+      <div class="note open">
+        <div class="note-head">The critic has no teeth</div>
+        <p>
+          It correctly flags problems and nothing acts on them. The design called for a
+          refutation to send the research agent another round; that loop was never built, so a
+          flagged metric reaches the workbook unchanged.
+        </p>
+      </div>
+
+      <div class="note open">
+        <div class="note-head">Evidence depth is inconsistent</div>
+        <p>
+          Deere returned 15 rows of history, Hays returned 2 &mdash; both for net fees, none for
+          EPS or operating profit. Two of three Hays metrics therefore have no series to fit
+          and no clamp to catch them. That is visible in the output: pre-exceptional operating
+          profit came out at 25.85 against a published consensus of 43.5 with management
+          guiding to the top of a 37&ndash;46 range.
+        </p>
+      </div>
+
+      <div class="note open">
+        <div class="note-head">Forecasters can drift above explicit guidance</div>
+        <p>
+          ADI guided revenue of $3.9bn &plusmn; $100m and adjusted EPS of $3.30 &plusmn; $0.15.
+          The run returned 4,106.50 and 3.49 &mdash; outside the guided band in both cases.
+          A point estimate published by management should bound the forecast, not merely
+          inform it.
+        </p>
+      </div>
+
+      <div class="note fixed">
+        <div class="note-head">Fixed: full-year guidance applied to a quarter</div>
+        <p>
+          Deere's FY2026 net income guidance implied roughly $16.67 of annual EPS, which was
+          being used as a <em>quarterly</em> anchor and forced a sensible $5.25 to $10.21.
+          Anchors now have to match the target period; rejections are logged rather than
+          silently dropped.
+        </p>
+      </div>
+
+      <div class="note fixed">
+        <div class="note-head">Fixed: metric labels silently dropping every value</div>
+        <p>
+          Models returned <code>Revenue (USDm, basis: reported)</code> where the contract wanted
+          <code>Revenue</code>, so reconciliation matched nothing and every metric resolved to
+          null. Prompt wording was tightened and a deterministic matcher added behind it,
+          because prompts drift and a silent null is the most expensive failure available.
+        </p>
+      </div>
+
+      <div class="note fixed">
+        <div class="note-head">Fixed: rate limits killed the first full run</div>
+        <p>
+          Four companies running concurrently hit HTTP 429 immediately on a fresh API account.
+          Retries now back off exponentially and honour <code>Retry-After</code>.
+        </p>
+      </div>
+
+      <div class="note">
+        <div class="note-head">Untested</div>
+        <p>
+          The industry framework is agnostic by construction and demonstrated across four
+          sectors. It has never been run on a fifth, and the general fallback profile has no
+          coverage at all. Three of the four fiscal period ends are derived arithmetically from
+          a prior quarter end rather than read from a document that states them.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <span>corpus frozen 2026-08-14</span>
+    <span>uploads are manual &mdash; the agent never submits</span>
+    <span>no secrets in repo, logs, or this page</span>
+  </footer>
+
+</div>
